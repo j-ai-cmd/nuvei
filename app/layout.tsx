@@ -3,6 +3,7 @@ import "./globals.css";
 import SideNav from "@/components/layout/SideNav";
 import TopBar from "@/components/layout/TopBar";
 import Footer from "@/components/layout/Footer";
+import { Analytics } from "@vercel/analytics/next";
 
 export const metadata: Metadata = {
   title: "Nuvei Legal Dashboard",
@@ -20,6 +21,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {children}
         </main>
         <Footer />
+        <Analytics />
       </body>
     </html>
   );
