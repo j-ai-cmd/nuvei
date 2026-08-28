@@ -28,7 +28,7 @@ A production-ready Next.js 14 application demonstrating how a Legal Operations T
 
 ```bash
 git clone <repo>
-cd legal-ai-intake
+cd nuvei
 npm install
 cp .env.example .env.local
 ```
@@ -37,7 +37,6 @@ Edit `.env.local`:
 
 ```
 KIMI_API_KEY=your_key_here
-KIMI_MODEL=moonshot-v1-32k
 ```
 
 ```bash
@@ -50,28 +49,17 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## AI Provider Configuration
 
-This app uses the [Moonshot (Kimi) API](https://platform.moonshot.cn/).
-
-### Required environment variables
+### Required environment variable
 
 | Variable | Description |
 |---|---|
-| `KIMI_API_KEY` | Your Moonshot API key |
-| `KIMI_MODEL` | Model name — **verify in your Moonshot console before deploying** |
+| `KIMI_API_KEY` | Your API key (server-side only) |
 
-**Available models (verify current availability in your console):**
-
-| Model | Context | Use case |
-|---|---|---|
-| `moonshot-v1-8k` | 8K tokens | Short contracts, fast |
-| `moonshot-v1-32k` | 32K tokens | Most contracts (recommended) |
-| `moonshot-v1-128k` | 128K tokens | Very long multi-part agreements |
-
-> **Note:** Model availability changes. Always verify the list at [platform.moonshot.cn](https://platform.moonshot.cn/) before deploying.
+The model is hardcoded server-side. No other configuration is required.
 
 ### Demo mode (no API key)
 
-If `KIMI_API_KEY` or `KIMI_MODEL` is not set, the app uses pre-computed demo analysis data. A **DEMO DATA** banner is shown prominently in the UI.
+If `KIMI_API_KEY` is not set, the app uses pre-computed demo analysis data. A **DEMO DATA** banner is shown prominently in the UI. Real PDF uploads will return an error rather than silently showing demo data.
 
 ---
 
@@ -79,9 +67,8 @@ If `KIMI_API_KEY` or `KIMI_MODEL` is not set, the app uses pre-computed demo ana
 
 1. Push to GitHub
 2. Import the repository in [Vercel](https://vercel.com)
-3. Set environment variables in **Project Settings → Environment Variables**:
+3. Set one environment variable in **Project Settings → Environment Variables**:
    - `KIMI_API_KEY`
-   - `KIMI_MODEL`
 4. Deploy
 
 No special build settings required. The app uses the Node.js runtime for API routes (`export const runtime = "nodejs"`).
@@ -120,13 +107,7 @@ No special build settings required. The app uses the Node.js runtime for API rou
 
 ## Security
 
-- `KIMI_API_KEY` is server-side only — never present in client bundles
-- No AI provider names appear in the frontend (provider-agnostic UI)
-- Files are processed in memory from buffers — no filesystem writes
-- All documents are discarded after the API response unless the user saves to a Matter
-
----
-
-## Disclaimer
-
-This is a concept prototype demonstrating AI-assisted legal operations. It is not legal advice. All AI analysis should be reviewed by qualified legal counsel before any action is taken.
+- `KIMI_API_KEY` exists only in server-side process environment; it is never imported by any client component, included in API responses, or logged
+- All document processing is in-memory — no temp files written to disk
+- API errors are sanitized before reaching the frontend; raw provider error bodies are only logged server-side
+- The AI provider name and model are never visible in the user-facing UI

@@ -1,6 +1,7 @@
 import { ContractAnalysis, ContractAnalysisSchema } from "@/types/contract";
 
 const KIMI_BASE_URL = "https://api.moonshot.ai/v1";
+const KIMI_MODEL = "kimi-k3";
 
 const SYSTEM_PROMPT = `You are a senior legal AI analyst specializing in contract review.
 Analyze the provided contract text and return a structured JSON response.
@@ -71,17 +72,16 @@ function stripJsonFences(text: string): string {
 
 async function callKimi(text: string, jsonOnly = false): Promise<string> {
   const apiKey = process.env.KIMI_API_KEY;
-  const model = process.env.KIMI_MODEL;
 
-  if (!apiKey || !model) {
-    throw new Error("KIMI_API_KEY and KIMI_MODEL environment variables are not set");
+  if (!apiKey) {
+    throw new Error("KIMI_API_KEY environment variable is not set");
   }
 
   const userMessage = jsonOnly
     ? `Analyze this contract and return ONLY a valid JSON object (no markdown, no explanation):\n\n${text.slice(0, 60000)}`
     : `Analyze this contract:\n\n${text.slice(0, 60000)}`;
 
-  console.log(`[AI] Sending request to ${KIMI_BASE_URL}/chat/completions — model: ${model}`);
+  console.log(`[AI] POST ${KIMI_BASE_URL}/chat/completions — model: ${KIMI_MODEL}`);
 
   const response = await fetch(`${KIMI_BASE_URL}/chat/completions`, {
     method: "POST",
@@ -90,7 +90,7 @@ async function callKimi(text: string, jsonOnly = false): Promise<string> {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      model,
+      model: KIMI_MODEL,
       messages: [
         { role: "system", content: SYSTEM_PROMPT },
         { role: "user", content: userMessage },
@@ -103,39 +103,35 @@ async function callKimi(text: string, jsonOnly = false): Promise<string> {
 
   if (!response.ok) {
     const errBody = await response.text();
-    console.error(`[AI] API error response: ${errBody}`);
-    throw new Error(`AI API returned ${response.status}: ${errBody}`);
+    // Sanitize: never forward raw API errors to the client (may contain key hints)
+    console.error(`[AI] API error ${response.status}: ${errBody}`);
+    throw new Error(`AI service returned HTTP ${response.status}`);
   }
 
   const data = await response.json();
-  const content = data.choices?.[0]?.message?.content ?? "";
-  console.log(`[AI] Response received — content length: ${content.length} chars`);
+  const content: string = data.choices?.[0]?.message?.content ?? "";
+  console.log(`[AI] Response received — ${content.length} chars`);
   return content;
 }
 
 /**
- * Returns null ONLY when no API key is configured (caller should use demo mode).
- * Throws an Error for all other failures (caller must NOT silently fall back to demo data).
+ * Returns null ONLY when KIMI_API_KEY is not configured (caller uses demo mode).
+ * Throws a sanitized Error for all other failures (caller must NOT fall back to demo data).
  */
 export async function analyzeContract(
   text: string
 ): Promise<ContractAnalysis | null> {
-  const apiKey = process.env.KIMI_API_KEY;
-  const model = process.env.KIMI_MODEL;
-
-  if (!apiKey || !model) {
-    console.log("[AI] No API key/model configured — returning null for demo fallback");
+  if (!process.env.KIMI_API_KEY) {
+    console.log("[AI] KIMI_API_KEY not set — returning null for demo fallback");
     return null;
   }
-
-  // From here: API key exists. Any failure throws — callers must handle it as a real error.
 
   let raw: string;
   try {
     raw = await callKimi(text);
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
-    throw new Error(`AI API call failed: ${msg}`);
+    throw new Error(`AI request failed: ${msg}`);
   }
 
   const cleaned = stripJsonFences(raw);
@@ -145,30 +141,35 @@ export async function analyzeContract(
     parsed = JSON.parse(cleaned);
     console.log("[AI] JSON parse succeeded");
   } catch (parseErr) {
-    console.warn("[AI] JSON parse failed on first attempt, retrying with json-only prompt");
+    console.warn("[AI] JSON parse failed — retrying with json-only prompt");
     let retry: string;
     try {
       retry = await callKimi(text, true);
     } catch (e) {
       const msg = e instanceof Error ? e.message : String(e);
-      throw new Error(`AI API retry call failed: ${msg}`);
+      throw new Error(`AI retry request failed: ${msg}`);
     }
     try {
       parsed = JSON.parse(stripJsonFences(retry));
       console.log("[AI] JSON parse succeeded on retry");
     } catch {
-      const originalErr = parseErr instanceof Error ? parseErr.message : String(parseErr);
-      throw new Error(`AI response is not valid JSON after retry. Original parse error: ${originalErr}. Raw response (first 500 chars): ${cleaned.slice(0, 500)}`);
+      const originalMsg =
+        parseErr instanceof Error ? parseErr.message : String(parseErr);
+      throw new Error(
+        `AI response could not be parsed as JSON after retry. Parse error: ${originalMsg}`
+      );
     }
   }
 
   const result = ContractAnalysisSchema.safeParse(parsed);
   if (!result.success) {
-    const issues = result.error.issues.map(i => `${i.path.join(".")}: ${i.message}`).join("; ");
+    const issues = result.error.issues
+      .map((i) => `${i.path.join(".")}: ${i.message}`)
+      .join("; ");
     console.error(`[AI] Zod validation failed: ${issues}`);
-    throw new Error(`AI response failed validation: ${issues}`);
+    throw new Error(`AI response failed schema validation: ${issues}`);
   }
 
-  console.log("[AI] Zod validation passed — analysis complete");
+  console.log("[AI] Validation passed — analysis complete");
   return result.data;
 }
