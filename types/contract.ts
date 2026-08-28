@@ -59,14 +59,18 @@ export type RiskAnalysis = z.infer<typeof RiskAnalysisSchema>;
 export const ContractAnalysisSchema = z.object({
   metadata: ContractMetadataSchema,
   riskAnalysis: RiskAnalysisSchema,
-  executiveSummary: z.string(),
-  keyObligations: z.array(z.string()),
-  keyDates: z.array(z.object({ label: z.string(), date: z.string().nullable() })),
-  top3Risks: z.array(RiskItemSchema),
-  missingInformation: z.array(z.string()),
-  unusualClauses: z.array(z.string()),
-  recommendedLegalRouting: z.string(),
-  disclaimer: z.string(),
+  executiveSummary: z.string().default(""),
+  keyObligations: z.array(z.string()).default([]),
+  keyDates: z
+    .array(z.object({ label: z.string(), date: z.string().nullable() }))
+    .default([]),
+  top3Risks: z.array(RiskItemSchema).default([]),
+  missingInformation: z.array(z.string()).default([]),
+  unusualClauses: z.array(z.string()).default([]),
+  recommendedLegalRouting: z.string().default(""),
+  disclaimer: z.string().default(
+    "This is AI-assisted analysis for informational purposes only and does not constitute legal advice."
+  ),
 });
 export type ContractAnalysis = z.infer<typeof ContractAnalysisSchema>;
 

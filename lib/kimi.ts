@@ -74,12 +74,14 @@ async function callKimi(text: string, jsonOnly = false): Promise<string> {
   const model = process.env.KIMI_MODEL;
 
   if (!apiKey || !model) {
-    throw new Error("KIMI_API_KEY and KIMI_MODEL must be set");
+    throw new Error("KIMI_API_KEY and KIMI_MODEL environment variables are not set");
   }
 
   const userMessage = jsonOnly
     ? `Analyze this contract and return ONLY a valid JSON object (no markdown, no explanation):\n\n${text.slice(0, 60000)}`
     : `Analyze this contract:\n\n${text.slice(0, 60000)}`;
+
+  console.log(`[AI] Sending request to ${KIMI_BASE_URL}/chat/completions — model: ${model}`);
 
   const response = await fetch(`${KIMI_BASE_URL}/chat/completions`, {
     method: "POST",
@@ -97,28 +99,43 @@ async function callKimi(text: string, jsonOnly = false): Promise<string> {
     }),
   });
 
+  console.log(`[AI] HTTP status: ${response.status}`);
+
   if (!response.ok) {
-    const err = await response.text();
-    throw new Error(`AI API error ${response.status}: ${err}`);
+    const errBody = await response.text();
+    console.error(`[AI] API error response: ${errBody}`);
+    throw new Error(`AI API returned ${response.status}: ${errBody}`);
   }
 
   const data = await response.json();
-  return data.choices?.[0]?.message?.content ?? "";
+  const content = data.choices?.[0]?.message?.content ?? "";
+  console.log(`[AI] Response received — content length: ${content.length} chars`);
+  return content;
 }
 
+/**
+ * Returns null ONLY when no API key is configured (caller should use demo mode).
+ * Throws an Error for all other failures (caller must NOT silently fall back to demo data).
+ */
 export async function analyzeContract(
   text: string
 ): Promise<ContractAnalysis | null> {
-  if (!process.env.KIMI_API_KEY || !process.env.KIMI_MODEL) {
+  const apiKey = process.env.KIMI_API_KEY;
+  const model = process.env.KIMI_MODEL;
+
+  if (!apiKey || !model) {
+    console.log("[AI] No API key/model configured — returning null for demo fallback");
     return null;
   }
+
+  // From here: API key exists. Any failure throws — callers must handle it as a real error.
 
   let raw: string;
   try {
     raw = await callKimi(text);
   } catch (e) {
-    console.error("AI API call failed:", e);
-    return null;
+    const msg = e instanceof Error ? e.message : String(e);
+    throw new Error(`AI API call failed: ${msg}`);
   }
 
   const cleaned = stripJsonFences(raw);
@@ -126,22 +143,32 @@ export async function analyzeContract(
   let parsed: unknown;
   try {
     parsed = JSON.parse(cleaned);
-  } catch {
-    console.warn("JSON parse failed, retrying with json-only prompt");
+    console.log("[AI] JSON parse succeeded");
+  } catch (parseErr) {
+    console.warn("[AI] JSON parse failed on first attempt, retrying with json-only prompt");
+    let retry: string;
     try {
-      const retry = await callKimi(text, true);
-      parsed = JSON.parse(stripJsonFences(retry));
+      retry = await callKimi(text, true);
     } catch (e) {
-      console.error("Retry JSON parse failed:", e);
-      return null;
+      const msg = e instanceof Error ? e.message : String(e);
+      throw new Error(`AI API retry call failed: ${msg}`);
+    }
+    try {
+      parsed = JSON.parse(stripJsonFences(retry));
+      console.log("[AI] JSON parse succeeded on retry");
+    } catch {
+      const originalErr = parseErr instanceof Error ? parseErr.message : String(parseErr);
+      throw new Error(`AI response is not valid JSON after retry. Original parse error: ${originalErr}. Raw response (first 500 chars): ${cleaned.slice(0, 500)}`);
     }
   }
 
   const result = ContractAnalysisSchema.safeParse(parsed);
   if (!result.success) {
-    console.error("Zod validation failed:", result.error.issues);
-    return null;
+    const issues = result.error.issues.map(i => `${i.path.join(".")}: ${i.message}`).join("; ");
+    console.error(`[AI] Zod validation failed: ${issues}`);
+    throw new Error(`AI response failed validation: ${issues}`);
   }
 
+  console.log("[AI] Zod validation passed — analysis complete");
   return result.data;
 }
