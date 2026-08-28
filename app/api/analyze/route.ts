@@ -66,11 +66,18 @@ export async function POST(request: NextRequest) {
   try {
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
+    console.log(`Extracting ${isPdf ? "PDF" : "DOCX"} - file size: ${buffer.length} bytes`);
     text = isPdf ? await extractPdfText(buffer) : await extractDocxText(buffer);
+    console.log(`Extraction successful - extracted ${text.length} characters`);
   } catch (e) {
-    console.error("Text extraction failed:", e);
+    const errorMsg = e instanceof Error ? e.message : String(e);
+    console.error("Text extraction failed:", errorMsg);
+    console.error("Full error:", e);
     return NextResponse.json(
-      { error: "Failed to extract text from the document. The file may be corrupted or password-protected." },
+      {
+        error: "Failed to extract text from the document. The file may be corrupted or password-protected.",
+        debug: process.env.NODE_ENV === "development" ? errorMsg : undefined
+      },
       { status: 422 }
     );
   }
