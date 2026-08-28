@@ -1,6 +1,6 @@
 import { ContractAnalysis, ContractAnalysisSchema } from "@/types/contract";
 
-const KIMI_BASE_URL = "https://api.moonshot.cn/v1";
+const KIMI_BASE_URL = "https://api.moonshot.ai/v1";
 
 const SYSTEM_PROMPT = `You are a senior legal AI analyst specializing in contract review.
 Analyze the provided contract text and return a structured JSON response.
