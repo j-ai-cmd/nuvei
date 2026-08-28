@@ -157,7 +157,6 @@ export default function TopBar() {
               </div>
               <div className="py-1">
                 {[
-                  { label: "Settings", href: "/settings", icon: "settings" },
                   { label: "Security Policy", href: "/security", icon: "security" },
                   { label: "Help", href: "/help", icon: "help_outline" },
                 ].map(({ label, href, icon }) => (

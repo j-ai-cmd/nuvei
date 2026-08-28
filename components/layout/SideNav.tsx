@@ -8,11 +8,9 @@ const navItems = [
   { href: "/", icon: "description", label: "Contract Intake" },
   { href: "/contracts", icon: "assignment", label: "Contracts" },
   { href: "/matters", icon: "work", label: "Matters" },
-  { href: "/analytics", icon: "analytics", label: "Analytics" },
 ];
 
 const bottomItems = [
-  { href: "/settings", icon: "settings", label: "Settings" },
   { href: "/help", icon: "help_outline", label: "Help" },
 ];
 
