@@ -95,7 +95,6 @@ async function callKimi(text: string, jsonOnly = false): Promise<string> {
         { role: "system", content: SYSTEM_PROMPT },
         { role: "user", content: userMessage },
       ],
-      temperature: 0.1,
     }),
   });
 
