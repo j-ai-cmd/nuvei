@@ -17,7 +17,7 @@ const bottomItems = [
 function NuveiLogo() {
   return (
     // eslint-disable-next-line @next/next/no-img-element
-    <img src="/nuvei-logo.svg" alt="Nuvei" className="h-9 w-auto" />
+    <img src="/nuvei-logo.png" alt="Nuvei" className="h-9 w-auto" />
   );
 }
 
