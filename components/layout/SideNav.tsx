@@ -14,26 +14,10 @@ const bottomItems = [
   { href: "/help", icon: "help_outline", label: "Help" },
 ];
 
-// Nuvei wordmark logo
 function NuveiLogo() {
   return (
-    <div className="flex items-center">
-      <svg viewBox="0 0 96 36" fill="none" xmlns="http://www.w3.org/2000/svg" className="h-8 w-auto">
-        {/* "nuvei" wordmark */}
-        <text
-          x="0" y="28"
-          fontFamily="Inter, Arial, sans-serif"
-          fontWeight="800"
-          fontSize="30"
-          fill="#081f2c"
-          letterSpacing="-1"
-        >
-          nuvei
-        </text>
-        {/* Red dot — dot on the "i", positioned above it */}
-        <circle cx="88" cy="5" r="5" fill="#ba0037" />
-      </svg>
-    </div>
+    // eslint-disable-next-line @next/next/no-img-element
+    <img src="/nuvei-logo.svg" alt="Nuvei" className="h-9 w-auto" />
   );
 }
 

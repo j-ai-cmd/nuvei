@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 90" fill="none">
+  <!-- nuvei wordmark — geometric heavy sans approximation -->
+  <text
+    x="0" y="78"
+    font-family="'Montserrat', 'Nunito Sans', 'Inter', Arial, sans-serif"
+    font-weight="900"
+    font-size="88"
+    letter-spacing="-3"
+    fill="#0d1f2d"
+  >nuvei</text>
+  <!-- red dot — dot on the i -->
+  <circle cx="263" cy="10" r="13" fill="#e3003a"/>
+</svg>
