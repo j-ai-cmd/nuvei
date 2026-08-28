@@ -4,6 +4,7 @@ import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { useRouter } from "next/navigation";
 import { AnalysisResult, HistoryEntry } from "@/types/contract";
+import { DEMO_ANALYSIS } from "@/lib/demo-analysis";
 import ProcessingModal from "./ProcessingModal";
 
 function saveToHistory(result: AnalysisResult) {
@@ -29,6 +30,11 @@ function saveToHistory(result: AnalysisResult) {
   }
 }
 
+// Generates a stable UUID-like id
+function makeId() {
+  return "demo-" + Math.random().toString(36).slice(2, 10);
+}
+
 export default function UploadZone() {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
@@ -36,7 +42,9 @@ export default function UploadZone() {
   const [filename, setFilename] = useState("");
   const [step, setStep] = useState(0);
 
-  async function submitFormData(fd: FormData, name: string) {
+  // ── Real upload path ────────────────────────────────────────────────────────
+  // Full pipeline: file → extract → Kimi API → validate → analysis page
+  async function submitFile(fd: FormData, name: string) {
     setFilename(name);
     setError(null);
     setProcessing(true);
@@ -59,7 +67,7 @@ export default function UploadZone() {
       const result: AnalysisResult = await res.json();
       try {
         sessionStorage.setItem(`legalai_result_${result.id}`, JSON.stringify(result));
-      } catch {/* ignore */}
+      } catch { /* ignore */ }
       saveToHistory(result);
 
       await new Promise((r) => setTimeout(r, 600));
@@ -71,13 +79,33 @@ export default function UploadZone() {
     }
   }
 
+  // ── Demo path ───────────────────────────────────────────────────────────────
+  // Pure frontend — no API calls, no extraction, no processing modal.
+  // Loads DEMO_ANALYSIS directly and navigates immediately.
+  function handleDemo() {
+    const id = makeId();
+    const result: AnalysisResult = {
+      id,
+      filename: "Demo_MSA_GlobalTech_Meridian.pdf",
+      analysis: DEMO_ANALYSIS,
+      isDemo: true,
+      processingTimeMs: 400,
+      analyzedAt: new Date().toISOString(),
+    };
+    try {
+      sessionStorage.setItem(`legalai_result_${id}`, JSON.stringify(result));
+    } catch { /* ignore */ }
+    saveToHistory(result);
+    router.push(`/analysis/${id}`);
+  }
+
   const onDrop = useCallback(async (accepted: File[]) => {
     if (accepted.length === 0) return;
     const file = accepted[0];
     const fd = new FormData();
     fd.append("file", file);
-    await submitFormData(fd, file.name);
-  // submitFormData is stable — defined once per render via closure
+    await submitFile(fd, file.name);
+  // submitFile is stable — defined once per render via closure
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -96,12 +124,6 @@ export default function UploadZone() {
       else setError("File rejected. Please try again.");
     },
   });
-
-  async function handleDemo() {
-    const fd = new FormData();
-    fd.append("demo", "true");
-    await submitFormData(fd, "Demo_MSA_GlobalTech_Meridian.pdf");
-  }
 
   return (
     <>

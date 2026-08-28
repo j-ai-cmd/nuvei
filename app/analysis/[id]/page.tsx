@@ -48,6 +48,77 @@ export default function AnalysisPage() {
     }
   }, [id]);
 
+  function handleExportReport() {
+    if (!result) return;
+    const { analysis, filename, isDemo, analyzedAt, processingTimeMs } = result;
+    const lines: string[] = [
+      "NUVEI LEGAL DASHBOARD — AI CONTRACT ANALYSIS REPORT",
+      "=".repeat(60),
+      `File: ${filename}`,
+      `Analyzed: ${new Date(analyzedAt).toLocaleString()}`,
+      `Processing time: ${(processingTimeMs / 1000).toFixed(1)}s`,
+      isDemo ? "⚠ DEMO DATA — pre-computed analysis" : "",
+      "",
+      "CONTRACT METADATA",
+      "-".repeat(40),
+      `Title: ${analysis.metadata.contractTitle ?? "—"}`,
+      `Type: ${analysis.metadata.agreementType ?? "—"}`,
+      `Parties: ${analysis.metadata.parties?.map((p) => `${p.name} (${p.role})`).join(", ") ?? "—"}`,
+      `Effective Date: ${analysis.metadata.effectiveDate ?? "—"}`,
+      `Expiration: ${analysis.metadata.expirationDate ?? "—"}`,
+      `Governing Law: ${analysis.metadata.governingLaw ?? "—"}`,
+      `Jurisdiction: ${analysis.metadata.jurisdiction ?? "—"}`,
+      `Contract Value: ${analysis.metadata.contractValue ?? "—"} ${analysis.metadata.currency ?? ""}`.trim(),
+      `Payment Terms: ${analysis.metadata.paymentTerms ?? "—"}`,
+      `Termination: ${analysis.metadata.terminationTerms ?? "—"}`,
+      `Liability Cap: ${analysis.metadata.liabilityCap ?? "—"}`,
+      `Confidentiality: ${analysis.metadata.confidentiality ?? "—"}`,
+      `IP Ownership: ${analysis.metadata.ipOwnership ?? "—"}`,
+      `Dispute Resolution: ${analysis.metadata.disputeResolution ?? "—"}`,
+      "",
+      "RISK ANALYSIS",
+      "-".repeat(40),
+      `Overall Score: ${analysis.riskAnalysis.overallRiskScore}/100`,
+      `Risk Level: ${analysis.riskAnalysis.riskLevel}`,
+      "",
+      `Findings (${analysis.riskAnalysis.risks.length}):`,
+      ...analysis.riskAnalysis.risks.map(
+        (r, i) => `  ${i + 1}. [${r.severity}] ${r.title}\n     ${r.explanation}\n     Clause: ${r.clause ?? "Not specified"}\n     Action: ${r.recommendedAction}`
+      ),
+      "",
+      "EXECUTIVE SUMMARY",
+      "-".repeat(40),
+      analysis.executiveSummary,
+      "",
+      "KEY OBLIGATIONS",
+      "-".repeat(40),
+      ...analysis.keyObligations.map((o, i) => `  ${i + 1}. ${o}`),
+      "",
+      "MISSING INFORMATION",
+      "-".repeat(40),
+      analysis.missingInformation.length > 0 ? analysis.missingInformation.map((m) => `  • ${m}`).join("\n") : "  None identified.",
+      "",
+      "UNUSUAL CLAUSES",
+      "-".repeat(40),
+      analysis.unusualClauses.length > 0 ? analysis.unusualClauses.map((c) => `  • ${c}`).join("\n") : "  None identified.",
+      "",
+      "RECOMMENDED ROUTING",
+      "-".repeat(40),
+      analysis.recommendedLegalRouting,
+      "",
+      "=".repeat(60),
+      analysis.disclaimer,
+    ];
+    const text = lines.filter((l) => l !== null && l !== undefined).join("\n");
+    const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${filename.replace(/\.[^/.]+$/, "")}_analysis_report.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
   async function handleCreateMatter() {
     if (!result) return;
     setCreatingMatter(true);
@@ -62,7 +133,20 @@ export default function AnalysisPage() {
         }),
       });
       const data: MatterRecord = await res.json();
-      setMatter(data);
+      // Augment with client-side context and persist to sessionStorage
+      const enriched: MatterRecord = {
+        ...data,
+        filename: result.filename,
+        contractTitle: result.analysis.metadata.contractTitle ?? undefined,
+        riskScore: result.analysis.riskAnalysis.overallRiskScore,
+        analysisId: result.id,
+      };
+      try {
+        const existing: MatterRecord[] = JSON.parse(sessionStorage.getItem("legalai_matters") ?? "[]");
+        existing.unshift(enriched);
+        sessionStorage.setItem("legalai_matters", JSON.stringify(existing.slice(0, 50)));
+      } catch { /* sessionStorage unavailable */ }
+      setMatter(enriched);
     } catch {
       alert("Failed to create matter. Please try again.");
     } finally {
@@ -128,7 +212,11 @@ export default function AnalysisPage() {
           </h1>
         </div>
         <div className="flex gap-3 w-full md:w-auto">
-          <button className="flex-1 md:flex-none px-6 py-2.5 rounded text-xs font-bold tracking-wider uppercase bg-surface-container-high text-on-surface hover:bg-surface-variant transition-colors border border-outline-variant/10">
+          <button
+            onClick={handleExportReport}
+            className="flex-1 md:flex-none px-6 py-2.5 rounded text-xs font-bold tracking-wider uppercase bg-surface-container-high text-on-surface hover:bg-surface-variant transition-colors border border-outline-variant/10 flex items-center justify-center gap-2"
+          >
+            <span className="material-symbols-outlined text-[18px]">download</span>
             Export Report
           </button>
           <button
@@ -319,7 +407,7 @@ export default function AnalysisPage() {
                 {creatingMatter ? "Creating Matter..." : "Create Matter (Simulated)"}
               </button>
               <p className="text-xs text-center text-on-surface-variant/60 mt-3">
-                DEMONSTRATION · MOCK CLM INTEGRATION · No data is persisted
+                DEMONSTRATION · MOCK CLM INTEGRATION · Saved to session Matters
               </p>
             </div>
           )}

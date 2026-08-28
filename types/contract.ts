@@ -88,9 +88,13 @@ export interface MatterRecord {
   contractType: string;
   counterparty: string;
   riskLevel: string;
+  riskScore?: number;
   assignedTeam: string;
   status: string;
   createdAt: string;
+  filename?: string;
+  contractTitle?: string;
+  analysisId?: string;
 }
 
 export interface HistoryEntry {

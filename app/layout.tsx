@@ -5,7 +5,7 @@ import TopBar from "@/components/layout/TopBar";
 import Footer from "@/components/layout/Footer";
 
 export const metadata: Metadata = {
-  title: "Legal AI · Enterprise Legal Ops",
+  title: "Nuvei Legal Dashboard",
   description: "AI-powered contract intake, analysis, and risk assessment for legal operations teams.",
 };
 
