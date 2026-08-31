@@ -80,22 +80,34 @@ export default function UploadZone() {
   }
 
   // ── Demo path ───────────────────────────────────────────────────────────────
-  // Pure frontend — no API calls, no extraction, no processing modal.
-  // Loads DEMO_ANALYSIS directly and navigates immediately.
-  function handleDemo() {
+  // Pure frontend — no API calls. Animates steps 0→4 then navigates.
+  async function handleDemo() {
     const id = makeId();
+    const demoFilename = "Demo_MSA_GlobalTech_Meridian.pdf";
+    setFilename(demoFilename);
+    setProcessing(true);
+    setStep(0);
+
+    // Advance through steps 1-4 at 500ms each (step 0 shown instantly)
+    for (let s = 1; s <= 4; s++) {
+      await new Promise((r) => setTimeout(r, 500));
+      setStep(s);
+    }
+    await new Promise((r) => setTimeout(r, 400));
+
     const result: AnalysisResult = {
       id,
-      filename: "Demo_MSA_GlobalTech_Meridian.pdf",
+      filename: demoFilename,
       analysis: DEMO_ANALYSIS,
       isDemo: true,
-      processingTimeMs: 400,
+      processingTimeMs: 2800,
       analyzedAt: new Date().toISOString(),
     };
     try {
       sessionStorage.setItem(`legalai_result_${id}`, JSON.stringify(result));
     } catch { /* ignore */ }
     saveToHistory(result);
+    setProcessing(false);
     router.push(`/analysis/${id}`);
   }
 
