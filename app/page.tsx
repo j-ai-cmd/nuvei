@@ -5,30 +5,15 @@ import Link from "next/link";
 import UploadZone from "@/components/intake/UploadZone";
 import WorkflowStepper from "@/components/intake/WorkflowStepper";
 import { HistoryEntry } from "@/types/contract";
-
-function riskBadge(level: string) {
-  if (level === "CRITICAL" || level === "HIGH") return "bg-secondary/10 text-secondary";
-  if (level === "MEDIUM") return "bg-amber-100 text-amber-800";
-  return "bg-green-100 text-green-800";
-}
-
-function formatTime(iso: string) {
-  const diff = Date.now() - new Date(iso).getTime();
-  if (diff < 3600000) return `${Math.round(diff / 60000)}m ago`;
-  if (diff < 86400000) return `${Math.round(diff / 3600000)}h ago`;
-  return `${Math.round(diff / 86400000)}d ago`;
-}
+import { getStoredHistory } from "@/lib/storage";
+import { formatRelative } from "@/lib/format";
+import { Icon, RiskBadge } from "@/components/ui";
 
 export default function IntakePage() {
   const [recent, setRecent] = useState<HistoryEntry[]>([]);
 
   useEffect(() => {
-    try {
-      const stored: HistoryEntry[] = JSON.parse(sessionStorage.getItem("legalai_history") ?? "[]");
-      setRecent(stored.slice(0, 5));
-    } catch {
-      setRecent([]);
-    }
+    setRecent(getStoredHistory().slice(0, 5));
   }, []);
 
   return (
@@ -57,7 +42,7 @@ export default function IntakePage() {
             <h3 className="text-xl font-bold text-primary">Recent Intakes</h3>
             {recent.length > 0 && (
               <Link href="/contracts" className="text-xs font-bold text-primary hover:underline flex items-center gap-1">
-                All <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
+                All <Icon name="arrow_forward" className="text-[14px]" />
               </Link>
             )}
           </div>
@@ -70,19 +55,17 @@ export default function IntakePage() {
               {recent.map((item) => (
                 <Link
                   key={item.id}
-                  href={item.id.startsWith("seed-") ? "/contracts" : `/analysis/${item.id}`}
+                  href={`/analysis/${item.id}`}
                   className="flex items-start gap-4 p-3 hover:bg-surface-container-low rounded-lg transition-colors"
                 >
                   <div className="w-10 h-10 rounded bg-primary/5 flex items-center justify-center text-primary flex-shrink-0">
-                    <span className="material-symbols-outlined text-[20px]">description</span>
+                    <Icon name="description" className="text-[20px]" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-xs font-bold text-primary truncate">{item.filename}</p>
-                    <p className="text-xs text-on-surface-variant">{formatTime(item.analyzedAt)}</p>
+                    <p className="text-xs text-on-surface-variant">{formatRelative(item.analyzedAt)}</p>
                   </div>
-                  <span className={`text-[10px] font-bold px-2 py-1 rounded whitespace-nowrap ${riskBadge(item.riskLevel)}`}>
-                    {item.riskLevel}
-                  </span>
+                  <RiskBadge level={item.riskLevel} />
                 </Link>
               ))}
             </div>
@@ -92,7 +75,7 @@ export default function IntakePage() {
         {/* Secure Processing */}
         <div className="bg-surface-container-low border border-outline-variant/10 rounded-xl p-6">
           <h3 className="text-xl font-bold text-primary mb-2 flex items-center gap-2">
-            <span className="material-symbols-outlined text-secondary text-[20px]">info</span>
+            <Icon name="info" className="text-secondary text-[20px]" />
             Secure Processing
           </h3>
           <p className="text-sm text-on-surface-variant mb-4">
@@ -101,7 +84,7 @@ export default function IntakePage() {
           </p>
           <Link href="/security" className="text-xs font-bold text-primary hover:underline flex items-center gap-1">
             View Security Policy
-            <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
+            <Icon name="arrow_forward" className="text-[16px]" />
           </Link>
         </div>
       </div>

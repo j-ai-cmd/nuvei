@@ -1,5 +1,7 @@
 "use client";
 
+import { Icon } from "@/components/ui";
+
 interface Step {
   label: string;
   sublabel?: string;
@@ -38,7 +40,7 @@ export default function ProcessingModal({ filename, currentStep, onCancel }: Pro
     <div className="fixed inset-0 bg-primary-container/20 backdrop-blur-sm z-50 flex items-center justify-center p-6">
       <div className="bg-surface-container-lowest border border-outline-variant/10 rounded-xl w-full max-w-lg p-10 shadow-xl">
         <div className="text-center mb-8">
-          <span className="material-symbols-outlined text-4xl text-primary mb-4 block">neurology</span>
+          <Icon name="neurology" className="text-4xl text-primary mb-4 block" />
           <h1 className="text-2xl font-bold text-primary">Processing Contract</h1>
           <p className="text-sm text-on-surface-variant mt-2 truncate max-w-xs mx-auto">{filename}</p>
         </div>
@@ -54,7 +56,7 @@ export default function ProcessingModal({ filename, currentStep, onCancel }: Pro
                   : "border border-outline"
               }`}>
                 {step.status === "done" ? (
-                  <span className="material-symbols-outlined text-[18px]">check</span>
+                  <Icon name="check" className="text-[18px]" />
                 ) : step.status === "active" ? (
                   <div className="w-2.5 h-2.5 bg-white rounded-full" />
                 ) : null}

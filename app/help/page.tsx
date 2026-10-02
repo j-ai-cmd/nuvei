@@ -1,3 +1,5 @@
+import { PageHeader } from "@/components/ui";
+
 export default function HelpPage() {
   const faqs = [
     {
@@ -36,10 +38,7 @@ export default function HelpPage() {
 
   return (
     <div className="max-w-3xl">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-primary-container mb-2">Help</h1>
-        <p className="text-base text-on-surface-variant">Frequently asked questions about the platform.</p>
-      </div>
+      <PageHeader title="Help" subtitle="Frequently asked questions about the platform." action={null} />
 
       <div className="space-y-4">
         {faqs.map(({ q, a }) => (

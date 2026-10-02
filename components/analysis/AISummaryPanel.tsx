@@ -1,4 +1,5 @@
 import { ContractAnalysis } from "@/types/contract";
+import { Icon } from "@/components/ui";
 
 export default function AISummaryPanel({ analysis }: { analysis: ContractAnalysis }) {
   const { missingInformation, recommendedLegalRouting, top3Risks, unusualClauses } = analysis;
@@ -14,7 +15,7 @@ export default function AISummaryPanel({ analysis }: { analysis: ContractAnalysi
         <div className="relative z-10">
           <div className="flex items-center gap-3 mb-6">
             <div className="w-8 h-8 rounded bg-white/10 flex items-center justify-center">
-              <span className="material-symbols-outlined text-white text-[20px]">psychology</span>
+              <Icon name="psychology" className="text-white text-[20px]" />
             </div>
             <h3 className="text-xl font-bold text-white">AI Review Summary</h3>
           </div>
@@ -23,7 +24,7 @@ export default function AISummaryPanel({ analysis }: { analysis: ContractAnalysi
             {missingInformation.length > 0 && (
               <div>
                 <h4 className="text-xs font-bold text-on-primary-container uppercase tracking-widest mb-2 flex items-center gap-2">
-                  <span className="material-symbols-outlined text-[16px]">error_outline</span>
+                  <Icon name="error_outline" className="text-[16px]" />
                   Missing Information
                 </h4>
                 <ul className="space-y-2">
@@ -41,7 +42,7 @@ export default function AISummaryPanel({ analysis }: { analysis: ContractAnalysi
 
             <div>
               <h4 className="text-xs font-bold text-on-primary-container uppercase tracking-widest mb-2 flex items-center gap-2">
-                <span className="material-symbols-outlined text-[16px]">route</span>
+                <Icon name="route" className="text-[16px]" />
                 Recommended Routing
               </h4>
               <div className="bg-white/5 rounded p-3 border-l-2 border-primary-fixed">
@@ -57,7 +58,7 @@ export default function AISummaryPanel({ analysis }: { analysis: ContractAnalysi
       {unusualClauses.length > 0 && (
         <div className="bg-surface-container-lowest rounded-lg border border-outline-variant/10 p-5">
           <h3 className="text-base font-bold text-primary mb-4 flex items-center gap-2">
-            <span className="material-symbols-outlined text-secondary text-[20px]">gavel</span>
+            <Icon name="gavel" className="text-secondary text-[20px]" />
             Unusual Clauses
           </h3>
           <ul className="space-y-3">

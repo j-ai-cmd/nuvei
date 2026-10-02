@@ -3,6 +3,9 @@
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { HistoryEntry, MatterRecord } from "@/types/contract";
+import { getMatters, getStoredHistory } from "@/lib/storage";
+import { formatRelative } from "@/lib/format";
+import { Icon } from "@/components/ui";
 
 interface Notification {
   id: string;
@@ -10,6 +13,7 @@ interface Notification {
   title: string;
   body: string;
   time: string;
+  href: string;
 }
 
 function buildNotifications(history: HistoryEntry[], matters: MatterRecord[]): Notification[] {
@@ -18,14 +22,13 @@ function buildNotifications(history: HistoryEntry[], matters: MatterRecord[]): N
     .sort((a, b) => new Date(b.analyzedAt).getTime() - new Date(a.analyzedAt).getTime())
     .slice(0, 3);
   recent.forEach((h) => {
-    const diff = Date.now() - new Date(h.analyzedAt).getTime();
-    const time = diff < 3600000 ? `${Math.round(diff / 60000)}m ago` : `${Math.round(diff / 3600000)}h ago`;
     notes.push({
       id: `analysis-${h.id}`,
       icon: h.riskLevel === "HIGH" || h.riskLevel === "CRITICAL" ? "warning" : "check_circle",
       title: `${h.riskLevel} risk — ${h.filename}`,
       body: `Analysis complete · Score ${h.riskScore}/100`,
-      time,
+      time: formatRelative(h.analyzedAt),
+      href: `/analysis/${h.id}`,
     });
   });
   matters.slice(0, 2).forEach((m) => {
@@ -34,10 +37,8 @@ function buildNotifications(history: HistoryEntry[], matters: MatterRecord[]): N
       icon: "work",
       title: `Matter created: ${m.matterId}`,
       body: `${m.contractType} · ${m.counterparty}`,
-      time: (() => {
-        const diff = Date.now() - new Date(m.createdAt).getTime();
-        return diff < 3600000 ? `${Math.round(diff / 60000)}m ago` : `${Math.round(diff / 3600000)}h ago`;
-      })(),
+      time: formatRelative(m.createdAt),
+      href: "/matters",
     });
   });
   return notes;
@@ -53,11 +54,7 @@ export default function TopBar() {
   const accountRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    try {
-      const history: HistoryEntry[] = JSON.parse(sessionStorage.getItem("legalai_history") ?? "[]");
-      const matters: MatterRecord[] = JSON.parse(sessionStorage.getItem("legalai_matters") ?? "[]");
-      setNotifications(buildNotifications(history, matters));
-    } catch { /* ignore */ }
+    setNotifications(buildNotifications(getStoredHistory(), getMatters()));
   }, [showNotifs]);
 
   // Close popovers on outside click
@@ -104,7 +101,7 @@ export default function TopBar() {
             className="p-2 rounded-full text-on-surface-variant hover:bg-surface-container-high transition-all relative"
             aria-label="Notifications"
           >
-            <span className="material-symbols-outlined">notifications</span>
+            <Icon name="notifications" />
             {notifications.length > 0 && (
               <span className="absolute top-1 right-1 w-2 h-2 bg-secondary rounded-full" />
             )}
@@ -122,7 +119,11 @@ export default function TopBar() {
               ) : (
                 <div className="divide-y divide-outline-variant/10 max-h-72 overflow-y-auto">
                   {notifications.map((n) => (
-                    <div key={n.id} className="px-4 py-3 flex items-start gap-3 hover:bg-surface-container-low transition-colors">
+                    <button
+                      key={n.id}
+                      onClick={() => { setShowNotifs(false); router.push(n.href); }}
+                      className="w-full text-left px-4 py-3 flex items-start gap-3 hover:bg-surface-container-low transition-colors"
+                    >
                       <span className={`material-symbols-outlined text-[18px] mt-0.5 shrink-0 ${n.icon === "warning" ? "text-secondary" : "text-primary-container"}`}>
                         {n.icon}
                       </span>
@@ -131,7 +132,7 @@ export default function TopBar() {
                         <p className="text-xs text-on-surface-variant">{n.body}</p>
                       </div>
                       <span className="text-[10px] text-on-surface-variant/60 shrink-0">{n.time}</span>
-                    </div>
+                    </button>
                   ))}
                 </div>
               )}
@@ -146,7 +147,7 @@ export default function TopBar() {
             className="p-2 rounded-full text-on-surface-variant hover:bg-surface-container-high transition-all"
             aria-label="Account"
           >
-            <span className="material-symbols-outlined">account_circle</span>
+            <Icon name="account_circle" />
           </button>
 
           {showAccount && (
@@ -166,7 +167,7 @@ export default function TopBar() {
                     className="flex items-center gap-3 px-4 py-2.5 text-sm text-on-surface hover:bg-surface-container-low transition-colors"
                     onClick={() => setShowAccount(false)}
                   >
-                    <span className="material-symbols-outlined text-[18px] text-on-surface-variant">{icon}</span>
+                    <Icon name={icon} className="text-[18px] text-on-surface-variant" />
                     {label}
                   </a>
                 ))}

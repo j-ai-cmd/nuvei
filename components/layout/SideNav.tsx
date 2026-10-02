@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Icon } from "@/components/ui";
 
 const navItems = [
   { href: "/dashboard", icon: "dashboard", label: "Dashboard" },
@@ -48,7 +49,7 @@ export default function SideNav() {
                   : "text-on-surface-variant opacity-80 hover:bg-surface-variant/30"
               }`}
             >
-              <span className="material-symbols-outlined text-[20px]">{item.icon}</span>
+              <Icon name={item.icon} className="text-[20px]" />
               <span className="text-xs font-semibold tracking-wider uppercase">{item.label}</span>
             </Link>
           );
@@ -68,7 +69,7 @@ export default function SideNav() {
                   : "text-on-surface-variant opacity-80 hover:bg-surface-variant/30"
               }`}
             >
-              <span className="material-symbols-outlined text-[20px]">{item.icon}</span>
+              <Icon name={item.icon} className="text-[20px]" />
               <span className="text-xs font-semibold tracking-wider uppercase">{item.label}</span>
             </Link>
           );

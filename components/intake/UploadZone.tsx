@@ -3,32 +3,11 @@
 import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { useRouter } from "next/navigation";
-import { AnalysisResult, HistoryEntry } from "@/types/contract";
+import { AnalysisResult } from "@/types/contract";
+import { saveResult } from "@/lib/storage";
 import { DEMO_ANALYSIS } from "@/lib/demo-analysis";
 import ProcessingModal from "./ProcessingModal";
-
-function saveToHistory(result: AnalysisResult) {
-  try {
-    const entry: HistoryEntry = {
-      id: result.id,
-      filename: result.filename,
-      contractType: result.analysis.metadata.agreementType,
-      counterparty: result.analysis.metadata.parties?.[0]?.name ?? null,
-      riskLevel: result.analysis.riskAnalysis.riskLevel,
-      riskScore: result.analysis.riskAnalysis.overallRiskScore,
-      isDemo: result.isDemo,
-      analyzedAt: result.analyzedAt,
-      processingTimeMs: result.processingTimeMs,
-    };
-    const existing: HistoryEntry[] = JSON.parse(
-      sessionStorage.getItem("legalai_history") ?? "[]"
-    );
-    existing.unshift(entry);
-    sessionStorage.setItem("legalai_history", JSON.stringify(existing.slice(0, 50)));
-  } catch {
-    // sessionStorage unavailable
-  }
-}
+import { Icon } from "@/components/ui";
 
 // Generates a stable UUID-like id
 function makeId() {
@@ -65,10 +44,7 @@ export default function UploadZone() {
       }
 
       const result: AnalysisResult = await res.json();
-      try {
-        sessionStorage.setItem(`legalai_result_${result.id}`, JSON.stringify(result));
-      } catch { /* ignore */ }
-      saveToHistory(result);
+      saveResult(result);
 
       await new Promise((r) => setTimeout(r, 600));
       router.push(`/analysis/${result.id}`);
@@ -103,10 +79,7 @@ export default function UploadZone() {
       processingTimeMs: 2800,
       analyzedAt: new Date().toISOString(),
     };
-    try {
-      sessionStorage.setItem(`legalai_result_${id}`, JSON.stringify(result));
-    } catch { /* ignore */ }
-    saveToHistory(result);
+    saveResult(result);
     setProcessing(false);
     router.push(`/analysis/${id}`);
   }
@@ -166,7 +139,7 @@ export default function UploadZone() {
 
         {error && (
           <div className="mb-6 px-4 py-3 bg-error-container text-on-error-container rounded-lg text-sm flex items-center gap-2">
-            <span className="material-symbols-outlined text-[18px]">error</span>
+            <Icon name="error" className="text-[18px]" />
             {error}
           </div>
         )}

@@ -1,3 +1,5 @@
+import { Icon } from "@/components/ui";
+
 interface StatCardProps {
   label: string;
   value: string;
@@ -21,7 +23,7 @@ export default function StatCard({ label, value, trend, trendUp, icon, highlight
         <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
           highlight ? "bg-secondary/20 text-secondary" : "bg-primary-fixed/20 text-primary-container"
         }`}>
-          <span className="material-symbols-outlined text-sm">{icon}</span>
+          <Icon name={icon} className="text-sm" />
         </div>
       </div>
       <div>
@@ -31,7 +33,7 @@ export default function StatCard({ label, value, trend, trendUp, icon, highlight
             highlight ? "text-secondary" : trendUp ? "text-emerald-600" : "text-emerald-600"
           }`}>
             {!highlight && (
-              <span className="material-symbols-outlined text-xs">{trendUp ? "trending_up" : "trending_down"}</span>
+              <Icon name={trendUp ? "trending_up" : "trending_down"} className="text-xs" />
             )}
             {trend}
           </div>

@@ -1,3 +1,4 @@
+import { Icon } from "@/components/ui";
 const STEPS = ["Upload", "Extract", "AI Analysis", "Risk Assessment", "Matter Ready"];
 
 export default function WorkflowStepper({ activeStep = 0 }: { activeStep?: number }) {
@@ -22,7 +23,7 @@ export default function WorkflowStepper({ activeStep = 0 }: { activeStep?: numbe
                     : "bg-surface-container-high text-on-surface-variant border border-outline-variant/20"
                 }`}
               >
-                {done ? <span className="material-symbols-outlined text-[16px]">check</span> : i + 1}
+                {done ? <Icon name="check" className="text-[16px]" /> : i + 1}
               </div>
               <span className={`text-xs font-bold tracking-wider ${active || done ? "text-primary" : "text-on-surface-variant"}`}>
                 {label}

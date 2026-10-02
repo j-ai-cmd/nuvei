@@ -2,6 +2,7 @@
 
 import { MatterRecord } from "@/types/contract";
 import { useRouter } from "next/navigation";
+import { Icon } from "@/components/ui";
 
 interface MatterModalProps {
   matter: MatterRecord;
@@ -27,7 +28,7 @@ export default function MatterModal({ matter, onClose }: MatterModalProps) {
         <div className="p-8">
           <div className="flex flex-col items-center text-center mb-8">
             <div className="h-16 w-16 rounded-full bg-surface-container flex items-center justify-center mb-4">
-              <span className="material-symbols-outlined text-[32px] text-primary">check_circle</span>
+              <Icon name="check_circle" className="text-[32px] text-primary" />
             </div>
             <h2 className="text-2xl font-bold text-primary">Matter Created</h2>
             <p className="text-sm text-on-surface-variant mt-2">
