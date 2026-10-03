@@ -9,6 +9,9 @@ import RiskCard from "@/components/analysis/RiskCard";
 import KeyTermsGrid from "@/components/analysis/KeyTermsGrid";
 import AISummaryPanel from "@/components/analysis/AISummaryPanel";
 import MatterModal from "@/components/analysis/MatterModal";
+import { getResult, saveMatter } from "@/lib/storage";
+import { isHighRisk } from "@/lib/format";
+import { Accordion, Button, EmptyState, Icon, Panel, Spinner, Tabs, useToast } from "@/components/ui";
 
 type Tab = "overview" | "risk" | "terms" | "ai-review" | "matter";
 
@@ -16,7 +19,7 @@ function DemoBanner() {
 
   return (
     <div className="mb-6 px-4 py-3 bg-surface-container border border-outline-variant/20 rounded-lg flex items-center gap-3">
-      <span className="material-symbols-outlined text-on-surface-variant text-[20px]">science</span>
+      <Icon name="science" className="text-on-surface-variant text-[20px]" />
       <div>
         <span className="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Demo Data</span>
         <p className="text-xs text-on-surface-variant">
@@ -34,18 +37,12 @@ export default function AnalysisPage() {
   const [activeTab, setActiveTab] = useState<Tab>("overview");
   const [matter, setMatter] = useState<MatterRecord | null>(null);
   const [creatingMatter, setCreatingMatter] = useState(false);
+  const toast = useToast();
 
   useEffect(() => {
-    try {
-      const stored = sessionStorage.getItem(`legalai_result_${id}`);
-      if (stored) {
-        setResult(JSON.parse(stored));
-      } else {
-        setNotFound(true);
-      }
-    } catch {
-      setNotFound(true);
-    }
+    const found = getResult(id);
+    if (found) setResult(found);
+    else setNotFound(true);
   }, [id]);
 
   function handleExportReport() {
@@ -117,6 +114,7 @@ export default function AnalysisPage() {
     a.download = `${filename.replace(/\.[^/.]+$/, "")}_analysis_report.txt`;
     a.click();
     URL.revokeObjectURL(url);
+    toast("Report downloaded", "success");
   }
 
   async function handleCreateMatter() {
@@ -133,7 +131,7 @@ export default function AnalysisPage() {
         }),
       });
       const data: MatterRecord = await res.json();
-      // Augment with client-side context and persist to sessionStorage
+      // Augment with client-side context and persist to session Matters
       const enriched: MatterRecord = {
         ...data,
         filename: result.filename,
@@ -141,14 +139,11 @@ export default function AnalysisPage() {
         riskScore: result.analysis.riskAnalysis.overallRiskScore,
         analysisId: result.id,
       };
-      try {
-        const existing: MatterRecord[] = JSON.parse(sessionStorage.getItem("legalai_matters") ?? "[]");
-        existing.unshift(enriched);
-        sessionStorage.setItem("legalai_matters", JSON.stringify(existing.slice(0, 50)));
-      } catch { /* sessionStorage unavailable */ }
+      saveMatter(enriched);
       setMatter(enriched);
+      toast(`Matter ${enriched.matterId} created`, "success");
     } catch {
-      alert("Failed to create matter. Please try again.");
+      toast("Failed to create matter. Please try again.", "error");
     } finally {
       setCreatingMatter(false);
     }
@@ -156,29 +151,16 @@ export default function AnalysisPage() {
 
   if (notFound) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
-        <span className="material-symbols-outlined text-5xl text-on-surface-variant mb-4">search_off</span>
-        <h2 className="text-2xl font-bold text-primary mb-2">Analysis not found</h2>
-        <p className="text-sm text-on-surface-variant mb-6">
-          This session has expired or the analysis was not stored. Please upload a new contract.
-        </p>
-        <Link href="/" className="bg-primary text-white px-6 py-3 rounded text-xs font-bold tracking-wider uppercase hover:bg-primary/90 transition-colors">
-          New Intake
-        </Link>
-      </div>
+      <EmptyState
+        icon="search_off"
+        title="Analysis not found"
+        message="This session has expired or the analysis was not stored. Please upload a new contract."
+        cta={{ href: "/", label: "New Intake" }}
+      />
     );
   }
 
-  if (!result) {
-    return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="flex flex-col items-center gap-4">
-          <div className="w-10 h-10 border-2 border-primary border-t-transparent rounded-full animate-spin-slow" />
-          <p className="text-sm text-on-surface-variant">Loading analysis...</p>
-        </div>
-      </div>
-    );
-  }
+  if (!result) return <Spinner label="Loading analysis..." />;
 
   const { analysis, filename, isDemo } = result;
   const { metadata, riskAnalysis, executiveSummary, keyObligations, keyDates } = analysis;
@@ -202,38 +184,29 @@ export default function AnalysisPage() {
 
       {/* Context Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-        <div>
-          <Link href="/" className="inline-flex items-center text-on-surface-variant hover:text-primary transition-colors mb-2 text-sm">
-            <span className="material-symbols-outlined text-[18px] mr-1">arrow_back</span>
-            Back to Intake
+        <div className="min-w-0 w-full md:w-auto">
+          <Link href="/contracts" className="inline-flex items-center text-on-surface-variant hover:text-primary transition-colors mb-2 text-sm">
+            <Icon name="arrow_back" className="text-[18px] mr-1" />
+            Back to Contracts
           </Link>
-          <h1 className="text-2xl md:text-3xl font-bold text-primary tracking-tight truncate max-w-2xl">
+          <h1 className="text-2xl md:text-3xl font-bold text-primary tracking-tight md:truncate max-w-2xl break-words">
             {metadata.contractTitle ?? filename}
           </h1>
         </div>
-        <div className="flex gap-3 w-full md:w-auto">
-          <button
-            onClick={handleExportReport}
-            className="flex-1 md:flex-none px-6 py-2.5 rounded text-xs font-bold tracking-wider uppercase bg-surface-container-high text-on-surface hover:bg-surface-variant transition-colors border border-outline-variant/10 flex items-center justify-center gap-2"
-          >
-            <span className="material-symbols-outlined text-[18px]">download</span>
+        <div className="flex flex-wrap gap-3 w-full md:w-auto shrink-0">
+          <Button variant="secondary" icon="download" onClick={handleExportReport} className="flex-1 md:flex-none">
             Export Report
-          </button>
-          <button
-            onClick={handleCreateMatter}
-            disabled={creatingMatter}
-            className="flex-1 md:flex-none px-6 py-2.5 rounded text-xs font-bold tracking-wider uppercase bg-secondary text-white hover:opacity-90 transition-opacity shadow-sm flex items-center justify-center gap-2 disabled:opacity-60"
-          >
-            <span className="material-symbols-outlined text-[18px]">add_circle</span>
+          </Button>
+          <Button variant="danger" icon="add_circle" onClick={handleCreateMatter} disabled={creatingMatter} className="flex-1 md:flex-none">
             {creatingMatter ? "Creating..." : "Create Matter"}
-          </button>
+          </Button>
         </div>
       </div>
 
       {isDemo && <DemoBanner />}
 
       {/* Metadata Bar */}
-      <div className="bg-white border border-outline-variant/10 rounded-lg p-4 mb-8 flex flex-wrap gap-x-8 gap-y-4 items-center shadow-sm">
+      <div className="bg-white border border-outline-variant/10 rounded-lg p-4 mb-8 flex flex-wrap gap-x-8 gap-y-4 items-center shadow-xs">
         <div>
           <span className="text-xs text-on-surface-variant uppercase tracking-wider font-semibold">Type</span>
           <p className="text-base font-bold text-primary mt-1">{metadata.agreementType ?? "Unknown"}</p>
@@ -247,7 +220,7 @@ export default function AnalysisPage() {
         <div>
           <span className="text-xs text-on-surface-variant uppercase tracking-wider font-semibold">Effective Date</span>
           <p className="text-base font-bold text-primary mt-1 flex items-center gap-1">
-            <span className="material-symbols-outlined text-[16px] text-on-surface-variant">calendar_today</span>
+            <Icon name="calendar_today" className="text-[16px] text-on-surface-variant" />
             {metadata.effectiveDate ?? "Not specified"}
           </p>
         </div>
@@ -255,12 +228,8 @@ export default function AnalysisPage() {
         <div>
           <span className="text-xs text-on-surface-variant uppercase tracking-wider font-semibold">Risk Level</span>
           <div className="flex items-center gap-2 mt-1">
-            <span className={`w-2.5 h-2.5 rounded-full ${
-              riskAnalysis.riskLevel === "HIGH" || riskAnalysis.riskLevel === "CRITICAL" ? "bg-secondary" : "bg-primary-container"
-            }`} />
-            <span className={`text-base font-bold ${
-              riskAnalysis.riskLevel === "HIGH" || riskAnalysis.riskLevel === "CRITICAL" ? "text-secondary" : "text-primary-container"
-            }`}>
+            <span className={`w-2.5 h-2.5 rounded-full ${isHighRisk(riskAnalysis.riskLevel) ? "bg-secondary" : "bg-primary-container"}`} />
+            <span className={`text-base font-bold ${isHighRisk(riskAnalysis.riskLevel) ? "text-secondary" : "text-primary-container"}`}>
               {riskAnalysis.riskLevel}
             </span>
           </div>
@@ -273,24 +242,10 @@ export default function AnalysisPage() {
       </div>
 
       {/* Tab Navigation */}
-      <nav className="flex border-b border-outline-variant/20 overflow-x-auto mb-6">
-        {TABS.map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            className={`px-6 py-3 text-xs font-bold tracking-wider uppercase whitespace-nowrap transition-colors ${
-              activeTab === tab.id
-                ? "text-primary border-b-2 border-secondary"
-                : "text-on-surface-variant hover:text-primary"
-            }`}
-          >
-            {tab.label}
-          </button>
-        ))}
-      </nav>
+      <Tabs tabs={TABS} active={activeTab} onChange={setActiveTab} />
 
       {/* Disclaimer */}
-      <div className="mb-6 p-3 bg-surface-container-low border border-outline-variant/10 rounded text-xs text-on-surface-variant">
+      <div className="mb-6 p-3 bg-surface-container-low border border-outline-variant/10 rounded-sm text-xs text-on-surface-variant">
         <strong>Disclaimer:</strong> {analysis.disclaimer}
       </div>
 
@@ -299,28 +254,25 @@ export default function AnalysisPage() {
         <div className="lg:col-span-8">
           {activeTab === "overview" && (
             <div className="space-y-6">
-              <div className="bg-surface-container-lowest rounded-lg border border-outline-variant/10 p-6">
-                <h3 className="text-xl font-bold text-primary mb-4">Executive Summary</h3>
+              <Panel title="Executive Summary">
                 <p className="text-sm text-on-surface-variant leading-relaxed">{executiveSummary}</p>
-              </div>
+              </Panel>
 
               {keyObligations.length > 0 && (
-                <div className="bg-surface-container-lowest rounded-lg border border-outline-variant/10 p-6">
-                  <h3 className="text-xl font-bold text-primary mb-4">Key Obligations</h3>
+                <Panel title="Key Obligations">
                   <ul className="space-y-2">
                     {keyObligations.map((o, i) => (
                       <li key={i} className="flex items-start gap-3 text-sm text-on-surface-variant">
-                        <span className="w-1.5 h-1.5 rounded-full bg-primary mt-2 flex-shrink-0" />
+                        <span className="w-1.5 h-1.5 rounded-full bg-primary mt-2 shrink-0" />
                         {o}
                       </li>
                     ))}
                   </ul>
-                </div>
+                </Panel>
               )}
 
               {keyDates.length > 0 && (
-                <div className="bg-surface-container-lowest rounded-lg border border-outline-variant/10 p-6">
-                  <h3 className="text-xl font-bold text-primary mb-4">Key Dates</h3>
+                <Panel title="Key Dates">
                   <div className="space-y-3">
                     {keyDates.map((d, i) => (
                       <div key={i} className="flex items-center justify-between border-b border-outline-variant/10 pb-3">
@@ -329,25 +281,23 @@ export default function AnalysisPage() {
                       </div>
                     ))}
                   </div>
-                </div>
+                </Panel>
               )}
             </div>
           )}
 
           {activeTab === "risk" && (
             <div className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <RiskScoreCard score={riskAnalysis.overallRiskScore} riskLevel={riskAnalysis.riskLevel} />
-                <div className="space-y-4">
-                  <h3 className="text-xl font-bold text-primary">All Findings ({riskAnalysis.risks.length})</h3>
-                  {riskAnalysis.risks.slice(0, 3).map((r, i) => (
-                    <RiskCard key={i} risk={r} />
-                  ))}
-                </div>
-              </div>
-              {riskAnalysis.risks.slice(3).map((r, i) => (
-                <RiskCard key={i + 3} risk={r} />
-              ))}
+              <RiskScoreCard score={riskAnalysis.overallRiskScore} riskLevel={riskAnalysis.riskLevel} />
+              <h3 className="text-xl font-bold text-primary">All Findings ({riskAnalysis.risks.length})</h3>
+              <Accordion
+                defaultExpandedIds={[0]}
+                items={riskAnalysis.risks.map((r, i) => ({
+                  id: i,
+                  title: `${r.severity} · ${r.title}`,
+                  content: <RiskCard risk={r} />,
+                }))}
+              />
             </div>
           )}
 
@@ -357,28 +307,26 @@ export default function AnalysisPage() {
 
           {activeTab === "ai-review" && (
             <div className="space-y-6">
-              <div className="bg-surface-container-lowest rounded-lg border border-outline-variant/10 p-6">
-                <h3 className="text-xl font-bold text-primary mb-4">Full Executive Summary</h3>
+              <Panel title="Full Executive Summary">
                 <p className="text-sm text-on-surface-variant leading-relaxed">{executiveSummary}</p>
-              </div>
+              </Panel>
               {analysis.missingInformation.length > 0 && (
-                <div className="bg-surface-container-lowest rounded-lg border border-outline-variant/10 p-6">
-                  <h3 className="text-xl font-bold text-primary mb-4">Missing Information</h3>
+                <Panel title="Missing Information">
                   <ul className="space-y-2">
                     {analysis.missingInformation.map((m, i) => (
                       <li key={i} className="flex items-start gap-2 text-sm text-on-surface-variant">
-                        <span className="material-symbols-outlined text-secondary text-[16px] mt-0.5">error_outline</span>
+                        <Icon name="error_outline" className="text-secondary text-[16px] mt-0.5" />
                         {m}
                       </li>
                     ))}
                   </ul>
-                </div>
+                </Panel>
               )}
             </div>
           )}
 
           {activeTab === "matter" && (
-            <div className="bg-surface-container-lowest rounded-lg border border-outline-variant/10 p-6">
+            <Panel>
               <h3 className="text-xl font-bold text-primary mb-2">Create Matter Record</h3>
               <p className="text-sm text-on-surface-variant mb-6">
                 This will create a simulated CLM matter record based on the AI analysis. In a production
@@ -398,18 +346,13 @@ export default function AnalysisPage() {
                   </div>
                 ))}
               </div>
-              <button
-                onClick={handleCreateMatter}
-                disabled={creatingMatter}
-                className="w-full py-3 bg-secondary text-white text-xs font-bold tracking-wider uppercase rounded hover:opacity-90 transition-opacity disabled:opacity-60 flex items-center justify-center gap-2"
-              >
-                <span className="material-symbols-outlined text-[18px]">add_circle</span>
+              <Button variant="danger" icon="add_circle" onClick={handleCreateMatter} disabled={creatingMatter} className="w-full">
                 {creatingMatter ? "Creating Matter..." : "Create Matter (Simulated)"}
-              </button>
+              </Button>
               <p className="text-xs text-center text-on-surface-variant/60 mt-3">
                 DEMONSTRATION · MOCK CLM INTEGRATION · Saved to session Matters
               </p>
-            </div>
+            </Panel>
           )}
         </div>
 

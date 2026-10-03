@@ -1,11 +1,12 @@
 import Link from "next/link";
+import { Card, Icon } from "@/components/ui";
 
 export default function SecurityPage() {
   return (
     <div className="max-w-3xl">
       <div className="mb-8">
         <Link href="/" className="inline-flex items-center text-on-surface-variant hover:text-primary transition-colors mb-4 text-sm">
-          <span className="material-symbols-outlined text-[18px] mr-1">arrow_back</span>
+          <Icon name="arrow_back" className="text-[18px] mr-1" />
           Back to Intake
         </Link>
         <h1 className="text-3xl font-bold text-primary-container mb-2">Security Policy</h1>
@@ -15,7 +16,7 @@ export default function SecurityPage() {
       </div>
 
       <div className="space-y-6">
-        <section className="bg-white rounded-xl border border-outline-variant/10 shadow-sm p-6">
+        <Card>
           <h2 className="text-lg font-bold text-primary-container mb-4">Document Processing</h2>
           <ul className="space-y-3 text-sm text-on-surface-variant">
             {[
@@ -26,14 +27,14 @@ export default function SecurityPage() {
               "No document or extracted text is stored in any database or file system by this application.",
             ].map((point) => (
               <li key={point} className="flex items-start gap-3">
-                <span className="material-symbols-outlined text-primary-container text-[16px] mt-0.5 shrink-0">check_circle</span>
+                <Icon name="check_circle" className="text-primary-container text-[16px] mt-0.5 shrink-0" />
                 {point}
               </li>
             ))}
           </ul>
-        </section>
+        </Card>
 
-        <section className="bg-white rounded-xl border border-outline-variant/10 shadow-sm p-6">
+        <Card>
           <h2 className="text-lg font-bold text-primary-container mb-4">AI Provider</h2>
           <p className="text-sm text-on-surface-variant mb-4">
             Extracted contract text is transmitted to a third-party AI API for analysis. This means:
@@ -46,7 +47,7 @@ export default function SecurityPage() {
               "The AI provider identity is not disclosed in the user-facing interface.",
             ].map((point) => (
               <li key={point} className="flex items-start gap-3">
-                <span className="material-symbols-outlined text-on-surface-variant text-[16px] mt-0.5 shrink-0">info</span>
+                <Icon name="info" className="text-on-surface-variant text-[16px] mt-0.5 shrink-0" />
                 {point}
               </li>
             ))}
@@ -57,9 +58,9 @@ export default function SecurityPage() {
               or attorney-client privileged material without first reviewing the AI provider&apos;s data handling terms.
             </p>
           </div>
-        </section>
+        </Card>
 
-        <section className="bg-white rounded-xl border border-outline-variant/10 shadow-sm p-6">
+        <Card>
           <h2 className="text-lg font-bold text-primary-container mb-4">Session Data</h2>
           <ul className="space-y-3 text-sm text-on-surface-variant">
             {[
@@ -69,14 +70,14 @@ export default function SecurityPage() {
               "No cookies are set by this application for tracking purposes.",
             ].map((point) => (
               <li key={point} className="flex items-start gap-3">
-                <span className="material-symbols-outlined text-primary-container text-[16px] mt-0.5 shrink-0">check_circle</span>
+                <Icon name="check_circle" className="text-primary-container text-[16px] mt-0.5 shrink-0" />
                 {point}
               </li>
             ))}
           </ul>
-        </section>
+        </Card>
 
-        <section className="bg-white rounded-xl border border-outline-variant/10 shadow-sm p-6">
+        <Card>
           <h2 className="text-lg font-bold text-primary-container mb-4">API Key Security</h2>
           <ul className="space-y-3 text-sm text-on-surface-variant">
             {[
@@ -85,14 +86,14 @@ export default function SecurityPage() {
               "No AI provider names or model identifiers are exposed in the user interface.",
             ].map((point) => (
               <li key={point} className="flex items-start gap-3">
-                <span className="material-symbols-outlined text-primary-container text-[16px] mt-0.5 shrink-0">check_circle</span>
+                <Icon name="check_circle" className="text-primary-container text-[16px] mt-0.5 shrink-0" />
                 {point}
               </li>
             ))}
           </ul>
-        </section>
+        </Card>
 
-        <section className="bg-white rounded-xl border border-outline-variant/10 shadow-sm p-6">
+        <Card>
           <h2 className="text-lg font-bold text-primary-container mb-4">Prototype Disclaimer</h2>
           <p className="text-sm text-on-surface-variant">
             This application is a concept prototype for demonstration purposes. It is not intended for
@@ -100,7 +101,7 @@ export default function SecurityPage() {
             and integration with your organisation&apos;s data governance policies. All AI-generated analysis
             is for informational purposes only and does not constitute legal advice.
           </p>
-        </section>
+        </Card>
       </div>
     </div>
   );

@@ -2,6 +2,7 @@
 
 import { MatterRecord } from "@/types/contract";
 import { useRouter } from "next/navigation";
+import { Button, Icon, Modal } from "@/components/ui";
 
 interface MatterModalProps {
   matter: MatterRecord;
@@ -21,13 +22,11 @@ export default function MatterModal({ matter, onClose }: MatterModalProps) {
   const router = useRouter();
 
   return (
-    <div className="fixed inset-0 bg-primary-container/20 backdrop-blur-sm z-50 flex items-center justify-center p-6">
-      <div className="bg-surface-container-lowest rounded-xl shadow-xl border border-outline-variant/20 w-full max-w-lg overflow-hidden">
-        <div className="h-2 w-full bg-gradient-to-r from-primary-fixed to-tertiary-fixed" />
-        <div className="p-8">
+    <Modal isOpen onClose={onClose} size="lg">
+        <div className="px-2 pb-2">
           <div className="flex flex-col items-center text-center mb-8">
             <div className="h-16 w-16 rounded-full bg-surface-container flex items-center justify-center mb-4">
-              <span className="material-symbols-outlined text-[32px] text-primary">check_circle</span>
+              <Icon name="check_circle" className="text-[32px] text-primary" />
             </div>
             <h2 className="text-2xl font-bold text-primary">Matter Created</h2>
             <p className="text-sm text-on-surface-variant mt-2">
@@ -58,21 +57,14 @@ export default function MatterModal({ matter, onClose }: MatterModalProps) {
           </div>
 
           <div className="flex gap-4">
-            <button
-              onClick={() => router.push("/dashboard")}
-              className="flex-1 px-6 py-3 bg-secondary text-white rounded-lg text-xs font-bold tracking-wider uppercase hover:bg-secondary-container transition-colors"
-            >
-              View Dashboard
-            </button>
-            <button
-              onClick={onClose}
-              className="flex-1 px-6 py-3 bg-surface-container text-primary rounded-lg text-xs font-bold tracking-wider uppercase hover:bg-surface-variant transition-colors"
-            >
+            <Button variant="danger" icon="work" onClick={() => router.push("/matters")} className="flex-1">
+              View Matters
+            </Button>
+            <Button variant="secondary" onClick={onClose} className="flex-1">
               Back to Analysis
-            </button>
+            </Button>
           </div>
         </div>
-      </div>
-    </div>
+    </Modal>
   );
 }

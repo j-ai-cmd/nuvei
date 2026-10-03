@@ -1,7 +1,11 @@
 import { ContractAnalysis, ContractAnalysisSchema } from "@/types/contract";
 
-const KIMI_BASE_URL = "https://api.moonshot.ai/v1";
-const KIMI_MODEL = "kimi-k2.6";
+// Optional overrides via env; defaults target Kimi K3.
+const KIMI_BASE_URL = process.env.KIMI_BASE_URL || "https://api.moonshot.ai/v1";
+const KIMI_MODEL = process.env.KIMI_MODEL || "kimi-k3";
+// K3 locks sampling at temperature 1.0 and rejects any other value.
+// Set KIMI_TEMPERATURE only when pointing KIMI_MODEL at a model that allows it.
+const KIMI_TEMPERATURE = Number(process.env.KIMI_TEMPERATURE ?? 1);
 
 const SYSTEM_PROMPT = `You are a senior legal AI analyst specializing in contract review.
 Analyze the provided contract text and return a structured JSON response.
@@ -98,7 +102,7 @@ async function callKimi(text: string, jsonOnly = false): Promise<string> {
     ? `Analyze this contract and return ONLY a valid JSON object (no markdown, no explanation):\n\n${text.slice(0, 60000)}`
     : `Analyze this contract:\n\n${text.slice(0, 60000)}`;
 
-  console.log(`[AI] POST ${KIMI_BASE_URL}/chat/completions — model: ${KIMI_MODEL}`);
+  console.log(`[AI] POST ${KIMI_BASE_URL}/chat/completions — model: ${KIMI_MODEL}, temperature: ${KIMI_TEMPERATURE}`);
 
   const response = await fetch(`${KIMI_BASE_URL}/chat/completions`, {
     method: "POST",
@@ -108,6 +112,7 @@ async function callKimi(text: string, jsonOnly = false): Promise<string> {
     },
     body: JSON.stringify({
       model: KIMI_MODEL,
+      temperature: KIMI_TEMPERATURE,
       messages: [
         { role: "system", content: SYSTEM_PROMPT },
         { role: "user", content: userMessage },

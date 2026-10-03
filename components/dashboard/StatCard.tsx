@@ -1,3 +1,6 @@
+import { forwardRef } from "react";
+import { Icon } from "@/components/ui";
+
 interface StatCardProps {
   label: string;
   value: string;
@@ -5,11 +8,17 @@ interface StatCardProps {
   trendUp?: boolean;
   icon: string;
   highlight?: boolean;
+  className?: string;
+  style?: React.CSSProperties;
 }
 
-export default function StatCard({ label, value, trend, trendUp, icon, highlight }: StatCardProps) {
+// forwardRef + className/style passthrough so GlowHover can measure and clone it
+const StatCard = forwardRef<HTMLDivElement, StatCardProps>(function StatCard(
+  { label, value, trend, trendUp, icon, highlight, className = "", style },
+  ref
+) {
   return (
-    <div className={`p-6 rounded-xl border shadow-sm flex flex-col justify-between ${
+    <div ref={ref} style={style} className={`${className} p-6 rounded-xl border shadow-xs flex flex-col justify-between ${
       highlight
         ? "bg-secondary/5 border-secondary/20 shadow-[0_4px_20px_rgba(186,0,55,0.04)]"
         : "bg-white border-outline-variant/10"
@@ -21,17 +30,17 @@ export default function StatCard({ label, value, trend, trendUp, icon, highlight
         <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
           highlight ? "bg-secondary/20 text-secondary" : "bg-primary-fixed/20 text-primary-container"
         }`}>
-          <span className="material-symbols-outlined text-sm">{icon}</span>
+          <Icon name={icon} className="text-sm" />
         </div>
       </div>
       <div>
         <div className={`text-4xl font-bold ${highlight ? "text-secondary" : "text-primary-container"}`}>{value}</div>
         {trend && (
           <div className={`text-xs mt-1 flex items-center gap-1 ${
-            highlight ? "text-secondary" : trendUp ? "text-emerald-600" : "text-emerald-600"
+            highlight ? "text-secondary" : trendUp !== undefined ? "text-emerald-600" : "text-on-surface-variant"
           }`}>
-            {!highlight && (
-              <span className="material-symbols-outlined text-xs">{trendUp ? "trending_up" : "trending_down"}</span>
+            {!highlight && trendUp !== undefined && (
+              <Icon name={trendUp ? "trending_up" : "trending_down"} className="text-xs" />
             )}
             {trend}
           </div>
@@ -39,4 +48,6 @@ export default function StatCard({ label, value, trend, trendUp, icon, highlight
       </div>
     </div>
   );
-}
+});
+
+export default StatCard;
