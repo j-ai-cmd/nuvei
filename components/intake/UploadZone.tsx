@@ -104,7 +104,7 @@ export default function UploadZone() {
       )}
 
       <div>
-        <div className="bg-surface-container-lowest border border-outline-variant/20 rounded-xl p-6 md:p-10 flex flex-col items-center justify-center min-h-[400px]">
+        <div className="bg-surface-container-lowest border border-outline-variant/60 rounded-lg p-6 md:p-10 flex flex-col items-center justify-center min-h-[400px]">
           <h3 className="text-xl font-bold text-primary mb-1">Drop your contract here</h3>
           <p className="text-sm text-on-surface-variant mb-6">PDF / DOCX · Max 25MB</p>
 

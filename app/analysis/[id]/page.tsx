@@ -18,7 +18,7 @@ type Tab = "overview" | "risk" | "terms" | "ai-review" | "matter";
 function DemoBanner() {
 
   return (
-    <div className="mb-6 px-4 py-3 bg-surface-container border border-outline-variant/20 rounded-lg flex items-center gap-3">
+    <div className="mb-6 px-4 py-3 bg-surface-container border border-outline-variant/60 rounded-lg flex items-center gap-3">
       <Icon name="science" className="text-on-surface-variant text-[20px]" />
       <div>
         <span className="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Sample Data</span>
@@ -215,7 +215,7 @@ export default function AnalysisPage() {
       {isDemo && <DemoBanner />}
 
       {/* Metadata Bar */}
-      <div className="bg-white border border-outline-variant/10 rounded-lg p-4 mb-8 flex flex-wrap gap-x-8 gap-y-4 items-center shadow-xs">
+      <div className="bg-surface-container-lowest border border-outline-variant/50 rounded-lg p-4 mb-8 flex flex-wrap gap-x-8 gap-y-4 items-center">
         <div>
           <span className="text-xs text-on-surface-variant uppercase tracking-wider font-semibold">Type</span>
           <p className="text-base font-bold text-primary mt-1">{metadata.agreementType ?? "Unknown"}</p>
@@ -254,12 +254,12 @@ export default function AnalysisPage() {
       <Tabs tabs={TABS} active={activeTab} onChange={setActiveTab} />
 
       {/* Disclaimer */}
-      <div className="mb-6 p-3 bg-surface-container-low border border-outline-variant/10 rounded-sm text-xs text-on-surface-variant">
+      <div className="mb-6 p-3 bg-surface-container-low border border-outline-variant/50 rounded-sm text-xs text-on-surface-variant">
         <strong>Disclaimer:</strong> {analysis.disclaimer}
       </div>
 
       {/* Tab Content */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
         <div className="lg:col-span-8">
           {activeTab === "overview" && (
             <div className="space-y-6">
@@ -284,7 +284,7 @@ export default function AnalysisPage() {
                 <Panel title="Key Dates">
                   <div className="space-y-3">
                     {keyDates.map((d, i) => (
-                      <div key={i} className="flex items-center justify-between border-b border-outline-variant/10 pb-3">
+                      <div key={i} className="flex items-center justify-between border-b border-outline-variant/50 pb-3">
                         <span className="text-sm font-semibold text-primary">{d.label}</span>
                         <span className="text-sm text-on-surface-variant">{d.date ?? "Not specified"}</span>
                       </div>
@@ -349,7 +349,7 @@ export default function AnalysisPage() {
                   ["Risk Level", riskAnalysis.riskLevel],
                   ["Recommended Routing", analysis.recommendedLegalRouting],
                 ].map(([label, value]) => (
-                  <div key={label} className="flex justify-between border-b border-outline-variant/10 pb-3">
+                  <div key={label} className="flex justify-between border-b border-outline-variant/50 pb-3">
                     <span className="text-xs font-bold text-on-surface-variant uppercase tracking-wider">{label}</span>
                     <span className="text-sm font-semibold text-primary text-right max-w-xs">{value}</span>
                   </div>

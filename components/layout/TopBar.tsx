@@ -2,12 +2,11 @@
 
 import { useState, useEffect, useRef } from "react";
 import DropdownMenu from "@/components/smoothui/dropdown-menu";
-import AnimatedInput from "@/components/smoothui/animated-input";
 import { useRouter } from "next/navigation";
 import { HistoryEntry, MatterRecord } from "@/types/contract";
 import { getMatters, getStoredHistory } from "@/lib/storage";
 import { formatRelative } from "@/lib/format";
-import { Icon, Tooltip } from "@/components/ui";
+import { Icon } from "@/components/ui";
 
 interface Notification {
   id: string;
@@ -75,7 +74,7 @@ export default function TopBar({ onMenu }: { onMenu?: () => void }) {
   }
 
   return (
-    <header className="bg-surface fixed top-0 right-0 left-0 md:left-64 h-16 border-b border-outline-variant/10 flex justify-between items-center gap-2 px-4 md:px-6 z-40">
+    <header className="bg-surface fixed top-0 right-0 left-0 md:left-64 h-16 border-b border-outline-variant/50 flex justify-between items-center gap-2 px-4 md:px-6 z-40">
       <button
         onClick={onMenu}
         className="md:hidden p-2 -ml-2 rounded-full text-on-surface-variant hover:bg-surface-container-high transition-all"
@@ -84,33 +83,34 @@ export default function TopBar({ onMenu }: { onMenu?: () => void }) {
         <Icon name="menu" />
       </button>
       <form onSubmit={handleSearch} className="flex-1 max-w-72 min-w-0">
-        <AnimatedInput
-          label="Search contracts, matters..."
-          value={query}
-          onChange={setQuery}
-          icon={<Icon name="search" className="text-on-surface-variant/60 text-[18px]" />}
-          inputClassName="rounded-full bg-surface-container-low border-transparent"
-          labelClassName="left-10! max-w-[calc(100%-3rem)] truncate whitespace-nowrap bg-surface-container-low text-on-surface-variant text-sm"
-        />
+        <div className="relative">
+          <Icon name="search" className="absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant/60 text-[18px]" />
+          <input
+            type="search"
+            aria-label="Search contracts, matters"
+            placeholder="Search contracts, matters..."
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            className="w-full bg-surface-container-low rounded-full py-2 pl-10 pr-4 text-sm outline-none focus:ring-1 focus:ring-primary transition-all"
+          />
+        </div>
       </form>
 
       <div className="flex items-center gap-2">
         {/* Notifications */}
         <div ref={notifsRef} className="relative">
-          <Tooltip content="Notifications" placement="bottom">
-            <button
+          <button
               onClick={() => setShowNotifs((v) => !v)}
               className="p-2 rounded-full text-on-surface-variant hover:bg-surface-container-high transition-all relative"
               aria-label="Notifications"
             >
               <Icon name="notifications" />
               {notifications.length > 0 && <span className="absolute top-1 right-1 w-2 h-2 bg-secondary rounded-full animate-pulse" />}
-            </button>
-          </Tooltip>
+          </button>
 
           {showNotifs && (
-            <div className="absolute right-0 top-12 w-[min(20rem,calc(100vw-2rem))] bg-white rounded-xl border border-outline-variant/20 shadow-xl z-50 overflow-hidden">
-              <div className="px-4 py-3 border-b border-outline-variant/10">
+            <div className="absolute right-0 top-12 w-[min(20rem,calc(100vw-2rem))] bg-surface-container-lowest rounded-lg border border-outline-variant/60 shadow-xl z-50 overflow-hidden">
+              <div className="px-4 py-3 border-b border-outline-variant/50">
                 <h3 className="text-xs font-bold text-primary-container uppercase tracking-wider">Notifications</h3>
               </div>
               {notifications.length === 0 ? (

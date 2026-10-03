@@ -19,7 +19,7 @@ export default function RiskScoreCard({ score, riskLevel }: RiskScoreCardProps) 
 
   return (
     <div>
-      <div className="bg-surface-container-lowest border border-outline-variant/10 rounded-lg p-8 flex flex-col justify-center min-h-[300px]">
+      <div className="bg-surface-container-lowest border border-outline-variant/50 rounded-lg p-8 flex flex-col justify-center min-h-[300px]">
         <h3 className="font-bold text-xl text-primary mb-6">Risk Score</h3>
         <div className="flex items-baseline gap-2 mb-6">
           <span className="text-6xl font-bold tabular-nums" style={{ color }}>{score}</span>

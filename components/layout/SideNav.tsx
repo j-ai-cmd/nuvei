@@ -50,7 +50,7 @@ export function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
           <NavLink key={item.label} item={item} active={isActive(item.href)} onNavigate={onNavigate} />
         ))}
       </div>
-      <div className="px-4 py-4 border-t border-outline-variant/10 space-y-1">
+      <div className="px-4 py-4 border-t border-outline-variant/50 space-y-1">
         {bottomItems.map((item) => (
           <NavLink key={item.label} item={item} active={isActive(item.href)} onNavigate={onNavigate} />
         ))}
@@ -61,7 +61,7 @@ export function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
 
 export function Brand() {
   return (
-    <div className="px-6 py-6 border-b border-outline-variant/10 mb-4">
+    <div className="px-6 py-6 border-b border-outline-variant/50 mb-4">
       <NuveiLogo />
       <p className="text-xs text-on-surface-variant mt-2 font-semibold tracking-wide">Legal Dashboard</p>
     </div>
@@ -70,7 +70,7 @@ export function Brand() {
 
 export default function SideNav() {
   return (
-    <nav className="hidden md:flex bg-surface-container-low h-screen w-64 fixed left-0 top-0 border-r border-outline-variant/10 flex-col z-50">
+    <nav className="hidden md:flex bg-surface-container-low h-screen w-64 fixed left-0 top-0 border-r border-outline-variant/50 flex-col z-50">
       <Brand />
       <NavLinks />
     </nav>
