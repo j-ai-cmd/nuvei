@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { HistoryEntry } from "@/types/contract";
 import { formatRelative } from "@/lib/format";
-import { ArrowLink, Icon, RiskBadge } from "@/components/ui";
+import { ArrowLink, Icon, RiskBadge, Tooltip } from "@/components/ui";
 
 interface ContractsTableProps {
   items: HistoryEntry[];
@@ -46,7 +46,9 @@ export default function ContractsTable({ items, showProcessingTime }: ContractsT
               <td className="px-4 py-4 text-on-surface-variant truncate max-w-[140px]">{item.contractType ?? "—"}</td>
               <td className="px-4 py-4 text-on-surface-variant truncate max-w-[140px]">{item.counterparty ?? "—"}</td>
               <td className="px-4 py-4">
-                <RiskBadge level={item.riskLevel} />
+                <Tooltip content={`Risk score ${item.riskScore}/100`}>
+                  <RiskBadge level={item.riskLevel} />
+                </Tooltip>
               </td>
               <td className="px-4 py-4 font-semibold text-primary-container">{item.riskScore}/100</td>
               {showProcessingTime && (
