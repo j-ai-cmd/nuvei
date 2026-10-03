@@ -49,7 +49,7 @@ export default function HelpPage() {
         }))}
       />
 
-      <div className="mt-8 bg-surface-container-low rounded-xl border border-outline-variant/10 p-6">
+      <div className="mt-8 bg-surface-container-low rounded-lg border border-outline-variant/50 p-6">
         <h2 className="text-sm font-bold text-primary-container mb-2">Still need help?</h2>
         <p className="text-sm text-on-surface-variant">
           This is a prototype application. For issues with the deployment, check the Vercel function logs

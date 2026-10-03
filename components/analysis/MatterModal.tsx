@@ -11,7 +11,7 @@ interface MatterModalProps {
 
 function Field({ label, value }: { label: string; value: string }) {
   return (
-    <div className="bg-surface p-4 rounded-lg border border-outline-variant/10">
+    <div className="bg-surface p-4 rounded-lg border border-outline-variant/50">
       <p className="text-xs text-on-surface-variant uppercase tracking-wider mb-1">{label}</p>
       <p className="text-base font-semibold text-primary">{value}</p>
     </div>
@@ -32,7 +32,7 @@ export default function MatterModal({ matter, onClose }: MatterModalProps) {
             <p className="text-sm text-on-surface-variant mt-2">
               Simulated CLM matter record generated. In production this would sync to your CLM system.
             </p>
-            <span className="mt-3 text-xs bg-surface-container px-3 py-1 rounded-full text-on-surface-variant font-semibold border border-outline-variant/20">
+            <span className="mt-3 text-xs bg-surface-container px-3 py-1 rounded-full text-on-surface-variant font-semibold border border-outline-variant/60">
               DEMONSTRATION · MOCK CLM INTEGRATION
             </span>
           </div>
@@ -42,7 +42,7 @@ export default function MatterModal({ matter, onClose }: MatterModalProps) {
             <Field label="Contract Type" value={matter.contractType} />
             <Field label="Counterparty" value={matter.counterparty} />
             <Field label="Assigned Team" value={matter.assignedTeam} />
-            <div className="bg-surface p-4 rounded-lg border border-outline-variant/10">
+            <div className="bg-surface p-4 rounded-lg border border-outline-variant/50">
               <p className="text-xs text-on-surface-variant uppercase tracking-wider mb-1">Risk Level</p>
               <p className={`text-base font-bold ${
                 matter.riskLevel === "HIGH" || matter.riskLevel === "CRITICAL" ? "text-secondary" : "text-primary"
@@ -50,7 +50,7 @@ export default function MatterModal({ matter, onClose }: MatterModalProps) {
                 {matter.riskLevel}
               </p>
             </div>
-            <div className="bg-surface p-4 rounded-lg border border-outline-variant/10">
+            <div className="bg-surface p-4 rounded-lg border border-outline-variant/50">
               <p className="text-xs text-on-surface-variant uppercase tracking-wider mb-1">Status</p>
               <p className="text-base font-semibold text-primary">{matter.status}</p>
             </div>

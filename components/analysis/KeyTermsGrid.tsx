@@ -28,7 +28,7 @@ export default function KeyTermsGrid({ metadata }: { metadata: ContractMetadata 
   return (
     <div className="space-y-6">
       {metadata.parties && metadata.parties.length > 0 && (
-        <div className="bg-surface-container-lowest rounded-lg border border-outline-variant/10 p-5">
+        <div className="bg-surface-container-lowest rounded-lg border border-outline-variant/50 p-5">
           <h4 className="text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-4">Parties</h4>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {metadata.parties.map((p, i) => (
@@ -41,19 +41,19 @@ export default function KeyTermsGrid({ metadata }: { metadata: ContractMetadata 
         </div>
       )}
 
-      <div className="bg-surface-container-lowest rounded-lg border border-outline-variant/10 p-5">
+      <div className="bg-surface-container-lowest rounded-lg border border-outline-variant/50 p-5">
         <h4 className="text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-4">Key Terms</h4>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {FIELD_LABELS.map(({ key, label }) => {
             const value = metadata[key] as string | null | undefined;
             if (value === null || value === undefined) return (
-              <div key={key} className="border-b border-outline-variant/10 pb-3">
+              <div key={key} className="border-b border-outline-variant/50 pb-3">
                 <p className="text-xs text-on-surface-variant/60 uppercase tracking-wider">{label}</p>
                 <p className="text-sm text-on-surface-variant/40 mt-1 italic">Not specified</p>
               </div>
             );
             return (
-              <div key={key} className="border-b border-outline-variant/10 pb-3">
+              <div key={key} className="border-b border-outline-variant/50 pb-3">
                 <p className="text-xs text-on-surface-variant uppercase tracking-wider font-semibold">{label}</p>
                 <p className="text-sm text-primary mt-1">{value}</p>
               </div>

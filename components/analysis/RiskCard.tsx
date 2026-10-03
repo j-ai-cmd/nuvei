@@ -12,7 +12,7 @@ export default function RiskCard({ risk }: { risk: RiskItem }) {
   const cfg = SEVERITY_CONFIG[risk.severity] ?? SEVERITY_CONFIG.MEDIUM;
 
   return (
-    <div className="bg-surface-container-lowest rounded-lg border border-outline-variant/10 p-5 relative overflow-hidden">
+    <div className="bg-surface-container-lowest rounded-lg border border-outline-variant/50 p-5 relative overflow-hidden">
       <div className={`absolute top-0 left-0 w-1 h-full ${cfg.bar}`} />
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center gap-2">
@@ -30,7 +30,7 @@ export default function RiskCard({ risk }: { risk: RiskItem }) {
 
       <p className="text-sm text-on-surface-variant mb-4">{risk.explanation}</p>
 
-      <div className="bg-surface-container-low p-3 rounded-sm border-b border-outline-variant/20 flex items-start gap-3">
+      <div className="bg-surface-container-low p-3 rounded-sm border-b border-outline-variant/60 flex items-start gap-3">
         <Icon name="task_alt" className="text-on-surface-variant text-[18px] mt-0.5" />
         <div>
           <span className="text-xs font-bold text-primary block mb-1">Recommended Action</span>

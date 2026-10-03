@@ -17,7 +17,7 @@ export default function IntakePage() {
   }, []);
 
   return (
-    <div className="grid grid-cols-12 gap-8">
+    <div className="grid grid-cols-12 gap-4">
       {/* Left column */}
       <div className="col-span-12 lg:col-span-8 space-y-8">
         <header>
@@ -37,7 +37,7 @@ export default function IntakePage() {
       {/* Right column */}
       <div className="col-span-12 lg:col-span-4 space-y-6">
         {/* Recent Intakes — live from sessionStorage */}
-        <div className="bg-surface-container-lowest border border-outline-variant/10 rounded-xl p-6">
+        <div className="bg-surface-container-lowest border border-outline-variant/50 rounded-lg p-6">
           <div className="flex justify-between items-center mb-4">
             <h3 className="text-xl font-bold text-primary">Recent Intakes</h3>
             {recent.length > 0 && (
@@ -73,7 +73,7 @@ export default function IntakePage() {
         </div>
 
         {/* Secure Processing */}
-        <div className="bg-surface-container-low border border-outline-variant/10 rounded-xl p-6">
+        <div className="bg-surface-container-low border border-outline-variant/50 rounded-lg p-6">
           <h3 className="text-xl font-bold text-primary mb-2 flex items-center gap-2">
             <Icon name="info" className="text-secondary text-[20px]" />
             Secure Processing

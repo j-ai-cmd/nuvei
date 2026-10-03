@@ -73,7 +73,7 @@ function ContractsInner() {
           cta={q ? undefined : { href: "/", label: "Upload Contract" }}
         />
       ) : (
-        <div className="bg-white rounded-xl border border-outline-variant/10 shadow-xs overflow-hidden">
+        <div className="bg-surface-container-lowest rounded-lg border border-outline-variant/50 overflow-hidden">
           <ContractsTable items={filtered} />
         </div>
       )}

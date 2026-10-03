@@ -5,16 +5,12 @@ export default function AISummaryPanel({ analysis }: { analysis: ContractAnalysi
   const { missingInformation, recommendedLegalRouting, top3Risks, unusualClauses } = analysis;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* AI Review Panel */}
-      <div className="bg-primary-container text-white rounded-lg border border-primary/20 p-6 shadow-lg relative overflow-hidden">
-        <div
-          className="absolute inset-0 opacity-5 pointer-events-none"
-          style={{ backgroundImage: "radial-gradient(#ffffff 1px, transparent 1px)", backgroundSize: "16px 16px" }}
-        />
+      <div className="bg-primary-container text-white rounded-lg p-5 relative overflow-hidden">
         <div className="relative z-10">
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-8 h-8 rounded-sm bg-white/10 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-sm bg-surface-container-lowest/10 flex items-center justify-center">
               <Icon name="psychology" className="text-white text-[20px]" />
             </div>
             <h3 className="text-xl font-bold text-white">AI Review Summary</h3>
@@ -38,14 +34,14 @@ export default function AISummaryPanel({ analysis }: { analysis: ContractAnalysi
               </div>
             )}
 
-            <div className="w-full h-px bg-white/10" />
+            <div className="w-full h-px bg-surface-container-lowest/10" />
 
             <div>
               <h4 className="text-xs font-bold text-on-primary-container uppercase tracking-widest mb-2 flex items-center gap-2">
                 <Icon name="route" className="text-[16px]" />
                 Recommended Routing
               </h4>
-              <div className="bg-white/5 rounded-sm p-3 border-l-2 border-primary-fixed">
+              <div className="bg-surface-container-lowest/5 rounded-sm p-3 border-l-2 border-primary-fixed">
                 <span className="text-sm text-white/80 block mb-1">Based on risk assessment, route to:</span>
                 <span className="text-sm font-bold text-white block">{recommendedLegalRouting}</span>
               </div>
@@ -56,7 +52,7 @@ export default function AISummaryPanel({ analysis }: { analysis: ContractAnalysi
 
       {/* Unusual Clauses */}
       {unusualClauses.length > 0 && (
-        <div className="bg-surface-container-lowest rounded-lg border border-outline-variant/10 p-5">
+        <div className="bg-surface-container-lowest rounded-lg border border-outline-variant/50 p-5">
           <h3 className="text-base font-bold text-primary mb-4 flex items-center gap-2">
             <Icon name="gavel" className="text-secondary text-[20px]" />
             Unusual Clauses
@@ -74,7 +70,7 @@ export default function AISummaryPanel({ analysis }: { analysis: ContractAnalysi
 
       {/* Document structure */}
       {top3Risks.length > 0 && (
-        <div className="bg-surface-container-lowest rounded-lg border border-outline-variant/10 p-5">
+        <div className="bg-surface-container-lowest rounded-lg border border-outline-variant/50 p-5">
           <h3 className="text-base font-bold text-primary mb-4">Top 3 Risks</h3>
           <div className="space-y-2">
             {top3Risks.map((risk, i) => (
@@ -83,7 +79,7 @@ export default function AISummaryPanel({ analysis }: { analysis: ContractAnalysi
                 className={`flex items-start justify-between gap-3 p-2 rounded cursor-default group border-l-2 ${
                   risk.severity === "CRITICAL" || risk.severity === "HIGH"
                     ? "bg-error-container/20 border-secondary"
-                    : "hover:bg-surface-container-low border-outline-variant/20"
+                    : "hover:bg-surface-container-low border-outline-variant/60"
                 }`}
               >
                 <span className="text-sm text-primary font-medium">{risk.title}</span>

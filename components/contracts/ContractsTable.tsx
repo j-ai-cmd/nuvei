@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { HistoryEntry } from "@/types/contract";
 import { formatRelative } from "@/lib/format";
-import { ArrowLink, Icon, RiskBadge, Tooltip } from "@/components/ui";
+import { ArrowLink, Icon, RiskBadge } from "@/components/ui";
 
 interface ContractsTableProps {
   items: HistoryEntry[];
@@ -41,7 +41,7 @@ export default function ContractsTable({ items, showProcessingTime }: ContractsT
     <div className="hidden md:block overflow-x-auto">
       <table className="w-full text-left border-collapse">
         <thead>
-          <tr className="border-b border-outline-variant/20 bg-surface-container-low">
+          <tr className="border-b border-outline-variant/60 bg-surface-container-low">
             {headers.map((h) => (
               <th key={h} className="px-4 py-3 text-xs font-bold text-on-surface-variant uppercase tracking-wider">
                 {h}
@@ -68,9 +68,7 @@ export default function ContractsTable({ items, showProcessingTime }: ContractsT
               <td className="px-4 py-4 text-on-surface-variant truncate max-w-[140px]">{item.contractType ?? "—"}</td>
               <td className="px-4 py-4 text-on-surface-variant truncate max-w-[140px]">{item.counterparty ?? "—"}</td>
               <td className="px-4 py-4">
-                <Tooltip content={`Risk score ${item.riskScore}/100`}>
-                  <RiskBadge level={item.riskLevel} />
-                </Tooltip>
+                <RiskBadge level={item.riskLevel} />
               </td>
               <td className="px-4 py-4 font-semibold text-primary-container">{item.riskScore}/100</td>
               {showProcessingTime && (

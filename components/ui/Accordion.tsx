@@ -14,7 +14,7 @@ export default function Accordion({
       items={items}
       allowMultiple={allowMultiple}
       defaultExpandedIds={defaultExpandedIds}
-      className="nuvei-accordion bg-surface-container-lowest rounded-lg border border-outline-variant/10"
+      className="nuvei-accordion bg-surface-container-lowest rounded-lg border border-outline-variant/50"
     />
   );
 }
