@@ -1,6 +1,5 @@
 import Link from "next/link";
-import SmoothButton, { smoothButtonVariants, type SmoothButtonProps } from "@/components/smoothui/smooth-button";
-import MagneticButton from "@/components/smoothui/magnetic-button";
+import SmoothButton, { type SmoothButtonProps } from "@/components/smoothui/smooth-button";
 import { cn } from "@/lib/utils";
 import Icon from "./Icon";
 
@@ -16,7 +15,10 @@ const VARIANTS: Record<Variant, Pick<SmoothButtonProps, "variant" | "color"> & {
     variant: "solid",
     className: "[--btn:var(--color-primary)] [--btn-hover:var(--color-primary-container)] [--btn-fg:#fff]",
   },
-  danger: { variant: "candy", color: "accent", className: "" },
+  danger: {
+    variant: "solid",
+    className: "[--btn:var(--color-secondary)] [--btn-hover:var(--color-on-secondary-fixed-variant)] [--btn-fg:#fff]",
+  },
   secondary: { variant: "outline", className: "hover:bg-surface-container-high" },
 };
 
@@ -50,22 +52,16 @@ export function Button({
   );
 }
 
-// Navigation CTA: MagneticButton pull, styled with SmoothButton's variant classes.
-// MagneticButton runs its className through twMerge, so these win over its defaults.
+// Navigation CTA styled as a button
 export function LinkButton({ href, variant = "primary", icon, className = "", children }: CommonProps & { href: string }) {
   const v = VARIANTS[variant];
   return (
-    <MagneticButton
-      asChild
-      radius={30}
-      strength={0.25}
-      className={cn(smoothButtonVariants({ variant: v.variant, color: v.color }), BASE, v.className, className)}
-    >
+    <SmoothButton asChild variant={v.variant} color={v.color} className={cn(BASE, v.className, className)}>
       <Link href={href}>
         {icon && <Icon name={icon} className="text-[18px]" />}
         {children}
       </Link>
-    </MagneticButton>
+    </SmoothButton>
   );
 }
 

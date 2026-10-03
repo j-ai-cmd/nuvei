@@ -1,4 +1,3 @@
-import SoftBlurIn from "@/components/smoothui/soft-blur-in";
 import { LinkButton } from "./Button";
 
 interface PageHeaderProps {
@@ -21,7 +20,7 @@ export default function PageHeader({ title, subtitle, action }: PageHeaderProps)
     <div className="mb-8 flex flex-col sm:flex-row sm:justify-between sm:items-end gap-4">
       <div>
         <h1 className="text-2xl md:text-3xl font-bold text-primary-container mb-2">
-          <SoftBlurIn>{title}</SoftBlurIn>
+          {title}
         </h1>
         {subtitle && <p className="text-base text-on-surface-variant">{subtitle}</p>}
       </div>

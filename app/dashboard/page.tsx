@@ -8,7 +8,7 @@ import { isHighRisk } from "@/lib/format";
 import StatCard from "@/components/dashboard/StatCard";
 import { VolumeChart, RiskDonut } from "@/components/dashboard/Charts";
 import ContractsTable from "@/components/contracts/ContractsTable";
-import { Card, GlowHover, Icon, PageHeader, Skeleton } from "@/components/ui";
+import { Card, Icon, PageHeader, Skeleton } from "@/components/ui";
 
 // Build 7-day volume chart from history
 function buildVolumeData(history: HistoryEntry[]) {
@@ -34,7 +34,6 @@ const TYPE_GROUPS = [
   { label: "Vendor", match: /vendor|supply/i },
 ];
 
-const NAVY = { hue: 202, saturation: 60, lightness: 30 };
 
 export default function DashboardPage() {
   const [history, setHistory] = useState<HistoryEntry[]>([]);
@@ -66,15 +65,12 @@ export default function DashboardPage() {
       <PageHeader title="Legal Operations Overview" subtitle="AI contract analysis metrics and operational risk summary." />
 
       <Skeleton loading={!loaded} className="rounded-xl mb-8">
-        <GlowHover
-          className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8"
-          items={[
-            { id: "total", theme: NAVY, element: <StatCard label="Contracts Analyzed" value={String(total)} trend={`${thisWeek} in the last 7 days`} trendUp icon="description" /> },
-            { id: "high", theme: { hue: 345, saturation: 100, lightness: 45 }, element: <StatCard label="High-Risk Contracts" value={String(highCount)} trend={highCount ? "Requires immediate review" : "Nothing urgent"} icon="warning" highlight /> },
-            { id: "time", theme: NAVY, element: <StatCard label="Avg. Processing Time" value={avgTime} trend="AI-powered extraction" icon="timer" /> },
-            { id: "pending", theme: NAVY, element: <StatCard label="Pending Review" value={String(pending)} trend="Medium+ risk without a matter" icon="pending_actions" /> },
-          ]}
-        />
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+          <StatCard label="Contracts Analyzed" value={String(total)} trend={`${thisWeek} in the last 7 days`} trendUp icon="description" />
+          <StatCard label="High-Risk Contracts" value={String(highCount)} trend={highCount ? "Requires immediate review" : "Nothing urgent"} icon="warning" highlight />
+          <StatCard label="Avg. Processing Time" value={avgTime} trend="AI-powered extraction" icon="timer" />
+          <StatCard label="Pending Review" value={String(pending)} trend="Medium+ risk without a matter" icon="pending_actions" />
+        </div>
       </Skeleton>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-8">

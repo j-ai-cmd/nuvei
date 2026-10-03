@@ -7,7 +7,7 @@ import { AnalysisResult } from "@/types/contract";
 import { saveResult } from "@/lib/storage";
 import { DEMO_ANALYSIS } from "@/lib/demo-analysis";
 import ProcessingModal from "./ProcessingModal";
-import { BorderBeam, Button, Icon } from "@/components/ui";
+import { Button, Icon } from "@/components/ui";
 
 // Generates a stable UUID-like id
 function makeId() {
@@ -103,8 +103,8 @@ export default function UploadZone() {
         <ProcessingModal filename={filename} currentStep={step} onCancel={() => setProcessing(false)} />
       )}
 
-      <BorderBeam colorFrom="#ba0037" colorTo="#cfe5f7" duration={8} radius={12} className="rounded-xl">
-        <div className="bg-surface-container-lowest rounded-xl p-10 flex flex-col items-center justify-center min-h-[400px]">
+      <div>
+        <div className="bg-surface-container-lowest border border-outline-variant/20 rounded-xl p-6 md:p-10 flex flex-col items-center justify-center min-h-[400px]">
           <h3 className="text-xl font-bold text-primary mb-1">Drop your contract here</h3>
           <p className="text-sm text-on-surface-variant mb-6">PDF / DOCX · Max 25MB</p>
 
@@ -130,7 +130,7 @@ export default function UploadZone() {
             </Button>
           </div>
         </div>
-      </BorderBeam>
+      </div>
     </>
   );
 }
