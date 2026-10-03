@@ -12,7 +12,6 @@ interface StatCardProps {
   style?: React.CSSProperties;
 }
 
-// forwardRef + className/style passthrough so GlowHover can measure and clone it
 const StatCard = forwardRef<HTMLDivElement, StatCardProps>(function StatCard(
   { label, value, trend, trendUp, icon, highlight, className = "", style },
   ref

@@ -1,6 +1,6 @@
 "use client";
 
-import { BorderBeam, ProgressBar } from "@/components/ui";
+import { ProgressBar } from "@/components/ui";
 
 interface RiskScoreCardProps {
   score: number;
@@ -16,11 +16,10 @@ const LEVEL_COLORS: Record<string, string> = {
 
 export default function RiskScoreCard({ score, riskLevel }: RiskScoreCardProps) {
   const color = LEVEL_COLORS[riskLevel] ?? "#ba0037";
-  const high = riskLevel === "HIGH" || riskLevel === "CRITICAL";
 
   return (
-    <BorderBeam active={high} colorFrom={color} colorTo="#ffb2b7" duration={6} radius={8} className="rounded-lg">
-      <div className="bg-surface-container-lowest rounded-lg p-8 flex flex-col justify-center min-h-[300px]">
+    <div>
+      <div className="bg-surface-container-lowest border border-outline-variant/10 rounded-lg p-8 flex flex-col justify-center min-h-[300px]">
         <h3 className="font-bold text-xl text-primary mb-6">Risk Score</h3>
         <div className="flex items-baseline gap-2 mb-6">
           <span className="text-6xl font-bold tabular-nums" style={{ color }}>{score}</span>
@@ -34,6 +33,6 @@ export default function RiskScoreCard({ score, riskLevel }: RiskScoreCardProps) 
           <span>Critical</span>
         </div>
       </div>
-    </BorderBeam>
+    </div>
   );
 }

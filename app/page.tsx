@@ -7,8 +7,7 @@ import WorkflowStepper from "@/components/intake/WorkflowStepper";
 import { HistoryEntry } from "@/types/contract";
 import { getHistory } from "@/lib/storage";
 import { formatRelative } from "@/lib/format";
-import { AnimatedList, Icon, RiskBadge } from "@/components/ui";
-import SoftBlurIn from "@/components/smoothui/soft-blur-in";
+import { Icon, RiskBadge } from "@/components/ui";
 
 export default function IntakePage() {
   const [recent, setRecent] = useState<HistoryEntry[]>([]);
@@ -23,7 +22,7 @@ export default function IntakePage() {
       <div className="col-span-12 lg:col-span-8 space-y-8">
         <header>
           <h2 className="text-4xl font-bold text-primary mb-4 tracking-tight">
-            <SoftBlurIn>Analyze a contract in minutes.</SoftBlurIn>
+            Analyze a contract in minutes.
           </h2>
           <p className="text-lg text-on-surface-variant max-w-3xl leading-relaxed">
             Upload a PDF or DOCX and automatically extract key terms, identify potential risks,
@@ -52,14 +51,10 @@ export default function IntakePage() {
               No contracts analyzed yet. Upload one above to get started.
             </p>
           ) : (
-            <AnimatedList
-              direction="down"
-              pauseOnHover={false}
-              // wiring: oldest first so the newest renders on top
-              items={[...recent].reverse().map((item) => ({
-                id: item.id,
-                content: (
+            <div className="space-y-1">
+              {recent.map((item) => (
                 <Link
+                  key={item.id}
                   href={`/analysis/${item.id}`}
                   className="flex items-start gap-4 p-3 hover:bg-surface-container-low rounded-lg transition-colors"
                 >
@@ -72,9 +67,8 @@ export default function IntakePage() {
                   </div>
                   <RiskBadge level={item.riskLevel} />
                 </Link>
-                ),
-              }))}
-            />
+              ))}
+            </div>
           )}
         </div>
 
