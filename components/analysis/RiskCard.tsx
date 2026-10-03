@@ -19,7 +19,7 @@ export default function RiskCard({ risk }: { risk: RiskItem }) {
           <Icon name={cfg.icon} className="text-on-surface-variant text-[20px]" />
           <h4 className="text-base font-bold text-primary">{risk.title}</h4>
         </div>
-        <span className={`${cfg.badge} text-[10px] font-bold px-2 py-1 rounded uppercase tracking-widest whitespace-nowrap`}>
+        <span className={`${cfg.badge} text-[10px] font-bold px-2 py-1 rounded-sm uppercase tracking-widest whitespace-nowrap`}>
           {risk.severity}
         </span>
       </div>
@@ -30,7 +30,7 @@ export default function RiskCard({ risk }: { risk: RiskItem }) {
 
       <p className="text-sm text-on-surface-variant mb-4">{risk.explanation}</p>
 
-      <div className="bg-surface-container-low p-3 rounded border-b border-outline-variant/20 flex items-start gap-3">
+      <div className="bg-surface-container-low p-3 rounded-sm border-b border-outline-variant/20 flex items-start gap-3">
         <Icon name="task_alt" className="text-on-surface-variant text-[18px] mt-0.5" />
         <div>
           <span className="text-xs font-bold text-primary block mb-1">Recommended Action</span>

@@ -5,15 +5,16 @@ import Link from "next/link";
 import UploadZone from "@/components/intake/UploadZone";
 import WorkflowStepper from "@/components/intake/WorkflowStepper";
 import { HistoryEntry } from "@/types/contract";
-import { getStoredHistory } from "@/lib/storage";
+import { getHistory } from "@/lib/storage";
 import { formatRelative } from "@/lib/format";
-import { Icon, RiskBadge } from "@/components/ui";
+import { AnimatedList, Icon, RiskBadge } from "@/components/ui";
+import SoftBlurIn from "@/components/smoothui/soft-blur-in";
 
 export default function IntakePage() {
   const [recent, setRecent] = useState<HistoryEntry[]>([]);
 
   useEffect(() => {
-    setRecent(getStoredHistory().slice(0, 5));
+    setRecent(getHistory().slice(0, 5));
   }, []);
 
   return (
@@ -22,7 +23,7 @@ export default function IntakePage() {
       <div className="col-span-12 lg:col-span-8 space-y-8">
         <header>
           <h2 className="text-4xl font-bold text-primary mb-4 tracking-tight">
-            Analyze a contract in minutes.
+            <SoftBlurIn>Analyze a contract in minutes.</SoftBlurIn>
           </h2>
           <p className="text-lg text-on-surface-variant max-w-3xl leading-relaxed">
             Upload a PDF or DOCX and automatically extract key terms, identify potential risks,
@@ -51,14 +52,18 @@ export default function IntakePage() {
               No contracts analyzed yet. Upload one above to get started.
             </p>
           ) : (
-            <div className="space-y-3">
-              {recent.map((item) => (
+            <AnimatedList
+              direction="down"
+              pauseOnHover={false}
+              // wiring: oldest first so the newest renders on top
+              items={[...recent].reverse().map((item) => ({
+                id: item.id,
+                content: (
                 <Link
-                  key={item.id}
                   href={`/analysis/${item.id}`}
                   className="flex items-start gap-4 p-3 hover:bg-surface-container-low rounded-lg transition-colors"
                 >
-                  <div className="w-10 h-10 rounded bg-primary/5 flex items-center justify-center text-primary flex-shrink-0">
+                  <div className="w-10 h-10 rounded-sm bg-primary/5 flex items-center justify-center text-primary shrink-0">
                     <Icon name="description" className="text-[20px]" />
                   </div>
                   <div className="flex-1 min-w-0">
@@ -67,8 +72,9 @@ export default function IntakePage() {
                   </div>
                   <RiskBadge level={item.riskLevel} />
                 </Link>
-              ))}
-            </div>
+                ),
+              }))}
+            />
           )}
         </div>
 

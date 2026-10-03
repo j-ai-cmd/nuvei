@@ -1,3 +1,4 @@
+import { forwardRef } from "react";
 import { Icon } from "@/components/ui";
 
 interface StatCardProps {
@@ -7,11 +8,17 @@ interface StatCardProps {
   trendUp?: boolean;
   icon: string;
   highlight?: boolean;
+  className?: string;
+  style?: React.CSSProperties;
 }
 
-export default function StatCard({ label, value, trend, trendUp, icon, highlight }: StatCardProps) {
+// forwardRef + className/style passthrough so GlowHover can measure and clone it
+const StatCard = forwardRef<HTMLDivElement, StatCardProps>(function StatCard(
+  { label, value, trend, trendUp, icon, highlight, className = "", style },
+  ref
+) {
   return (
-    <div className={`p-6 rounded-xl border shadow-sm flex flex-col justify-between ${
+    <div ref={ref} style={style} className={`${className} p-6 rounded-xl border shadow-xs flex flex-col justify-between ${
       highlight
         ? "bg-secondary/5 border-secondary/20 shadow-[0_4px_20px_rgba(186,0,55,0.04)]"
         : "bg-white border-outline-variant/10"
@@ -41,4 +48,6 @@ export default function StatCard({ label, value, trend, trendUp, icon, highlight
       </div>
     </div>
   );
-}
+});
+
+export default StatCard;

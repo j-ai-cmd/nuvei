@@ -7,7 +7,7 @@ const STYLES: Record<string, string> = {
 
 export default function RiskBadge({ level, suffix }: { level: string; suffix?: string }) {
   return (
-    <span className={`inline-flex px-2 py-0.5 rounded text-[10px] font-bold whitespace-nowrap ${STYLES[level] ?? STYLES.LOW}`}>
+    <span className={`inline-flex px-2 py-0.5 rounded-sm text-[10px] font-bold whitespace-nowrap ${STYLES[level] ?? STYLES.LOW}`}>
       {level}
       {suffix && ` ${suffix}`}
     </span>

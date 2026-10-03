@@ -1,13 +1,13 @@
 "use client";
 
-import { useCallback, useState } from "react";
-import { useDropzone } from "react-dropzone";
+import { useState } from "react";
+import AnimatedFileUpload from "@/components/smoothui/animated-file-upload";
 import { useRouter } from "next/navigation";
 import { AnalysisResult } from "@/types/contract";
 import { saveResult } from "@/lib/storage";
 import { DEMO_ANALYSIS } from "@/lib/demo-analysis";
 import ProcessingModal from "./ProcessingModal";
-import { Icon } from "@/components/ui";
+import { BorderBeam, Button, Icon } from "@/components/ui";
 
 // Generates a stable UUID-like id
 function makeId() {
@@ -84,81 +84,53 @@ export default function UploadZone() {
     router.push(`/analysis/${id}`);
   }
 
-  const onDrop = useCallback(async (accepted: File[]) => {
-    if (accepted.length === 0) return;
-    const file = accepted[0];
+  // wiring: AnimatedFileUpload only checks size, so enforce type here
+  function handleFiles(files: File[]) {
+    const file = files[files.length - 1];
+    if (!file) return;
+    if (!/\.(pdf|docx)$/i.test(file.name)) {
+      setError("Only PDF and DOCX files are accepted.");
+      return;
+    }
     const fd = new FormData();
     fd.append("file", file);
-    await submitFile(fd, file.name);
-  // submitFile is stable — defined once per render via closure
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
-    onDrop,
-    accept: {
-      "application/pdf": [".pdf"],
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [".docx"],
-    },
-    maxSize: 25 * 1024 * 1024,
-    noClick: true,
-    onDropRejected: (files) => {
-      const err = files[0]?.errors[0];
-      if (err?.code === "file-too-large") setError("File exceeds 25MB limit.");
-      else if (err?.code === "file-invalid-type") setError("Only PDF and DOCX files are accepted.");
-      else setError("File rejected. Please try again.");
-    },
-  });
+    submitFile(fd, file.name);
+  }
 
   return (
     <>
       {processing && (
-        <ProcessingModal
-          filename={filename}
-          currentStep={step}
-          onCancel={() => setProcessing(false)}
-        />
+        <ProcessingModal filename={filename} currentStep={step} onCancel={() => setProcessing(false)} />
       )}
 
-      <div
-        {...getRootProps()}
-        className={`bg-surface-container-lowest border-2 border-dashed rounded-xl p-12 flex flex-col items-center justify-center min-h-[400px] cursor-default transition-colors ${
-          isDragActive ? "border-primary bg-primary/5" : "border-outline-variant/30 hover:border-primary"
-        }`}
-      >
-        <input {...getInputProps()} />
-        <div className="w-20 h-20 bg-surface-container-low rounded-full flex items-center justify-center mb-6">
-          <span className={`material-symbols-outlined text-4xl ${isDragActive ? "text-primary" : "text-on-surface-variant"}`}>
-            cloud_upload
-          </span>
-        </div>
-        <h3 className="text-xl font-bold text-primary mb-2">
-          {isDragActive ? "Drop your contract here" : "Drop your contract here"}
-        </h3>
-        <p className="text-sm text-on-surface-variant mb-8">PDF / DOCX · Max 25MB</p>
+      <BorderBeam colorFrom="#ba0037" colorTo="#cfe5f7" duration={8} radius={12} className="rounded-xl">
+        <div className="bg-surface-container-lowest rounded-xl p-10 flex flex-col items-center justify-center min-h-[400px]">
+          <h3 className="text-xl font-bold text-primary mb-1">Drop your contract here</h3>
+          <p className="text-sm text-on-surface-variant mb-6">PDF / DOCX · Max 25MB</p>
 
-        {error && (
-          <div className="mb-6 px-4 py-3 bg-error-container text-on-error-container rounded-lg text-sm flex items-center gap-2">
-            <Icon name="error" className="text-[18px]" />
-            {error}
+          <AnimatedFileUpload
+            accept=".pdf,.docx"
+            maxSize={25 * 1024 * 1024}
+            multiple={false}
+            disabled={processing}
+            onFilesSelected={handleFiles}
+            className="w-full max-w-xl"
+          />
+
+          {error && (
+            <div className="mt-6 px-4 py-3 bg-error-container text-on-error-container rounded-lg text-sm flex items-center gap-2">
+              <Icon name="error" className="text-[18px]" />
+              {error}
+            </div>
+          )}
+
+          <div className="mt-8">
+            <Button variant="danger" icon="science" onClick={handleDemo}>
+              Try Demo Contract
+            </Button>
           </div>
-        )}
-
-        <div className="flex gap-4 flex-wrap justify-center">
-          <button
-            onClick={open}
-            className="bg-primary text-white text-xs font-bold tracking-wider uppercase px-6 py-3 rounded hover:bg-primary/90 transition-colors"
-          >
-            Browse Files
-          </button>
-          <button
-            onClick={handleDemo}
-            className="border border-secondary text-secondary text-xs font-bold tracking-wider uppercase px-6 py-3 rounded hover:bg-secondary/5 transition-colors"
-          >
-            Try Demo Contract
-          </button>
         </div>
-      </div>
+      </BorderBeam>
     </>
   );
 }

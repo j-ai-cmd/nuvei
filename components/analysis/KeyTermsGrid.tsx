@@ -32,7 +32,7 @@ export default function KeyTermsGrid({ metadata }: { metadata: ContractMetadata 
           <h4 className="text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-4">Parties</h4>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {metadata.parties.map((p, i) => (
-              <div key={i} className="bg-surface-container-low p-3 rounded">
+              <div key={i} className="bg-surface-container-low p-3 rounded-sm">
                 <p className="text-xs text-on-surface-variant font-semibold">{p.role ?? `Party ${i + 1}`}</p>
                 <p className="text-sm font-bold text-primary mt-1">{p.name ?? "—"}</p>
               </div>

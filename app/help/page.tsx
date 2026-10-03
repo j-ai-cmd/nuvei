@@ -1,4 +1,4 @@
-import { PageHeader } from "@/components/ui";
+import { Accordion, PageHeader } from "@/components/ui";
 
 export default function HelpPage() {
   const faqs = [
@@ -40,21 +40,21 @@ export default function HelpPage() {
     <div className="max-w-3xl">
       <PageHeader title="Help" subtitle="Frequently asked questions about the platform." action={null} />
 
-      <div className="space-y-4">
-        {faqs.map(({ q, a }) => (
-          <div key={q} className="bg-white rounded-xl border border-outline-variant/10 shadow-sm p-6">
-            <h3 className="text-sm font-bold text-primary-container mb-2">{q}</h3>
-            <p className="text-sm text-on-surface-variant leading-relaxed">{a}</p>
-          </div>
-        ))}
-      </div>
+      <Accordion
+        defaultExpandedIds={[0]}
+        items={faqs.map(({ q, a }, i) => ({
+          id: i,
+          title: q,
+          content: <p className="text-sm text-on-surface-variant leading-relaxed">{a}</p>,
+        }))}
+      />
 
       <div className="mt-8 bg-surface-container-low rounded-xl border border-outline-variant/10 p-6">
         <h2 className="text-sm font-bold text-primary-container mb-2">Still need help?</h2>
         <p className="text-sm text-on-surface-variant">
           This is a prototype application. For issues with the deployment, check the Vercel function logs
           for server-side errors. For AI analysis issues, verify that{" "}
-          <code className="bg-surface-variant px-1 rounded text-xs">KIMI_API_KEY</code> is set in your
+          <code className="bg-surface-variant px-1 rounded-sm text-xs">KIMI_API_KEY</code> is set in your
           Vercel environment variables.
         </p>
       </div>

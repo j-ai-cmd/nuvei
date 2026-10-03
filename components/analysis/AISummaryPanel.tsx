@@ -14,7 +14,7 @@ export default function AISummaryPanel({ analysis }: { analysis: ContractAnalysi
         />
         <div className="relative z-10">
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-8 h-8 rounded bg-white/10 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-sm bg-white/10 flex items-center justify-center">
               <Icon name="psychology" className="text-white text-[20px]" />
             </div>
             <h3 className="text-xl font-bold text-white">AI Review Summary</h3>
@@ -30,7 +30,7 @@ export default function AISummaryPanel({ analysis }: { analysis: ContractAnalysi
                 <ul className="space-y-2">
                   {missingInformation.map((item, i) => (
                     <li key={i} className="flex items-start gap-2 text-sm">
-                      <span className="w-1.5 h-1.5 rounded-full bg-secondary mt-2 flex-shrink-0" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-secondary mt-2 shrink-0" />
                       <span className="text-white/80">{item}</span>
                     </li>
                   ))}
@@ -45,7 +45,7 @@ export default function AISummaryPanel({ analysis }: { analysis: ContractAnalysi
                 <Icon name="route" className="text-[16px]" />
                 Recommended Routing
               </h4>
-              <div className="bg-white/5 rounded p-3 border-l-2 border-primary-fixed">
+              <div className="bg-white/5 rounded-sm p-3 border-l-2 border-primary-fixed">
                 <span className="text-sm text-white/80 block mb-1">Based on risk assessment, route to:</span>
                 <span className="text-sm font-bold text-white block">{recommendedLegalRouting}</span>
               </div>
@@ -64,7 +64,7 @@ export default function AISummaryPanel({ analysis }: { analysis: ContractAnalysi
           <ul className="space-y-3">
             {unusualClauses.map((c, i) => (
               <li key={i} className="flex items-start gap-2 text-sm text-on-surface-variant">
-                <span className="w-1.5 h-1.5 rounded-full bg-secondary mt-2 flex-shrink-0" />
+                <span className="w-1.5 h-1.5 rounded-full bg-secondary mt-2 shrink-0" />
                 {c}
               </li>
             ))}

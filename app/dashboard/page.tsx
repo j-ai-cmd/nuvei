@@ -8,7 +8,7 @@ import { isHighRisk } from "@/lib/format";
 import StatCard from "@/components/dashboard/StatCard";
 import { VolumeChart, RiskDonut } from "@/components/dashboard/Charts";
 import ContractsTable from "@/components/contracts/ContractsTable";
-import { Card, Icon, PageHeader } from "@/components/ui";
+import { Card, GlowHover, Icon, PageHeader, Skeleton } from "@/components/ui";
 
 // Build 7-day volume chart from history
 function buildVolumeData(history: HistoryEntry[]) {
@@ -28,11 +28,15 @@ function buildVolumeData(history: HistoryEntry[]) {
   return { labels, data: labels.map((l) => days[l]) };
 }
 
+const NAVY = { hue: 202, saturation: 60, lightness: 30 };
+
 export default function DashboardPage() {
   const [history, setHistory] = useState<HistoryEntry[]>([]);
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     setHistory(getHistory());
+    setLoaded(true);
   }, []);
 
   const total = history.length;
@@ -49,12 +53,17 @@ export default function DashboardPage() {
     <div>
       <PageHeader title="Legal Operations Overview" subtitle="AI contract analysis metrics and operational risk summary." />
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <StatCard label="Contracts Analyzed" value={String(total)} trend="+12% this month" trendUp icon="description" />
-        <StatCard label="High-Risk Contracts" value={String(highCount)} trend="Requires immediate review" icon="warning" highlight />
-        <StatCard label="Avg. Processing Time" value={avgTime} trend="AI-powered extraction" icon="timer" />
-        <StatCard label="Pending Review" value="8" trend="Awaiting attorney sign-off" icon="pending_actions" />
-      </div>
+      <Skeleton loading={!loaded} className="rounded-xl mb-8">
+        <GlowHover
+          className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8"
+          items={[
+            { id: "total", theme: NAVY, element: <StatCard label="Contracts Analyzed" value={String(total)} trend="+12% this month" trendUp icon="description" /> },
+            { id: "high", theme: { hue: 345, saturation: 100, lightness: 45 }, element: <StatCard label="High-Risk Contracts" value={String(highCount)} trend="Requires immediate review" icon="warning" highlight /> },
+            { id: "time", theme: NAVY, element: <StatCard label="Avg. Processing Time" value={avgTime} trend="AI-powered extraction" icon="timer" /> },
+            { id: "pending", theme: NAVY, element: <StatCard label="Pending Review" value="8" trend="Awaiting attorney sign-off" icon="pending_actions" /> },
+          ]}
+        />
+      </Skeleton>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-8">
         <Card title="Contract Volume (Last 7 Days)" className="lg:col-span-8">
@@ -69,7 +78,7 @@ export default function DashboardPage() {
         {["MSA", "NDA", "Vendor"].map((type) => {
           const count = history.filter((h) => h.contractType?.includes(type)).length;
           return (
-            <Card key={type} className="!p-5">
+            <Card key={type} className="p-5!">
               <p className="text-xs text-on-surface-variant uppercase tracking-wider font-semibold mb-2">{type} Agreements</p>
               <p className="text-3xl font-bold text-primary-container">{count}</p>
               <p className="text-xs text-on-surface-variant mt-1">analyzed this session</p>

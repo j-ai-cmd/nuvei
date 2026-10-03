@@ -11,7 +11,7 @@ import AISummaryPanel from "@/components/analysis/AISummaryPanel";
 import MatterModal from "@/components/analysis/MatterModal";
 import { getResult, saveMatter } from "@/lib/storage";
 import { isHighRisk } from "@/lib/format";
-import { Button, EmptyState, Icon, Panel, Spinner, Tabs } from "@/components/ui";
+import { Accordion, Button, EmptyState, Icon, Panel, Spinner, Tabs, useToast } from "@/components/ui";
 
 type Tab = "overview" | "risk" | "terms" | "ai-review" | "matter";
 
@@ -37,6 +37,7 @@ export default function AnalysisPage() {
   const [activeTab, setActiveTab] = useState<Tab>("overview");
   const [matter, setMatter] = useState<MatterRecord | null>(null);
   const [creatingMatter, setCreatingMatter] = useState(false);
+  const toast = useToast();
 
   useEffect(() => {
     const found = getResult(id);
@@ -113,6 +114,7 @@ export default function AnalysisPage() {
     a.download = `${filename.replace(/\.[^/.]+$/, "")}_analysis_report.txt`;
     a.click();
     URL.revokeObjectURL(url);
+    toast("Report downloaded", "success");
   }
 
   async function handleCreateMatter() {
@@ -139,8 +141,9 @@ export default function AnalysisPage() {
       };
       saveMatter(enriched);
       setMatter(enriched);
+      toast(`Matter ${enriched.matterId} created`, "success");
     } catch {
-      alert("Failed to create matter. Please try again.");
+      toast("Failed to create matter. Please try again.", "error");
     } finally {
       setCreatingMatter(false);
     }
@@ -203,7 +206,7 @@ export default function AnalysisPage() {
       {isDemo && <DemoBanner />}
 
       {/* Metadata Bar */}
-      <div className="bg-white border border-outline-variant/10 rounded-lg p-4 mb-8 flex flex-wrap gap-x-8 gap-y-4 items-center shadow-sm">
+      <div className="bg-white border border-outline-variant/10 rounded-lg p-4 mb-8 flex flex-wrap gap-x-8 gap-y-4 items-center shadow-xs">
         <div>
           <span className="text-xs text-on-surface-variant uppercase tracking-wider font-semibold">Type</span>
           <p className="text-base font-bold text-primary mt-1">{metadata.agreementType ?? "Unknown"}</p>
@@ -242,7 +245,7 @@ export default function AnalysisPage() {
       <Tabs tabs={TABS} active={activeTab} onChange={setActiveTab} />
 
       {/* Disclaimer */}
-      <div className="mb-6 p-3 bg-surface-container-low border border-outline-variant/10 rounded text-xs text-on-surface-variant">
+      <div className="mb-6 p-3 bg-surface-container-low border border-outline-variant/10 rounded-sm text-xs text-on-surface-variant">
         <strong>Disclaimer:</strong> {analysis.disclaimer}
       </div>
 
@@ -260,7 +263,7 @@ export default function AnalysisPage() {
                   <ul className="space-y-2">
                     {keyObligations.map((o, i) => (
                       <li key={i} className="flex items-start gap-3 text-sm text-on-surface-variant">
-                        <span className="w-1.5 h-1.5 rounded-full bg-primary mt-2 flex-shrink-0" />
+                        <span className="w-1.5 h-1.5 rounded-full bg-primary mt-2 shrink-0" />
                         {o}
                       </li>
                     ))}
@@ -285,18 +288,16 @@ export default function AnalysisPage() {
 
           {activeTab === "risk" && (
             <div className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <RiskScoreCard score={riskAnalysis.overallRiskScore} riskLevel={riskAnalysis.riskLevel} />
-                <div className="space-y-4">
-                  <h3 className="text-xl font-bold text-primary">All Findings ({riskAnalysis.risks.length})</h3>
-                  {riskAnalysis.risks.slice(0, 3).map((r, i) => (
-                    <RiskCard key={i} risk={r} />
-                  ))}
-                </div>
-              </div>
-              {riskAnalysis.risks.slice(3).map((r, i) => (
-                <RiskCard key={i + 3} risk={r} />
-              ))}
+              <RiskScoreCard score={riskAnalysis.overallRiskScore} riskLevel={riskAnalysis.riskLevel} />
+              <h3 className="text-xl font-bold text-primary">All Findings ({riskAnalysis.risks.length})</h3>
+              <Accordion
+                defaultExpandedIds={[0]}
+                items={riskAnalysis.risks.map((r, i) => ({
+                  id: i,
+                  title: `${r.severity} · ${r.title}`,
+                  content: <RiskCard risk={r} />,
+                }))}
+              />
             </div>
           )}
 

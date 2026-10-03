@@ -3,6 +3,7 @@ import "./globals.css";
 import SideNav from "@/components/layout/SideNav";
 import TopBar from "@/components/layout/TopBar";
 import Footer from "@/components/layout/Footer";
+import { ToastProvider } from "@/components/ui";
 import { Analytics } from "@vercel/analytics/next";
 
 export const metadata: Metadata = {
@@ -15,12 +16,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <head />
       <body className="bg-background text-on-background min-h-screen">
-        <SideNav />
-        <TopBar />
-        <main className="ml-64 pt-24 px-6 pb-32 max-w-[1440px]">
-          {children}
-        </main>
-        <Footer />
+        <ToastProvider>
+          <SideNav />
+          <TopBar />
+          <main className="ml-64 pt-24 px-6 pb-32 max-w-container-max">
+            {children}
+          </main>
+          <Footer />
+        </ToastProvider>
         <Analytics />
       </body>
     </html>

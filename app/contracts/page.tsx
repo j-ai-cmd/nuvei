@@ -4,16 +4,18 @@ import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { HistoryEntry } from "@/types/contract";
 import { getHistory } from "@/lib/storage";
-import { EmptyState, PageHeader } from "@/components/ui";
+import { EmptyState, PageHeader, Skeleton } from "@/components/ui";
 import ContractsTable from "@/components/contracts/ContractsTable";
 
 function ContractsInner() {
   const searchParams = useSearchParams();
   const q = searchParams.get("q")?.toLowerCase() ?? "";
   const [all, setAll] = useState<HistoryEntry[]>([]);
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     setAll(getHistory());
+    setLoaded(true);
   }, []);
 
   const filtered = q
@@ -38,7 +40,13 @@ function ContractsInner() {
         }
       />
 
-      {filtered.length === 0 ? (
+      {!loaded ? (
+        <div className="space-y-3">
+          {Array.from({ length: 5 }, (_, i) => (
+            <Skeleton key={i} className="h-14 rounded-lg" />
+          ))}
+        </div>
+      ) : filtered.length === 0 ? (
         <EmptyState
           icon="description"
           title={q ? "No contracts match your search" : "No contracts yet"}
@@ -46,7 +54,7 @@ function ContractsInner() {
           cta={q ? undefined : { href: "/", label: "Upload Contract" }}
         />
       ) : (
-        <div className="bg-white rounded-xl border border-outline-variant/10 shadow-sm overflow-hidden">
+        <div className="bg-white rounded-xl border border-outline-variant/10 shadow-xs overflow-hidden">
           <ContractsTable items={filtered} />
         </div>
       )}

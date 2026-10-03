@@ -1,17 +1,26 @@
 import Link from "next/link";
+import SmoothButton, { smoothButtonVariants, type SmoothButtonProps } from "@/components/smoothui/smooth-button";
+import MagneticButton from "@/components/smoothui/magnetic-button";
+import { cn } from "@/lib/utils";
 import Icon from "./Icon";
 
 type Variant = "primary" | "dark" | "danger" | "secondary";
 
-const VARIANTS: Record<Variant, string> = {
-  primary: "bg-primary-container text-white hover:bg-primary",
-  dark: "bg-primary text-white hover:bg-primary/90",
-  danger: "bg-secondary text-white hover:opacity-90 shadow-sm",
-  secondary: "bg-surface-container-high text-on-surface hover:bg-surface-variant border border-outline-variant/10",
+// Nuvei tones expressed through SmoothButton's own --btn / --btn-hover / --btn-fg axis
+const VARIANTS: Record<Variant, Pick<SmoothButtonProps, "variant" | "color"> & { className: string }> = {
+  primary: {
+    variant: "solid",
+    className: "[--btn:var(--color-primary-container)] [--btn-hover:var(--color-primary)] [--btn-fg:#fff]",
+  },
+  dark: {
+    variant: "solid",
+    className: "[--btn:var(--color-primary)] [--btn-hover:var(--color-primary-container)] [--btn-fg:#fff]",
+  },
+  danger: { variant: "candy", color: "accent", className: "" },
+  secondary: { variant: "outline", className: "hover:bg-surface-container-high" },
 };
 
-const BASE =
-  "px-6 py-3 rounded flex items-center justify-center gap-2 transition-colors text-xs font-bold tracking-wider uppercase disabled:opacity-60";
+const BASE = "h-11 px-6 text-xs font-bold tracking-wider uppercase";
 
 interface CommonProps {
   variant?: Variant;
@@ -26,21 +35,37 @@ export function Button({
   className = "",
   children,
   ...rest
-}: CommonProps & Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "className" | "children">) {
+}: CommonProps & Omit<SmoothButtonProps, "className" | "children" | "variant" | "color" | "prefix">) {
+  const v = VARIANTS[variant];
   return (
-    <button className={`${BASE} ${VARIANTS[variant]} ${className}`} {...rest}>
-      {icon && <Icon name={icon} className="text-[18px]" />}
+    <SmoothButton
+      variant={v.variant}
+      color={v.color}
+      className={cn(BASE, v.className, className)}
+      prefix={icon ? <Icon name={icon} className="text-[18px]" /> : undefined}
+      {...rest}
+    >
       {children}
-    </button>
+    </SmoothButton>
   );
 }
 
+// Navigation CTA: MagneticButton pull, styled with SmoothButton's variant classes.
+// MagneticButton runs its className through twMerge, so these win over its defaults.
 export function LinkButton({ href, variant = "primary", icon, className = "", children }: CommonProps & { href: string }) {
+  const v = VARIANTS[variant];
   return (
-    <Link href={href} className={`${BASE} ${VARIANTS[variant]} ${className}`}>
-      {icon && <Icon name={icon} className="text-[18px]" />}
-      {children}
-    </Link>
+    <MagneticButton
+      asChild
+      radius={80}
+      strength={0.25}
+      className={cn(smoothButtonVariants({ variant: v.variant, color: v.color }), BASE, v.className, className)}
+    >
+      <Link href={href}>
+        {icon && <Icon name={icon} className="text-[18px]" />}
+        {children}
+      </Link>
+    </MagneticButton>
   );
 }
 
@@ -49,9 +74,12 @@ export function ArrowLink({ href, children, className = "" }: { href: string; ch
   return (
     <Link
       href={href}
-      className={`text-xs font-bold text-primary hover:text-primary/70 flex items-center gap-1 transition-colors ${className}`}
+      className={cn(
+        "group text-xs font-bold text-primary hover:text-primary/70 inline-flex items-center gap-1 transition-colors",
+        className
+      )}
     >
-      {children} <Icon name="arrow_forward" className="text-[14px]" />
+      {children} <Icon name="arrow_forward" className="text-[14px] transition-transform group-hover:translate-x-0.5" />
     </Link>
   );
 }
