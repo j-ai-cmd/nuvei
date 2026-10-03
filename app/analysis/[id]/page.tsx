@@ -9,9 +9,9 @@ import RiskCard from "@/components/analysis/RiskCard";
 import KeyTermsGrid from "@/components/analysis/KeyTermsGrid";
 import AISummaryPanel from "@/components/analysis/AISummaryPanel";
 import MatterModal from "@/components/analysis/MatterModal";
-import { getResult, saveMatter } from "@/lib/storage";
+import { getMatters, getResult, saveMatter } from "@/lib/storage";
 import { isHighRisk } from "@/lib/format";
-import { Accordion, Button, EmptyState, Icon, Panel, Spinner, Tabs, useToast } from "@/components/ui";
+import { Accordion, Button, EmptyState, LinkButton, Icon, Panel, Spinner, Tabs, useToast } from "@/components/ui";
 
 type Tab = "overview" | "risk" | "terms" | "ai-review" | "matter";
 
@@ -21,9 +21,9 @@ function DemoBanner() {
     <div className="mb-6 px-4 py-3 bg-surface-container border border-outline-variant/20 rounded-lg flex items-center gap-3">
       <Icon name="science" className="text-on-surface-variant text-[20px]" />
       <div>
-        <span className="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Demo Data</span>
+        <span className="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Sample Data</span>
         <p className="text-xs text-on-surface-variant">
-          This analysis uses pre-computed demonstration data. Connect an AI API key to analyze real contracts.
+          Sample analysis, pre-computed for demonstration. Upload a contract to run a live AI review.
         </p>
       </div>
     </div>
@@ -37,12 +37,14 @@ export default function AnalysisPage() {
   const [activeTab, setActiveTab] = useState<Tab>("overview");
   const [matter, setMatter] = useState<MatterRecord | null>(null);
   const [creatingMatter, setCreatingMatter] = useState(false);
+  const [existingMatter, setExistingMatter] = useState<MatterRecord | null>(null);
   const toast = useToast();
 
   useEffect(() => {
     const found = getResult(id);
     if (found) setResult(found);
     else setNotFound(true);
+    setExistingMatter(getMatters().find((m) => m.analysisId === id) ?? null);
   }, [id]);
 
   function handleExportReport() {
@@ -140,6 +142,7 @@ export default function AnalysisPage() {
         analysisId: result.id,
       };
       saveMatter(enriched);
+      setExistingMatter(enriched);
       setMatter(enriched);
       toast(`Matter ${enriched.matterId} created`, "success");
     } catch {
@@ -189,7 +192,7 @@ export default function AnalysisPage() {
             <Icon name="arrow_back" className="text-[18px] mr-1" />
             Back to Contracts
           </Link>
-          <h1 className="text-2xl md:text-3xl font-bold text-primary tracking-tight md:truncate max-w-2xl break-words">
+          <h1 className="text-2xl md:text-3xl font-bold text-primary tracking-tight line-clamp-2 max-w-3xl break-words">
             {metadata.contractTitle ?? filename}
           </h1>
         </div>
@@ -197,9 +200,15 @@ export default function AnalysisPage() {
           <Button variant="secondary" icon="download" onClick={handleExportReport} className="flex-1 md:flex-none">
             Export Report
           </Button>
-          <Button variant="danger" icon="add_circle" onClick={handleCreateMatter} disabled={creatingMatter} className="flex-1 md:flex-none">
-            {creatingMatter ? "Creating..." : "Create Matter"}
-          </Button>
+          {existingMatter ? (
+            <LinkButton href="/matters" variant="secondary" icon="work" className="flex-1 md:flex-none">
+              Matter {existingMatter.matterId}
+            </LinkButton>
+          ) : (
+            <Button variant="danger" icon="add_circle" onClick={handleCreateMatter} disabled={creatingMatter} className="flex-1 md:flex-none">
+              {creatingMatter ? "Creating..." : "Create Matter"}
+            </Button>
+          )}
         </div>
       </div>
 
@@ -346,9 +355,15 @@ export default function AnalysisPage() {
                   </div>
                 ))}
               </div>
-              <Button variant="danger" icon="add_circle" onClick={handleCreateMatter} disabled={creatingMatter} className="w-full">
-                {creatingMatter ? "Creating Matter..." : "Create Matter (Simulated)"}
-              </Button>
+              {existingMatter ? (
+                <LinkButton href="/matters" variant="secondary" icon="work" className="w-full">
+                  View Matter {existingMatter.matterId}
+                </LinkButton>
+              ) : (
+                <Button variant="danger" icon="add_circle" onClick={handleCreateMatter} disabled={creatingMatter} className="w-full">
+                  {creatingMatter ? "Creating Matter..." : "Create Matter (Simulated)"}
+                </Button>
+              )}
               <p className="text-xs text-center text-on-surface-variant/60 mt-3">
                 DEMONSTRATION · MOCK CLM INTEGRATION · Saved to session Matters
               </p>

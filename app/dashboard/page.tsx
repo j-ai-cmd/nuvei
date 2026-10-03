@@ -28,12 +28,6 @@ function buildVolumeData(history: HistoryEntry[]) {
   return { labels, data: labels.map((l) => days[l]) };
 }
 
-const TYPE_GROUPS = [
-  { label: "MSA", match: /master services|\bmsa\b/i },
-  { label: "NDA", match: /non-disclosure|\bnda\b/i },
-  { label: "Vendor", match: /vendor|supply/i },
-];
-
 
 const NAVY = { hue: 202, saturation: 60, lightness: 30 };
 const RED = { hue: 345, saturation: 100, lightness: 45 };
@@ -86,19 +80,6 @@ export default function DashboardPage() {
         <Card title="Risk Distribution" className="lg:col-span-4 flex flex-col">
           <RiskDonut high={highCount} medium={medCount} low={lowCount} total={total} />
         </Card>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        {TYPE_GROUPS.map(({ label: type, match }) => {
-          const count = history.filter((h) => match.test(h.contractType ?? "")).length;
-          return (
-            <Card key={type} className="p-5!">
-              <p className="text-xs text-on-surface-variant uppercase tracking-wider font-semibold mb-2">{type} Agreements</p>
-              <p className="text-3xl font-bold text-primary-container">{count}</p>
-              <p className="text-xs text-on-surface-variant mt-1">analyzed this session</p>
-            </Card>
-          );
-        })}
       </div>
 
       <Card
