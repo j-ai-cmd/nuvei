@@ -146,7 +146,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           error:
-            "AI analysis is not configured. Set KIMI_API_KEY and KIMI_MODEL environment variables to enable real document analysis.",
+            "AI analysis is not configured. Set the KIMI_API_KEY environment variable to enable real document analysis.",
         },
         { status: 503 }
       );
