@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { HistoryEntry } from "@/types/contract";
 import { formatRelative } from "@/lib/format";
@@ -16,7 +17,28 @@ export default function ContractsTable({ items, showProcessingTime }: ContractsT
   const headers = ["File", "Type", "Counterparty", "Risk", "Score", ...(showProcessingTime ? ["Time"] : []), "Analyzed", ""];
 
   return (
-    <div className="overflow-x-auto">
+    <>
+    {/* Phones: stacked cards */}
+    <ul className="md:hidden divide-y divide-outline-variant/10">
+      {items.map((item) => (
+        <li key={item.id}>
+          <Link href={`/analysis/${item.id}`} className="flex items-start gap-3 p-4 hover:bg-surface-container-low transition-colors">
+            <Icon name="description" className="text-on-surface-variant text-[20px] mt-0.5" />
+            <div className="flex-1 min-w-0">
+              <p className="font-semibold text-primary-container truncate text-sm">{item.filename}</p>
+              <p className="text-xs text-on-surface-variant truncate">
+                {item.contractType ?? "—"} · {item.counterparty ?? "—"}
+              </p>
+              <p className="text-xs text-on-surface-variant mt-1">
+                {item.riskScore}/100 · {formatRelative(item.analyzedAt)}
+              </p>
+            </div>
+            <RiskBadge level={item.riskLevel} />
+          </Link>
+        </li>
+      ))}
+    </ul>
+    <div className="hidden md:block overflow-x-auto">
       <table className="w-full text-left border-collapse">
         <thead>
           <tr className="border-b border-outline-variant/20 bg-surface-container-low">
@@ -63,5 +85,6 @@ export default function ContractsTable({ items, showProcessingTime }: ContractsT
         </tbody>
       </table>
     </div>
+    </>
   );
 }

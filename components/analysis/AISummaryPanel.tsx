@@ -80,13 +80,13 @@ export default function AISummaryPanel({ analysis }: { analysis: ContractAnalysi
             {top3Risks.map((risk, i) => (
               <div
                 key={i}
-                className={`flex items-center justify-between p-2 rounded cursor-default group border-l-2 ${
+                className={`flex items-start justify-between gap-3 p-2 rounded cursor-default group border-l-2 ${
                   risk.severity === "CRITICAL" || risk.severity === "HIGH"
                     ? "bg-error-container/20 border-secondary"
                     : "hover:bg-surface-container-low border-outline-variant/20"
                 }`}
               >
-                <span className="text-sm text-primary font-medium truncate max-w-[180px]">{risk.title}</span>
+                <span className="text-sm text-primary font-medium">{risk.title}</span>
                 <span
                   className={`text-[10px] font-bold px-2 py-0.5 rounded uppercase ${
                     risk.severity === "CRITICAL" ? "text-on-error-container" :

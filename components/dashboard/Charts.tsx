@@ -33,7 +33,7 @@ export function VolumeChart({ labels, data }: VolumeChartProps) {
               borderColor: "#081f2c",
               backgroundColor: "rgba(8, 31, 44, 0.05)",
               borderWidth: 2,
-              tension: 0.4,
+              tension: 0.25,
               fill: true,
               pointBackgroundColor: "#ffffff",
               pointBorderColor: "#081f2c",
@@ -47,7 +47,7 @@ export function VolumeChart({ labels, data }: VolumeChartProps) {
           maintainAspectRatio: false,
           plugins: { legend: { display: false } },
           scales: {
-            y: { beginAtZero: true, grid: { color: "rgba(195, 199, 204, 0.2)" }, border: { display: false } },
+            y: { beginAtZero: true, ticks: { precision: 0, stepSize: 1 }, grid: { color: "rgba(195, 199, 204, 0.2)" }, border: { display: false } },
             x: { grid: { display: false }, border: { display: false } },
           },
         }}
