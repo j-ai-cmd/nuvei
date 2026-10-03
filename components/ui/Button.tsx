@@ -57,7 +57,7 @@ export function LinkButton({ href, variant = "primary", icon, className = "", ch
   return (
     <MagneticButton
       asChild
-      radius={80}
+      radius={30}
       strength={0.25}
       className={cn(smoothButtonVariants({ variant: v.variant, color: v.color }), BASE, v.className, className)}
     >

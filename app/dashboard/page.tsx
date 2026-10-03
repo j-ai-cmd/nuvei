@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { HistoryEntry } from "@/types/contract";
-import { getHistory } from "@/lib/storage";
+import { getHistory, getMatters } from "@/lib/storage";
 import { isHighRisk } from "@/lib/format";
 import StatCard from "@/components/dashboard/StatCard";
 import { VolumeChart, RiskDonut } from "@/components/dashboard/Charts";
@@ -28,14 +28,22 @@ function buildVolumeData(history: HistoryEntry[]) {
   return { labels, data: labels.map((l) => days[l]) };
 }
 
+const TYPE_GROUPS = [
+  { label: "MSA", match: /master services|\bmsa\b/i },
+  { label: "NDA", match: /non-disclosure|\bnda\b/i },
+  { label: "Vendor", match: /vendor|supply/i },
+];
+
 const NAVY = { hue: 202, saturation: 60, lightness: 30 };
 
 export default function DashboardPage() {
   const [history, setHistory] = useState<HistoryEntry[]>([]);
   const [loaded, setLoaded] = useState(false);
+  const [matterIds, setMatterIds] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     setHistory(getHistory());
+    setMatterIds(new Set(getMatters().map((m) => m.analysisId ?? "")));
     setLoaded(true);
   }, []);
 
@@ -47,6 +55,10 @@ export default function DashboardPage() {
   const avgTime = avgMs > 0 ? `${(avgMs / 1000).toFixed(1)}s` : "—";
 
   const volume = buildVolumeData(history);
+  const weekAgo = Date.now() - 7 * 86400000;
+  const thisWeek = history.filter((h) => new Date(h.analyzedAt).getTime() >= weekAgo).length;
+  // Medium+ risk contracts that don't yet have a matter record
+  const pending = history.filter((h) => h.riskLevel !== "LOW" && !matterIds.has(h.id)).length;
   const recent = history.slice(0, 8);
 
   return (
@@ -57,10 +69,10 @@ export default function DashboardPage() {
         <GlowHover
           className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8"
           items={[
-            { id: "total", theme: NAVY, element: <StatCard label="Contracts Analyzed" value={String(total)} trend="+12% this month" trendUp icon="description" /> },
-            { id: "high", theme: { hue: 345, saturation: 100, lightness: 45 }, element: <StatCard label="High-Risk Contracts" value={String(highCount)} trend="Requires immediate review" icon="warning" highlight /> },
+            { id: "total", theme: NAVY, element: <StatCard label="Contracts Analyzed" value={String(total)} trend={`${thisWeek} in the last 7 days`} trendUp icon="description" /> },
+            { id: "high", theme: { hue: 345, saturation: 100, lightness: 45 }, element: <StatCard label="High-Risk Contracts" value={String(highCount)} trend={highCount ? "Requires immediate review" : "Nothing urgent"} icon="warning" highlight /> },
             { id: "time", theme: NAVY, element: <StatCard label="Avg. Processing Time" value={avgTime} trend="AI-powered extraction" icon="timer" /> },
-            { id: "pending", theme: NAVY, element: <StatCard label="Pending Review" value="8" trend="Awaiting attorney sign-off" icon="pending_actions" /> },
+            { id: "pending", theme: NAVY, element: <StatCard label="Pending Review" value={String(pending)} trend="Medium+ risk without a matter" icon="pending_actions" /> },
           ]}
         />
       </Skeleton>
@@ -75,8 +87,8 @@ export default function DashboardPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        {["MSA", "NDA", "Vendor"].map((type) => {
-          const count = history.filter((h) => h.contractType?.includes(type)).length;
+        {TYPE_GROUPS.map(({ label: type, match }) => {
+          const count = history.filter((h) => match.test(h.contractType ?? "")).length;
           return (
             <Card key={type} className="p-5!">
               <p className="text-xs text-on-surface-variant uppercase tracking-wider font-semibold mb-2">{type} Agreements</p>

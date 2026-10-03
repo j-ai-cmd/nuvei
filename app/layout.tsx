@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import SideNav from "@/components/layout/SideNav";
-import TopBar from "@/components/layout/TopBar";
-import Footer from "@/components/layout/Footer";
+import "material-symbols/outlined.css";
+import "@fontsource-variable/inter";
+import AppShell from "@/components/layout/AppShell";
 import { ToastProvider } from "@/components/ui";
 import { Analytics } from "@vercel/analytics/next";
 
@@ -17,12 +17,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head />
       <body className="bg-background text-on-background min-h-screen">
         <ToastProvider>
-          <SideNav />
-          <TopBar />
-          <main className="ml-64 pt-24 px-6 pb-32 max-w-container-max">
-            {children}
-          </main>
-          <Footer />
+          <AppShell>{children}</AppShell>
         </ToastProvider>
         <Analytics />
       </body>

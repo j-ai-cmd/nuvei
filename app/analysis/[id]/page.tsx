@@ -184,16 +184,16 @@ export default function AnalysisPage() {
 
       {/* Context Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-        <div>
+        <div className="min-w-0 w-full md:w-auto">
           <Link href="/contracts" className="inline-flex items-center text-on-surface-variant hover:text-primary transition-colors mb-2 text-sm">
             <Icon name="arrow_back" className="text-[18px] mr-1" />
             Back to Contracts
           </Link>
-          <h1 className="text-2xl md:text-3xl font-bold text-primary tracking-tight truncate max-w-2xl">
+          <h1 className="text-2xl md:text-3xl font-bold text-primary tracking-tight md:truncate max-w-2xl break-words">
             {metadata.contractTitle ?? filename}
           </h1>
         </div>
-        <div className="flex gap-3 w-full md:w-auto">
+        <div className="flex flex-wrap gap-3 w-full md:w-auto shrink-0">
           <Button variant="secondary" icon="download" onClick={handleExportReport} className="flex-1 md:flex-none">
             Export Report
           </Button>

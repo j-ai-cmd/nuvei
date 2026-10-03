@@ -15,7 +15,14 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
     <ToastContext.Provider value={notify}>
       {children}
       {toast && (
-        <BasicToast key={toast.id} message={toast.message} type={toast.type} duration={3500} onClose={() => setToast(null)} />
+        <BasicToast
+          key={toast.id}
+          message={toast.message}
+          type={toast.type}
+          duration={3500}
+          onClose={() => setToast(null)}
+          className="top-auto! bottom-16! md:bottom-20! right-4! max-w-[calc(100vw-2rem)]"
+        />
       )}
     </ToastContext.Provider>
   );

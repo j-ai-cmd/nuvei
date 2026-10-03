@@ -37,9 +37,9 @@ const StatCard = forwardRef<HTMLDivElement, StatCardProps>(function StatCard(
         <div className={`text-4xl font-bold ${highlight ? "text-secondary" : "text-primary-container"}`}>{value}</div>
         {trend && (
           <div className={`text-xs mt-1 flex items-center gap-1 ${
-            highlight ? "text-secondary" : trendUp ? "text-emerald-600" : "text-emerald-600"
+            highlight ? "text-secondary" : trendUp !== undefined ? "text-emerald-600" : "text-on-surface-variant"
           }`}>
-            {!highlight && (
+            {!highlight && trendUp !== undefined && (
               <Icon name={trendUp ? "trending_up" : "trending_down"} className="text-xs" />
             )}
             {trend}

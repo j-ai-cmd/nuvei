@@ -18,9 +18,9 @@ export default function PageHeader({ title, subtitle, action }: PageHeaderProps)
       action
     );
   return (
-    <div className="mb-8 flex justify-between items-end gap-4">
+    <div className="mb-8 flex flex-col sm:flex-row sm:justify-between sm:items-end gap-4">
       <div>
-        <h1 className="text-3xl font-bold text-primary-container mb-2">
+        <h1 className="text-2xl md:text-3xl font-bold text-primary-container mb-2">
           <SoftBlurIn>{title}</SoftBlurIn>
         </h1>
         {subtitle && <p className="text-base text-on-surface-variant">{subtitle}</p>}

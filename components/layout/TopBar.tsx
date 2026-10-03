@@ -46,7 +46,7 @@ function buildNotifications(history: HistoryEntry[], matters: MatterRecord[]): N
   return notes;
 }
 
-export default function TopBar() {
+export default function TopBar({ onMenu }: { onMenu?: () => void }) {
   const router = useRouter();
   const [query, setQuery] = useState("");
   const [showNotifs, setShowNotifs] = useState(false);
@@ -75,15 +75,22 @@ export default function TopBar() {
   }
 
   return (
-    <header className="bg-surface fixed top-0 right-0 w-[calc(100%-256px)] h-16 border-b border-outline-variant/10 flex justify-between items-center px-6 z-40">
-      <form onSubmit={handleSearch} className="w-72">
+    <header className="bg-surface fixed top-0 right-0 left-0 md:left-64 h-16 border-b border-outline-variant/10 flex justify-between items-center gap-2 px-4 md:px-6 z-40">
+      <button
+        onClick={onMenu}
+        className="md:hidden p-2 -ml-2 rounded-full text-on-surface-variant hover:bg-surface-container-high transition-all"
+        aria-label="Open menu"
+      >
+        <Icon name="menu" />
+      </button>
+      <form onSubmit={handleSearch} className="flex-1 max-w-72 min-w-0">
         <AnimatedInput
           label="Search contracts, matters..."
           value={query}
           onChange={setQuery}
           icon={<Icon name="search" className="text-on-surface-variant/60 text-[18px]" />}
           inputClassName="rounded-full bg-surface-container-low border-transparent"
-          labelClassName="bg-surface-container-low text-on-surface-variant text-sm"
+          labelClassName="left-10! max-w-[calc(100%-3rem)] truncate whitespace-nowrap bg-surface-container-low text-on-surface-variant text-sm"
         />
       </form>
 
@@ -102,7 +109,7 @@ export default function TopBar() {
           </Tooltip>
 
           {showNotifs && (
-            <div className="absolute right-0 top-12 w-80 bg-white rounded-xl border border-outline-variant/20 shadow-xl z-50 overflow-hidden">
+            <div className="absolute right-0 top-12 w-[min(20rem,calc(100vw-2rem))] bg-white rounded-xl border border-outline-variant/20 shadow-xl z-50 overflow-hidden">
               <div className="px-4 py-3 border-b border-outline-variant/10">
                 <h3 className="text-xs font-bold text-primary-container uppercase tracking-wider">Notifications</h3>
               </div>

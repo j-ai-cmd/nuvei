@@ -14,7 +14,7 @@ export default function Tabs<T extends string>({ tabs, active, onChange }: TabsP
         activeTab={active}
         onChange={(id) => onChange(id as T)}
         variant="underline"
-        className="w-full text-xs font-bold tracking-wider uppercase"
+        className="min-w-full w-max whitespace-nowrap text-xs font-bold tracking-wider uppercase"
       />
     </div>
   );
