@@ -1,5 +1,35 @@
 @import 'tailwindcss';
 
+/* Material Symbols Outlined, subset to the icons used in this app (public/fonts).
+   To add an icon, regenerate the subset with its name in icon_names (see README). */
+@font-face {
+  font-family: 'Material Symbols Outlined';
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url('/fonts/material-symbols-subset.woff2') format('woff2');
+}
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: 'liga';
+  /* Icons are square: if the font is ever slow or missing, clip the ligature name instead of breaking layout */
+  width: 1em;
+  height: 1em;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme {

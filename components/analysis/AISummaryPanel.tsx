@@ -20,7 +20,7 @@ export default function AISummaryPanel({ analysis }: { analysis: ContractAnalysi
             {missingInformation.length > 0 && (
               <div>
                 <h4 className="text-xs font-bold text-on-primary-container uppercase tracking-widest mb-2 flex items-center gap-2">
-                  <Icon name="error_outline" className="text-[16px]" />
+                  <Icon name="error" className="text-[16px]" />
                   Missing Information
                 </h4>
                 <ul className="space-y-2">
