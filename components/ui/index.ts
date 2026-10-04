@@ -7,6 +7,7 @@ export { default as EmptyState } from "./EmptyState";
 export { default as LabeledValue } from "./LabeledValue";
 export { default as Spinner } from "./Spinner";
 export { default as Tabs } from "./Tabs";
+export { default as Stepper } from "./Stepper";
 export { default as Panel } from "./Panel";
 export { default as Accordion } from "./Accordion";
 export { ToastProvider, useToast } from "./Toast";

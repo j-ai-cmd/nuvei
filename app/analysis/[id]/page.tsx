@@ -160,6 +160,7 @@ export default function AnalysisPage() {
     return (
       <EmptyState
         icon="search_off"
+        as="h1"
         title="Analysis not found"
         message="This analysis isn't in your current session. It is cleared when the tab closes, so upload the contract again."
         cta={{ href: "/intake", label: "New Intake" }}

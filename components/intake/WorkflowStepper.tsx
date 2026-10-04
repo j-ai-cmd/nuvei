@@ -1,6 +1,6 @@
 "use client";
 
-import AnimatedStepper from "@/components/smoothui/animated-stepper";
+import { Stepper } from "@/components/ui";
 
 const STEPS = [
   { label: "Upload", description: "PDF or DOCX up to 25MB" },
@@ -14,7 +14,7 @@ export default function WorkflowStepper({ activeStep = 0 }: { activeStep?: numbe
   return (
     <div className="pt-8">
       <h2 className="text-xs font-bold text-on-surface-variant mb-6 uppercase tracking-wider">Analysis workflow</h2>
-      <AnimatedStepper steps={STEPS} defaultStep={activeStep} allowClickNavigation />
+      <Stepper steps={STEPS} defaultStep={activeStep} allowClickNavigation />
     </div>
   );
 }

@@ -3,8 +3,7 @@
 import { useEffect, useState } from "react";
 import { getTourProgress } from "@/lib/tour";
 import AITaskList, { type AITask } from "@/components/smoothui/ai-task-list";
-import AnimatedStepper from "@/components/smoothui/animated-stepper";
-import { Card, Icon, LinkButton } from "@/components/ui";
+import { Card, Icon, LinkButton, Stepper } from "@/components/ui";
 
 const PROBLEMS = [
   {
@@ -136,7 +135,7 @@ export default function OverviewPage() {
         <p className="text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-2">02 · How it works</p>
         <h2 className="text-2xl font-bold text-primary mb-6">Four steps, each one a screen in this app.</h2>
         <Card>
-          <AnimatedStepper
+          <Stepper
             allowClickNavigation
             steps={STEPS.map((s) => ({
               label: s.title,
@@ -163,7 +162,7 @@ export default function OverviewPage() {
         <h2 className="text-2xl font-bold text-primary mb-6">Walk the whole flow yourself.</h2>
         <Card>
           <div className="flex flex-col md:flex-row md:items-start gap-4">
-            <AITaskList label="Demo progress" tasks={tourTasks} className="md:flex-1 border-outline-variant/50" />
+            <AITaskList label="Demo progress" tasks={tourTasks} className="nuvei-tasklist md:flex-1 border-outline-variant/50" />
             <div className="md:w-64 shrink-0 rounded-lg border border-outline-variant/50 p-4">
               {nextStep ? (
                 <>

@@ -5,7 +5,9 @@ import { join } from "node:path";
 
 const ROOTS = ["app", "components", "lib"];
 const SKIP = ["components/smoothui"];
-const PATTERNS = [/<Icon[^>]*name="([a-z0-9_]+)"/g, /\bicon[=:]\s*"([a-z0-9_]+)"/g, /\?\s*"([a-z0-9_]+)"\s*:\s*"([a-z0-9_]+)"/g];
+// Static names, icon props/fields, and any quoted names inside a dynamic <Icon name={...}> expression
+const PATTERNS = [/<Icon[^>]*name="([a-z0-9_]+)"/g, /\bicon[=:]\s*"([a-z0-9_]+)"/g];
+const DYNAMIC = /<Icon[^>]*name=\{([^}]*)\}/g;
 
 function walk(dir, out = []) {
   for (const f of readdirSync(dir)) {
@@ -21,6 +23,7 @@ const names = new Set();
 for (const file of ROOTS.flatMap((r) => walk(r))) {
   const src = readFileSync(file, "utf8");
   for (const re of PATTERNS) for (const m of src.matchAll(re)) m.slice(1).forEach((n) => n && names.add(n));
+  for (const m of src.matchAll(DYNAMIC)) for (const q of m[1].matchAll(/"([a-z0-9_]+)"/g)) names.add(q[1]);
 }
 const list = [...names].sort();
 const css = await (
