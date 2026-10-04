@@ -3,36 +3,36 @@ import { Accordion, PageHeader } from "@/components/ui";
 export default function HelpPage() {
   const faqs = [
     {
-      q: "What file types are supported?",
-      a: "PDF and DOCX files up to 25 MB. Scanned PDFs (image-only, no embedded text) cannot be processed — use a PDF with selectable text.",
+      q: "What file types can I upload?",
+      a: "PDF and DOCX files up to 25 MB. The PDF needs selectable text; a scanned image of a page has no text to read.",
     },
     {
       q: "Is my document sent to a third party?",
-      a: "Yes — extracted text is sent to an AI provider for analysis. Documents are processed in memory and never written to disk on our servers. Review the Security Policy for full details.",
+      a: "Yes. The extracted text goes to an AI provider for analysis. The file itself is read in memory and never saved on our servers. The Security Policy has the details.",
     },
     {
       q: "What does the risk score mean?",
-      a: "Scores range from 0 (minimal risk) to 100 (critical risk). The AI identifies clauses that deviate from standard commercial practice — unlimited liability, auto-renewal traps, one-sided termination, missing exhibits, etc.",
+      a: "It runs from 0 (minimal risk) to 100 (critical). The score goes up for clauses that depart from standard commercial terms, such as unlimited liability, auto-renewal with a long notice window, one-sided termination, or missing exhibits.",
     },
     {
-      q: "Why is the analysis showing DEMO DATA?",
-      a: "Demo mode activates when no AI API key is configured in the deployment environment, or when you click 'Try Demo Contract'. A DEMO DATA banner will be prominently displayed.",
+      q: "Why does an analysis say Sample data?",
+      a: "The five example contracts and the Try Demo Contract button use analyses written in advance, so you can explore the app without an API key. Anything you upload yourself is analyzed live.",
     },
     {
-      q: "What is a Matter?",
-      a: "Clicking 'Create Matter' generates a simulated CLM (Contract Lifecycle Management) record. In a production environment this would integrate with a real CLM system such as Ironclad or DocuSign CLM. In this prototype, matters are stored in session memory only.",
+      q: "What is a matter?",
+      a: "Create Matter makes a simulated record in a contract lifecycle management (CLM) system. In production it would go to a real CLM such as Ironclad or DocuSign CLM. Here it is kept for the current browser session only.",
     },
     {
-      q: "Does the AI provide legal advice?",
-      a: "No. All analysis is AI-assisted and for informational purposes only. It does not constitute legal advice. All findings must be reviewed by qualified legal counsel before any action is taken.",
+      q: "Does the AI give legal advice?",
+      a: "No. The analysis is for information only. A qualified lawyer should review every finding before anyone acts on it.",
     },
     {
-      q: "How long is my data retained?",
-      a: "Contract history and matter records are stored in browser sessionStorage — they are cleared when you close the tab. No data is persisted server-side beyond the duration of the API call.",
+      q: "How long is my data kept?",
+      a: "Contract history and matters live in your browser's session storage and are cleared when you close the tab. The server keeps nothing after the request finishes.",
     },
     {
-      q: "Can I export the analysis?",
-      a: "Yes — use the 'Export Report' button on any analysis page to download a plain-text summary of the full analysis.",
+      q: "Can I export an analysis?",
+      a: "Yes. Export Report on any analysis page downloads the full analysis as a plain-text file.",
     },
   ];
 

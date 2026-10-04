@@ -55,12 +55,12 @@ export default function AnalysisPage() {
     if (!result) return;
     const { analysis, filename, isDemo, analyzedAt, processingTimeMs } = result;
     const lines: string[] = [
-      "NUVEI LEGAL DASHBOARD — AI CONTRACT ANALYSIS REPORT",
+      "NUVEI LEGAL DASHBOARD: AI CONTRACT ANALYSIS REPORT",
       "=".repeat(60),
       `File: ${filename}`,
       `Analyzed: ${new Date(analyzedAt).toLocaleString()}`,
       `Processing time: ${(processingTimeMs / 1000).toFixed(1)}s`,
-      isDemo ? "⚠ DEMO DATA — pre-computed analysis" : "",
+      isDemo ? "SAMPLE DATA: pre-computed analysis, not a live AI review" : "",
       "",
       "CONTRACT METADATA",
       "-".repeat(40),
@@ -161,7 +161,7 @@ export default function AnalysisPage() {
       <EmptyState
         icon="search_off"
         title="Analysis not found"
-        message="This session has expired or the analysis was not stored. Please upload a new contract."
+        message="This analysis isn't in your current session. It is cleared when the tab closes, so upload the contract again."
         cta={{ href: "/intake", label: "New Intake" }}
       />
     );
@@ -283,12 +283,12 @@ export default function AnalysisPage() {
         <div className="lg:col-span-8">
           {activeTab === "overview" && (
             <div className="space-y-6">
-              <Panel title="Executive Summary">
+              <Panel title="Executive summary">
                 <p className="text-sm text-on-surface-variant leading-relaxed">{executiveSummary}</p>
               </Panel>
 
               {keyObligations.length > 0 && (
-                <Panel title="Key Obligations">
+                <Panel title="Key obligations">
                   <ul className="space-y-2">
                     {keyObligations.map((o, i) => (
                       <li key={i} className="flex items-start gap-3 text-sm text-on-surface-variant">
@@ -301,7 +301,7 @@ export default function AnalysisPage() {
               )}
 
               {keyDates.length > 0 && (
-                <Panel title="Key Dates">
+                <Panel title="Key dates">
                   <div className="space-y-3">
                     {keyDates.map((d, i) => (
                       <div key={i} className="flex items-center justify-between border-b border-outline-variant/50 pb-3">
@@ -318,7 +318,7 @@ export default function AnalysisPage() {
           {activeTab === "risk" && (
             <div className="space-y-6">
               <RiskScoreCard score={riskAnalysis.overallRiskScore} riskLevel={riskAnalysis.riskLevel} />
-              <h3 className="text-xl font-bold text-primary">All Findings ({riskAnalysis.risks.length})</h3>
+              <h3 className="text-xl font-bold text-primary">All findings ({riskAnalysis.risks.length})</h3>
               <Accordion
                 defaultExpandedIds={[0]}
                 items={riskAnalysis.risks.map((r, i) => ({
@@ -336,11 +336,11 @@ export default function AnalysisPage() {
 
           {activeTab === "ai-review" && (
             <div className="space-y-6">
-              <Panel title="Full Executive Summary">
+              <Panel title="Full executive summary">
                 <p className="text-sm text-on-surface-variant leading-relaxed">{executiveSummary}</p>
               </Panel>
               {analysis.missingInformation.length > 0 && (
-                <Panel title="Missing Information">
+                <Panel title="Missing information">
                   <ul className="space-y-2">
                     {analysis.missingInformation.map((m, i) => (
                       <li key={i} className="flex items-start gap-2 text-sm text-on-surface-variant">
@@ -356,18 +356,17 @@ export default function AnalysisPage() {
 
           {activeTab === "matter" && (
             <Panel>
-              <h3 className="text-xl font-bold text-primary mb-2">Create Matter Record</h3>
+              <h3 className="text-xl font-bold text-primary mb-2">Create a matter record</h3>
               <p className="text-sm text-on-surface-variant mb-6">
-                This will create a simulated CLM matter record based on the AI analysis. In a production
-                environment, this would integrate with your Contract Lifecycle Management system (e.g. Clio,
-                Ironclad, DocuSign CLM).
+                Creates a simulated matter from this analysis. In production it would go to your contract
+                lifecycle management system, such as Clio, Ironclad or DocuSign CLM.
               </p>
               <div className="space-y-3 mb-8">
                 {[
-                  ["Contract Type", metadata.agreementType ?? "Unknown"],
+                  ["Contract type", metadata.agreementType ?? "Unknown"],
                   ["Counterparty", counterparty],
-                  ["Risk Level", riskAnalysis.riskLevel],
-                  ["Recommended Routing", analysis.recommendedLegalRouting],
+                  ["Risk level", riskAnalysis.riskLevel],
+                  ["Recommended routing", analysis.recommendedLegalRouting],
                 ].map(([label, value]) => (
                   <div key={label} className="flex justify-between border-b border-outline-variant/50 pb-3">
                     <span className="text-xs font-bold text-on-surface-variant uppercase tracking-wider">{label}</span>
@@ -377,15 +376,15 @@ export default function AnalysisPage() {
               </div>
               {existingMatter ? (
                 <LinkButton href="/matters" variant="secondary" icon="work" className="w-full">
-                  View Matter {existingMatter.matterId}
+                  View matter {existingMatter.matterId}
                 </LinkButton>
               ) : (
                 <Button variant="danger" icon="add_circle" onClick={handleCreateMatter} disabled={creatingMatter} className="w-full">
-                  {creatingMatter ? "Creating Matter..." : "Create Matter (Simulated)"}
+                  {creatingMatter ? "Creating matter..." : "Create simulated matter"}
                 </Button>
               )}
               <p className="text-xs text-center text-on-surface-variant/60 mt-3">
-                DEMONSTRATION · MOCK CLM INTEGRATION · Saved to session Matters
+                Saved to Matters for this browser session
               </p>
             </Panel>
           )}

@@ -180,9 +180,9 @@ export default function OverviewPage() {
             ))}
           </ol>
           <p className="text-xs text-on-surface-variant mt-4">
-            Want a real document?{" "}
+            To test with a real document,{" "}
             <a href="/samples/Sample_Software_Services_Agreement.pdf" download className="font-semibold underline underline-offset-2 hover:text-primary">
-              Download the sample contract
+              download the sample contract
             </a>{" "}
             and upload it on Contract Intake.
           </p>
@@ -192,7 +192,7 @@ export default function OverviewPage() {
       {/* Chapter 4: payments-specific checks */}
       <section className="mb-14">
         <p className="text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-2">04 · Built for a payments company</p>
-        <h2 className="text-2xl font-bold text-primary mb-6">It checks what matters when you move other people&apos;s money.</h2>
+        <h2 className="text-2xl font-bold text-primary mb-6">It checks the terms that carry the most risk for a payments company.</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {CHECKS.map((c) => (
             <div key={c.title} className="flex gap-3 rounded-lg border border-outline-variant/50 bg-surface-container-lowest p-4">

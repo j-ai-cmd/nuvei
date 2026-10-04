@@ -40,7 +40,7 @@ export default function DashboardPage() {
   return (
     <div>
       <PageHeader
-        title="Legal Risk Overview"
+        title="Legal risk overview"
         subtitle="Which contracts need legal attention, and what to do next."
       />
 
@@ -83,7 +83,7 @@ export default function DashboardPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 mb-6">
         <Card
-          title="Review Queue"
+          title="Review queue"
           className="lg:col-span-8"
           action={<span className="text-xs text-on-surface-variant">Highest risk first</span>}
         >
@@ -124,7 +124,7 @@ export default function DashboardPage() {
           )}
         </Card>
 
-        <Card title="Upcoming Deadlines" className="lg:col-span-4">
+        <Card title="Upcoming deadlines" className="lg:col-span-4">
           {p.deadlines.length === 0 ? (
             <p className="text-sm text-on-surface-variant">No upcoming contract dates.</p>
           ) : (
@@ -151,7 +151,7 @@ export default function DashboardPage() {
       </div>
 
       <Card
-        title="Risk Score by Contract"
+        title="Risk score by contract"
         className="mb-6"
         action={
           <span className="text-xs text-on-surface-variant flex items-center gap-3">
@@ -167,7 +167,7 @@ export default function DashboardPage() {
       </Card>
 
       <Card
-        title="Recently Analyzed"
+        title="Recently analyzed"
         action={
           <Link href="/contracts" className="text-primary-container text-xs font-bold hover:underline flex items-center gap-1">
             View All <Icon name="arrow_forward" className="text-sm" />

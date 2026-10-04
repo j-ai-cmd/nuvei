@@ -26,7 +26,7 @@ function buildNotifications(history: HistoryEntry[], matters: MatterRecord[]): N
     notes.push({
       id: `analysis-${h.id}`,
       icon: h.riskLevel === "HIGH" || h.riskLevel === "CRITICAL" ? "warning" : "check_circle",
-      title: `${h.riskLevel} risk — ${h.filename}`,
+      title: `${h.riskLevel} risk: ${h.filename}`,
       body: `Analysis complete · Score ${h.riskScore}/100`,
       time: formatRelative(h.analyzedAt),
       href: `/analysis/${h.id}`,

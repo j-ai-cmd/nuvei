@@ -28,12 +28,12 @@ export default function MatterModal({ matter, onClose }: MatterModalProps) {
             <div className="h-16 w-16 rounded-full bg-surface-container flex items-center justify-center mb-4">
               <Icon name="check_circle" className="text-[32px] text-primary" />
             </div>
-            <h2 className="text-2xl font-bold text-primary">Matter Created</h2>
+            <h2 className="text-2xl font-bold text-primary">Matter created</h2>
             <p className="text-sm text-on-surface-variant mt-2">
-              Simulated CLM matter record generated. In production this would sync to your CLM system.
+              This is a simulated record. In production it would be created in your CLM system.
             </p>
             <span className="mt-3 text-xs bg-surface-container px-3 py-1 rounded-full text-on-surface-variant font-semibold border border-outline-variant/60">
-              DEMONSTRATION · MOCK CLM INTEGRATION
+              Simulated CLM record
             </span>
           </div>
 

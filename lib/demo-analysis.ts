@@ -2,7 +2,7 @@ import { ContractAnalysis } from "@/types/contract";
 
 export const DEMO_ANALYSIS: ContractAnalysis = {
   metadata: {
-    contractTitle: "Master Services Agreement — Global Tech Solutions Ltd. & Meridian Financial Group plc",
+    contractTitle: "Master Services Agreement between Global Tech Solutions Ltd. and Meridian Financial Group plc",
     agreementType: "Master Services Agreement (MSA)",
     parties: [
       { name: "Global Tech Solutions Ltd.", role: "Vendor / Service Provider" },
@@ -19,7 +19,7 @@ export const DEMO_ANALYSIS: ContractAnalysis = {
     paymentTerms: "Invoices due within 30 days of receipt; quarterly in advance for base retainer; late interest at 8% p.a. above Bank of England base rate",
     fees: "£250,000 p.a. base retainer; £350/hour for additional development",
     terminationTerms: "For cause: 30 days notice (uncured material breach); For convenience: 90 days notice by Client only",
-    liabilityCap: "Greater of 3x total fees paid in preceding 12 months or £2,000,000 — EXCEPT IP infringement claims which are UNLIMITED",
+    liabilityCap: "Greater of 3x total fees paid in preceding 12 months or £2,000,000, except IP infringement claims, which are unlimited",
     indemnification: "Vendor indemnifies Client for breach, negligence, IP infringement, and data breaches. Client indemnifies Vendor for misuse of Deliverables.",
     confidentiality: "5-year post-termination obligation; standard exclusions apply",
     ipOwnership: "Deliverables are works made for hire owned by Client (upon full payment). Vendor retains pre-existing IP and a royalty-free licence to anonymised learnings.",
@@ -85,7 +85,7 @@ export const DEMO_ANALYSIS: ContractAnalysis = {
     ],
   },
   executiveSummary:
-    "This Master Services Agreement governs a significant technology services engagement between Global Tech Solutions Ltd. (Vendor) and Meridian Financial Group plc (Client), with a base annual value of £250,000 over an initial 3-year term. The agreement is broadly well-structured but contains several provisions of material concern. Most critically, Clause 14.3 imposes unlimited liability on the Vendor for IP infringement claims — an unusual carve-out that warrants negotiation before execution. The 180-day auto-renewal notice window and the absence of the three referenced Exhibits (SOW, DPA, Pricing Matrix) are also significant issues requiring resolution prior to signature. The data protection provisions are generally robust and exceed statutory minimums. Legal review and negotiation of at least 3 clauses is recommended before execution.",
+    "This Master Services Agreement covers technology services from Global Tech Solutions Ltd. (Vendor) to Meridian Financial Group plc (Client), at a base of £250,000 a year over an initial 3-year term. Most of it is standard, but a few provisions need attention. The biggest is Clause 14.3, which makes the Vendor's liability for IP infringement claims unlimited; that is unusual and should be negotiated before signing. The 180-day auto-renewal notice window and the three missing Exhibits (SOW, DPA, Pricing Matrix) also need resolving before signature. The data protection terms go beyond the statutory minimum. At least three clauses should be negotiated before execution.",
   keyObligations: [
     "Client must provide written non-renewal notice at least 180 days before end of any term",
     "Client must pay base retainer of £250,000 p.a. quarterly in advance",
@@ -114,7 +114,7 @@ export const DEMO_ANALYSIS: ContractAnalysis = {
     {
       title: "Automatic 2-Year Renewal with 180-Day Notice Window",
       severity: "HIGH",
-      explanation: "The agreement auto-renews for 2-year terms requiring 180 days advance written notice to prevent renewal — an unusually long notice period creating significant lock-in risk.",
+      explanation: "The agreement auto-renews for 2-year terms requiring 180 days advance written notice to prevent renewal. That notice period is unusually long and makes the contract hard to exit.",
       clause: "Clause 4.2",
       recommendedAction: "Add to contract management calendar immediately. Negotiate notice period down to 90 days.",
     },
@@ -127,19 +127,19 @@ export const DEMO_ANALYSIS: ContractAnalysis = {
     },
   ],
   missingInformation: [
-    "Exhibit A (Statement of Work #1) — not attached",
-    "Exhibit B (Data Processing Agreement) — not attached; required for UK GDPR compliance",
-    "Exhibit C (Pricing Matrix) — not attached",
-    "Client signatory name and signature — blank in signature block",
-    "Vendor signatory name and signature — blank in signature block",
+    "Exhibit A (Statement of Work #1): not attached",
+    "Exhibit B (Data Processing Agreement): not attached; required for UK GDPR compliance",
+    "Exhibit C (Pricing Matrix): not attached",
+    "Client signatory name and signature: blank in signature block",
+    "Vendor signatory name and signature: blank in signature block",
   ],
   unusualClauses: [
     "Clause 14.3: Unlimited liability carve-out for IP infringement claims is highly unusual in technology MSAs and significantly exceeds market standard",
     "Clause 5.4: Vendor's perpetual royalty-free licence to 'anonymised learnings' is uncommon and potentially risks competitive intelligence leakage in a financial services context",
-    "Clause 7.4: 36-hour breach notification requirement is more stringent than UK GDPR's 72-hour statutory standard — operationally demanding for Vendor",
+    "Clause 7.4: 36-hour breach notification requirement is more stringent than UK GDPR's 72-hour statutory standard, which will be hard for Vendor to meet",
     "Clause 4.2: 180-day auto-renewal notice period is double the typical 90-day market standard for MSAs of this type and value",
   ],
-  recommendedLegalRouting: "Procurement & Finance (liability cap negotiation) → Legal — Commercial (IP and Exhibits review) → Compliance / DPO (DPA and UK GDPR review) → General Counsel sign-off before execution",
+  recommendedLegalRouting: "Procurement & Finance (liability cap negotiation) → Commercial Legal (IP and Exhibits review) → Compliance / DPO (DPA and UK GDPR review) → General Counsel sign-off before execution",
   disclaimer:
     "This is AI-assisted analysis for informational purposes only and does not constitute legal advice. All findings should be reviewed by qualified legal counsel before any action is taken.",
 };

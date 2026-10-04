@@ -38,7 +38,7 @@ function ContractsInner() {
         title="Contracts"
         subtitle={
           <>
-            All analyzed contracts from this session.
+            Contracts analyzed in this session, plus five samples.
             {q && <span className="ml-2 font-semibold text-primary">Filtering: &ldquo;{q}&rdquo;</span>}
           </>
         }
