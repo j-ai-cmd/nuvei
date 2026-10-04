@@ -36,7 +36,8 @@ function DropdownMenuContent({
   ...props
 }: React.ComponentProps<typeof DropdownMenuPrimitive.Content>) {
   return (
-    <DropdownMenuPrimitive.Portal>
+    // a11y: render inside the labelled #overlay-root landmark (AppShell) instead of bare <body>
+    <DropdownMenuPrimitive.Portal container={typeof document !== "undefined" ? document.getElementById("overlay-root") : undefined}>
       <DropdownMenuPrimitive.Content
         data-slot="dropdown-menu-content"
         sideOffset={sideOffset}

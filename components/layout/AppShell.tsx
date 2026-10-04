@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 import Drawer from "@/components/smoothui/drawer";
 import SideNav, { Brand, NavLinks } from "./SideNav";
 import TopBar from "./TopBar";
@@ -8,6 +9,18 @@ import Footer from "./Footer";
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const pathname = usePathname();
+  const firstRender = useRef(true);
+
+  // After a client-side page change, move focus to the page content so keyboard and
+  // screen reader users start on the new page, not on the link they clicked.
+  useEffect(() => {
+    if (firstRender.current) {
+      firstRender.current = false;
+      return;
+    }
+    document.getElementById("main")?.focus({ preventScroll: true });
+  }, [pathname]);
 
   return (
     <>
@@ -27,6 +40,8 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       <TopBar onMenu={() => setMenuOpen(true)} />
       <main id="main" tabIndex={-1} className="md:ml-64 pt-20 md:pt-24 px-4 md:px-6 pb-8 md:pb-32 max-w-container-max">{children}</main>
       <Footer />
+      {/* Menus portal here so they sit inside a labelled landmark */}
+      <div id="overlay-root" role="region" aria-label="Menus" />
     </>
   );
 }

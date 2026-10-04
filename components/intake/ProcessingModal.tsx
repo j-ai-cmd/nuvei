@@ -26,7 +26,7 @@ export default function ProcessingModal({ filename, currentStep, onCancel }: Pro
       </div>
 
       <div className="flex justify-center mb-6">
-        <AILoader label={STEPS[Math.min(currentStep, STEPS.length - 1)].description} showElapsed />
+        <AILoader className="nuvei-loader" label={STEPS[Math.min(currentStep, STEPS.length - 1)].description} showElapsed />
       </div>
 
       <AnimatedStepper steps={STEPS} currentStep={Math.min(currentStep, STEPS.length - 1)} />

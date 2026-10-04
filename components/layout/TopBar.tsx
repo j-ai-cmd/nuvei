@@ -62,8 +62,15 @@ export default function TopBar({ onMenu }: { onMenu?: () => void }) {
     function handleClick(e: MouseEvent) {
       if (notifsRef.current && !notifsRef.current.contains(e.target as Node)) setShowNotifs(false);
     }
+    function handleKey(e: KeyboardEvent) {
+      if (e.key === "Escape") setShowNotifs(false);
+    }
     document.addEventListener("mousedown", handleClick);
-    return () => document.removeEventListener("mousedown", handleClick);
+    document.addEventListener("keydown", handleKey);
+    return () => {
+      document.removeEventListener("mousedown", handleClick);
+      document.removeEventListener("keydown", handleKey);
+    };
   }, []);
 
   function handleSearch(e: React.FormEvent) {
