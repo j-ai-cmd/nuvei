@@ -1,8 +1,7 @@
 "use client";
 
 import AILoader from "@/components/smoothui/ai-loader";
-import AnimatedStepper from "@/components/smoothui/animated-stepper";
-import { Button, Modal } from "@/components/ui";
+import { Button, Modal, Stepper } from "@/components/ui";
 
 interface ProcessingModalProps {
   filename: string;
@@ -29,7 +28,7 @@ export default function ProcessingModal({ filename, currentStep, onCancel }: Pro
         <AILoader className="nuvei-loader" label={STEPS[Math.min(currentStep, STEPS.length - 1)].description} showElapsed />
       </div>
 
-      <AnimatedStepper steps={STEPS} currentStep={Math.min(currentStep, STEPS.length - 1)} />
+      <Stepper steps={STEPS} currentStep={Math.min(currentStep, STEPS.length - 1)} />
 
       {onCancel && (
         <div className="mt-6 flex justify-center">

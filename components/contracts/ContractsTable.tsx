@@ -38,7 +38,7 @@ export default function ContractsTable({ items, showProcessingTime }: ContractsT
         </li>
       ))}
     </ul>
-    <div className="hidden md:block overflow-x-auto">
+    <div className="relative hidden md:block overflow-x-auto">
       <table className="w-full text-left border-collapse">
         <thead>
           <tr className="border-b border-outline-variant/60 bg-surface-container-low">

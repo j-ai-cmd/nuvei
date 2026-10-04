@@ -8,8 +8,8 @@ interface RiskScoreCardProps {
 }
 
 const LEVEL_COLORS: Record<string, string> = {
-  LOW: "#4caf50",
-  MEDIUM: "#ff9800",
+  LOW: "#15803d",
+  MEDIUM: "#b45309",
   HIGH: "#ba0037",
   CRITICAL: "#93000a",
 };

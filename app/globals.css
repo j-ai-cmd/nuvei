@@ -250,13 +250,18 @@ body {
 /* Small text links get a 44px tap area on touch screens without moving the layout
    (ui-ux-pro-max: touch targets ≥ 44px). */
 @media (pointer: coarse) {
-  .tap { padding-block: 14px; margin-block: -14px; }
+  .tap { padding-block: 15px; margin-block: -15px; }
   main button,
   main [role="tab"],
   header input,
   main a[class*="h-9"],
   main a[class*="h-11"] { min-height: 44px; }
   main [role="tab"] { min-width: 44px; }
+  [role="dialog"] button,
+  [role="dialog"] [role="tab"] { min-height: 44px; min-width: 44px; }
+  /* basic-toast dismiss button is 24px upstream */
+  [role="status"] button,
+  [role="alert"] button { min-height: 44px; min-width: 44px; }
 }
 
 /* Keep keyboard-focused controls clear of the fixed top bar and (desktop) footer
@@ -268,3 +273,12 @@ html { scroll-padding-top: 80px; scroll-padding-bottom: 16px; }
 
 /* main is focused programmatically on page change; no ring around the whole page */
 #main:focus { outline: none; }
+
+/* ai-task-list fades finished rows to 65% opacity upstream, which drops their text below
+   4.5:1. Keep them fully readable; the drawn checkmark already marks them done. */
+.nuvei-tasklist li { opacity: 1 !important; }
+
+/* animated-stepper vertical layout (used below lg): its content panel sits beside the
+   steps and ran past the screen edge. Below lg there is no room for both, so stack it. */
+.nuvei-stepper.flex-row { flex-direction: column; }
+.nuvei-stepper [role="tabpanel"] { min-width: 0; }
