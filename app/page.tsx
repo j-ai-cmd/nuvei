@@ -184,7 +184,7 @@ export default function OverviewPage() {
           </div>
           <p className="text-xs text-on-surface-variant mt-4">
             To test with a real document,{" "}
-            <a href="/samples/Sample_Software_Services_Agreement.pdf" download className="font-semibold underline underline-offset-2 hover:text-primary">
+            <a href="/samples/Sample_Software_Services_Agreement.pdf" download className="tap font-semibold underline underline-offset-2 hover:text-primary">
               download the sample contract
             </a>{" "}
             and upload it on Contract Intake.

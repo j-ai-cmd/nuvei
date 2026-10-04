@@ -13,16 +13,16 @@ export default function AISummaryPanel({ analysis }: { analysis: ContractAnalysi
             <div className="w-8 h-8 rounded-sm bg-surface-container-lowest/10 flex items-center justify-center">
               <Icon name="psychology" className="text-white text-[20px]" />
             </div>
-            <h3 className="text-xl font-bold text-white">AI review summary</h3>
+            <h2 className="text-xl font-bold text-white">AI review summary</h2>
           </div>
 
           <div className="space-y-6">
             {missingInformation.length > 0 && (
               <div>
-                <h4 className="text-xs font-bold text-on-primary-container uppercase tracking-widest mb-2 flex items-center gap-2">
+                <h3 className="text-xs font-bold text-on-primary-container uppercase tracking-widest mb-2 flex items-center gap-2">
                   <Icon name="error" className="text-[16px]" />
                   Missing information
-                </h4>
+                </h3>
                 <ul className="space-y-2">
                   {missingInformation.map((item, i) => (
                     <li key={i} className="flex items-start gap-2 text-sm">
@@ -37,10 +37,10 @@ export default function AISummaryPanel({ analysis }: { analysis: ContractAnalysi
             <div className="w-full h-px bg-surface-container-lowest/10" />
 
             <div>
-              <h4 className="text-xs font-bold text-on-primary-container uppercase tracking-widest mb-2 flex items-center gap-2">
+              <h3 className="text-xs font-bold text-on-primary-container uppercase tracking-widest mb-2 flex items-center gap-2">
                 <Icon name="route" className="text-[16px]" />
                 Recommended Routing
-              </h4>
+              </h3>
               <div className="bg-surface-container-lowest/5 rounded-sm p-3 border-l-2 border-primary-fixed">
                 <span className="text-sm text-white/80 block mb-1">Based on risk assessment, route to:</span>
                 <span className="text-sm font-bold text-white block">{recommendedLegalRouting}</span>
@@ -53,10 +53,10 @@ export default function AISummaryPanel({ analysis }: { analysis: ContractAnalysi
       {/* Unusual Clauses */}
       {unusualClauses.length > 0 && (
         <div className="bg-surface-container-lowest rounded-lg border border-outline-variant/50 p-5">
-          <h3 className="text-base font-bold text-primary mb-4 flex items-center gap-2">
+          <h2 className="text-base font-bold text-primary mb-4 flex items-center gap-2">
             <Icon name="gavel" className="text-secondary text-[20px]" />
             Unusual clauses
-          </h3>
+          </h2>
           <ul className="space-y-3">
             {unusualClauses.map((c, i) => (
               <li key={i} className="flex items-start gap-2 text-sm text-on-surface-variant">
@@ -71,7 +71,7 @@ export default function AISummaryPanel({ analysis }: { analysis: ContractAnalysi
       {/* Document structure */}
       {top3Risks.length > 0 && (
         <div className="bg-surface-container-lowest rounded-lg border border-outline-variant/50 p-5">
-          <h3 className="text-base font-bold text-primary mb-4">Top 3 risks</h3>
+          <h2 className="text-base font-bold text-primary mb-4">Top 3 risks</h2>
           <div className="space-y-2">
             {top3Risks.map((risk, i) => (
               <div
@@ -84,7 +84,7 @@ export default function AISummaryPanel({ analysis }: { analysis: ContractAnalysi
               >
                 <span className="text-sm text-primary font-medium">{risk.title}</span>
                 <span
-                  className={`text-[10px] font-bold px-2 py-0.5 rounded uppercase ${
+                  className={`text-[11px] font-bold px-2 py-0.5 rounded uppercase ${
                     risk.severity === "CRITICAL" ? "text-on-error-container" :
                     risk.severity === "HIGH" ? "text-secondary" :
                     "text-on-surface-variant"

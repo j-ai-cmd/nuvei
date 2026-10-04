@@ -64,7 +64,7 @@ export default function MattersPage() {
               </div>
             </Card>
           ))}
-          <p className="text-xs text-center text-on-surface-variant/50 pt-4">
+          <p className="text-xs text-center text-on-surface-variant pt-4">
             Simulated CLM records, kept for this browser session only
           </p>
         </div>

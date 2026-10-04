@@ -27,9 +27,9 @@ export default function IntakePage() {
       {/* Left column */}
       <div className="col-span-12 lg:col-span-8 space-y-8">
         <header>
-          <h2 className="text-4xl font-bold text-primary mb-4 tracking-tight">
+          <h1 className="text-3xl md:text-4xl font-bold text-primary mb-4 tracking-tight">
             Analyze a contract in minutes.
-          </h2>
+          </h1>
           <p className="text-lg text-on-surface-variant max-w-3xl leading-relaxed">
             Upload a PDF or DOCX. The AI pulls out the key terms and flags risky clauses so a lawyer can
             review them quickly.
@@ -45,9 +45,9 @@ export default function IntakePage() {
         {/* Recent Intakes — live from sessionStorage */}
         <div className="bg-surface-container-lowest border border-outline-variant/50 rounded-lg p-6">
           <div className="flex justify-between items-center mb-4">
-            <h3 className="text-xl font-bold text-primary">Recent intakes</h3>
+            <h2 className="text-xl font-bold text-primary">Recent intakes</h2>
             {recent.length > 0 && (
-              <Link href="/contracts" className="text-xs font-bold text-primary hover:underline flex items-center gap-1">
+              <Link href="/contracts" className="tap text-xs font-bold text-primary hover:underline flex items-center gap-1">
                 All <Icon name="arrow_forward" className="text-[14px]" />
               </Link>
             )}
@@ -80,15 +80,15 @@ export default function IntakePage() {
 
         {/* Secure Processing */}
         <div className="bg-surface-container-low border border-outline-variant/50 rounded-lg p-6">
-          <h3 className="text-xl font-bold text-primary mb-2 flex items-center gap-2">
+          <h2 className="text-xl font-bold text-primary mb-2 flex items-center gap-2">
             <Icon name="info" className="text-secondary text-[20px]" />
             Secure processing
-          </h3>
+          </h2>
           <p className="text-sm text-on-surface-variant mb-4">
             Files are read in memory and never written to disk. Results stay in your browser session and
             are cleared when you close the tab.
           </p>
-          <Link href="/security" className="text-xs font-bold text-primary hover:underline flex items-center gap-1">
+          <Link href="/security" className="tap text-xs font-bold text-primary hover:underline flex items-center gap-1">
             View security policy
             <Icon name="arrow_forward" className="text-[16px]" />
           </Link>

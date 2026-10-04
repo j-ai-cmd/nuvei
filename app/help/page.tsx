@@ -40,6 +40,7 @@ export default function HelpPage() {
     <div className="max-w-3xl">
       <PageHeader title="Help" subtitle="Frequently asked questions about the platform." action={null} />
 
+      <h2 className="sr-only">Questions</h2>
       <Accordion
         defaultExpandedIds={[0]}
         items={faqs.map(({ q, a }, i) => ({

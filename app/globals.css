@@ -246,3 +246,15 @@ body {
 @media (min-width: 1024px) { .nuvei-stats section .grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; } }
 /* no gradient wash on hover (design system: flat surfaces) */
 .nuvei-stats section .group > .absolute { display: none; }
+
+/* Small text links get a 44px tap area on touch screens without moving the layout
+   (ui-ux-pro-max: touch targets ≥ 44px). */
+@media (pointer: coarse) {
+  .tap { padding-block: 14px; margin-block: -14px; }
+  main button,
+  main [role="tab"],
+  header input,
+  main a[class*="h-9"],
+  main a[class*="h-11"] { min-height: 44px; }
+  main [role="tab"] { min-width: 44px; }
+}

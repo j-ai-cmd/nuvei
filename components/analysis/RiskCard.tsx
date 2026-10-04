@@ -19,7 +19,7 @@ export default function RiskCard({ risk }: { risk: RiskItem }) {
           <Icon name={cfg.icon} className="text-on-surface-variant text-[20px]" />
           <h4 className="text-base font-bold text-primary">{risk.title}</h4>
         </div>
-        <span className={`${cfg.badge} text-[10px] font-bold px-2 py-1 rounded-sm uppercase tracking-widest whitespace-nowrap`}>
+        <span className={`${cfg.badge} text-[11px] font-bold px-2 py-1 rounded-sm uppercase tracking-widest whitespace-nowrap`}>
           {risk.severity}
         </span>
       </div>

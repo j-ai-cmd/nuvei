@@ -116,7 +116,7 @@ export default function UploadZone({ autoDemo = false }: { autoDemo?: boolean })
 
       <div>
         <div className="bg-surface-container-lowest border border-outline-variant/60 rounded-lg p-6 md:p-10 flex flex-col items-center justify-center min-h-[400px]">
-          <h3 className="text-xl font-bold text-primary mb-1">Drop your contract here</h3>
+          <h2 className="text-xl font-bold text-primary mb-1">Drop your contract here</h2>
           <p className="text-sm text-on-surface-variant mb-6">PDF / DOCX · Max 25MB</p>
 
           <AnimatedFileUpload
@@ -142,7 +142,7 @@ export default function UploadZone({ autoDemo = false }: { autoDemo?: boolean })
             <a
               href="/samples/Sample_Software_Services_Agreement.pdf"
               download
-              className="text-xs font-semibold text-on-surface-variant hover:text-primary underline underline-offset-2"
+              className="tap text-xs font-semibold text-on-surface-variant hover:text-primary underline underline-offset-2"
             >
               Need a file? Download a sample contract (PDF)
             </a>

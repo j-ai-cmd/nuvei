@@ -20,9 +20,8 @@ const STEPS = [
 
 export default function ProcessingModal({ filename, currentStep, onCancel }: ProcessingModalProps) {
   return (
-    <Modal isOpen onClose={() => onCancel?.()} size="full">
+    <Modal isOpen onClose={() => onCancel?.()} size="full" title="Processing contract">
       <div className="text-center mb-6">
-        <h2 className="text-2xl font-bold text-primary">Processing contract</h2>
         <p className="text-sm text-on-surface-variant mt-2 truncate max-w-xs mx-auto">{filename}</p>
       </div>
 

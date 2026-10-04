@@ -22,13 +22,12 @@ export default function MatterModal({ matter, onClose }: MatterModalProps) {
   const router = useRouter();
 
   return (
-    <Modal isOpen onClose={onClose} size="lg">
+    <Modal isOpen onClose={onClose} size="lg" title="Matter created">
         <div className="px-2 pb-2">
           <div className="flex flex-col items-center text-center mb-8">
             <div className="h-16 w-16 rounded-full bg-surface-container flex items-center justify-center mb-4">
               <Icon name="check_circle" className="text-[32px] text-primary" />
             </div>
-            <h2 className="text-2xl font-bold text-primary">Matter created</h2>
             <p className="text-sm text-on-surface-variant mt-2">
               This is a simulated record. In production it would be created in your CLM system.
             </p>

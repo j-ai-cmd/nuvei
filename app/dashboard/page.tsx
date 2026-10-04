@@ -124,7 +124,7 @@ export default function DashboardPage() {
                   <Link href={`/analysis/${d.contractId}`} className="flex items-start gap-3 group">
                     <div className="w-14 shrink-0 rounded-md border border-outline-variant/50 py-1 text-center">
                       <p className="text-sm font-bold text-primary-container tabular-nums">{d.daysAway}</p>
-                      <p className="text-[10px] uppercase tracking-wider text-on-surface-variant">days</p>
+                      <p className="text-[11px] uppercase tracking-wider text-on-surface-variant">days</p>
                     </div>
                     <div className="min-w-0">
                       <p className="text-sm font-semibold text-primary-container group-hover:underline">{d.label}</p>
@@ -159,7 +159,7 @@ export default function DashboardPage() {
       <Card
         title="Recently analyzed"
         action={
-          <Link href="/contracts" className="text-primary-container text-xs font-bold hover:underline flex items-center gap-1">
+          <Link href="/contracts" className="tap text-primary-container text-xs font-bold hover:underline flex items-center gap-1">
             View All <Icon name="arrow_forward" className="text-sm" />
           </Link>
         }

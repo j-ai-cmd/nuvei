@@ -14,7 +14,7 @@ interface ContractsTableProps {
 // Every row opens its analysis (seed rows resolve to sample analyses)
 export default function ContractsTable({ items, showProcessingTime }: ContractsTableProps) {
   const router = useRouter();
-  const headers = ["File", "Type", "Counterparty", "Risk", "Score", ...(showProcessingTime ? ["Time"] : []), "Analyzed", ""];
+  const headers = ["File", "Type", "Counterparty", "Risk", "Score", ...(showProcessingTime ? ["Time"] : []), "Analyzed", "Actions"];
 
   return (
     <>
@@ -44,7 +44,8 @@ export default function ContractsTable({ items, showProcessingTime }: ContractsT
           <tr className="border-b border-outline-variant/60 bg-surface-container-low">
             {headers.map((h) => (
               <th key={h} className="px-4 py-3 text-xs font-bold text-on-surface-variant uppercase tracking-wider">
-                {h}
+                {/* the actions column has no visible title, but screen readers still need one */}
+                {h === "Actions" ? <span className="sr-only">{h}</span> : h}
               </th>
             ))}
           </tr>
@@ -61,7 +62,7 @@ export default function ContractsTable({ items, showProcessingTime }: ContractsT
                   <Icon name="description" className="text-on-surface-variant text-[20px]" />
                   <span className="font-semibold text-primary-container truncate max-w-[180px]">{item.filename}</span>
                   {item.isDemo && (
-                    <span className="text-[10px] font-bold bg-surface-variant text-on-surface-variant px-1.5 py-0.5 rounded-sm">DEMO</span>
+                    <span className="text-[11px] font-bold bg-surface-variant text-on-surface-variant px-1.5 py-0.5 rounded-sm">DEMO</span>
                   )}
                 </div>
               </td>

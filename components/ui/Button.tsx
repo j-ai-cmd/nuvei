@@ -71,7 +71,7 @@ export function ArrowLink({ href, children, className = "" }: { href: string; ch
     <Link
       href={href}
       className={cn(
-        "group text-xs font-bold text-primary hover:text-primary/70 inline-flex items-center gap-1 transition-colors",
+        "tap group text-xs font-bold text-primary hover:text-primary/70 inline-flex items-center gap-1 transition-colors",
         className
       )}
     >
