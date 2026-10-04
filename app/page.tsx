@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import { getTourProgress } from "@/lib/tour";
-import { Card, Icon, LinkButton, ProgressBar } from "@/components/ui";
+import AITaskList, { type AITask } from "@/components/smoothui/ai-task-list";
+import AnimatedStepper from "@/components/smoothui/animated-stepper";
+import { Card, Icon, LinkButton } from "@/components/ui";
 
 const PROBLEMS = [
   {
@@ -83,7 +84,14 @@ export default function OverviewPage() {
     { done: tour?.createdMatter, title: "Route it as a matter", body: "Create Matter on any analysis.", href: "/contracts", cta: "Pick a contract" },
     { done: tour?.viewedDashboard, title: "See the portfolio view", body: "What needs attention, and what's due.", href: "/dashboard", cta: "Open dashboard" },
   ];
-  const doneCount = tourSteps.filter((s) => s.done).length;
+  const nextStep = tourSteps.find((s) => !s.done);
+  // The first unfinished step shows as running so the eye lands on it
+  const tourTasks: AITask[] = tourSteps.map((s) => ({
+    id: s.title,
+    label: s.title,
+    note: s.done ? "Done" : undefined,
+    status: s.done ? "done" : s === nextStep ? "running" : "pending",
+  }));
 
   return (
     <div className="max-w-5xl">
@@ -127,20 +135,26 @@ export default function OverviewPage() {
       <section className="mb-14">
         <p className="text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-2">02 · How it works</p>
         <h2 className="text-2xl font-bold text-primary mb-6">Four steps, each one a screen in this app.</h2>
-        <ol className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {STEPS.map((s) => (
-            <li key={s.n} className="rounded-lg border border-outline-variant/50 bg-surface-container-lowest p-5 flex flex-col">
-              <span className="w-8 h-8 rounded-full bg-primary-container text-white text-sm font-bold flex items-center justify-center mb-3">
-                {s.n}
-              </span>
-              <h3 className="text-base font-bold text-primary mb-1">{s.title}</h3>
-              <p className="text-sm text-on-surface-variant leading-relaxed flex-1">{s.body}</p>
-              <Link href={s.href} className="mt-3 text-xs font-bold text-primary hover:underline inline-flex items-center gap-1">
-                {s.link} <Icon name="arrow_forward" className="text-[14px]" />
-              </Link>
-            </li>
-          ))}
-        </ol>
+        <Card>
+          <AnimatedStepper
+            allowClickNavigation
+            steps={STEPS.map((s) => ({
+              label: s.title,
+              description: s.body,
+              content: (
+                <div className="mt-4 flex flex-col sm:flex-row sm:items-center gap-3 rounded-md bg-surface-container-low px-4 py-3">
+                  <p className="text-sm text-primary-container flex-1">
+                    {s.title} happens on <strong>{s.link}</strong>.
+                  </p>
+                  <LinkButton href={s.href} variant="secondary" className="h-9 shrink-0">
+                    Open {s.link}
+                  </LinkButton>
+                </div>
+              ),
+            }))}
+          />
+          <p className="mt-3 text-xs text-on-surface-variant">Click a step to see where it happens in the app.</p>
+        </Card>
       </section>
 
       {/* Chapter 3: proof, a guided demo that tracks itself */}
@@ -148,37 +162,26 @@ export default function OverviewPage() {
         <p className="text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-2">03 · See it working</p>
         <h2 className="text-2xl font-bold text-primary mb-6">Walk the whole flow yourself.</h2>
         <Card>
-          <div className="mb-5">
-            <ProgressBar
-              value={(doneCount / tourSteps.length) * 100}
-              color="#ba0037"
-              label={`${doneCount} of ${tourSteps.length} steps complete`}
-              labelClassName="text-sm font-semibold text-primary-container"
-            />
+          <div className="flex flex-col md:flex-row md:items-start gap-4">
+            <AITaskList label="Demo progress" tasks={tourTasks} className="md:flex-1 border-outline-variant/50" />
+            <div className="md:w-64 shrink-0 rounded-lg border border-outline-variant/50 p-4">
+              {nextStep ? (
+                <>
+                  <p className="text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-1">Next step</p>
+                  <p className="text-sm font-semibold text-primary-container">{nextStep.title}</p>
+                  <p className="text-xs text-on-surface-variant mb-3">{nextStep.body}</p>
+                  <LinkButton href={nextStep.href} variant="danger" icon="arrow_forward" className="w-full h-9">
+                    {nextStep.cta}
+                  </LinkButton>
+                </>
+              ) : (
+                <>
+                  <p className="text-sm font-semibold text-primary-container mb-1">You have seen the whole flow.</p>
+                  <p className="text-xs text-on-surface-variant">Try it on your own contract next.</p>
+                </>
+              )}
+            </div>
           </div>
-          <ol className="divide-y divide-outline-variant/40">
-            {tourSteps.map((s, i) => (
-              <li key={s.title} className="flex items-center gap-4 py-3">
-                <span
-                  className={`w-7 h-7 shrink-0 rounded-full flex items-center justify-center text-xs font-bold ${
-                    s.done ? "bg-green-700 text-white" : "border border-outline-variant text-on-surface-variant"
-                  }`}
-                  aria-label={s.done ? "Done" : `Step ${i + 1}`}
-                >
-                  {s.done ? <Icon name="check" className="text-[16px]" /> : i + 1}
-                </span>
-                <div className="flex-1 min-w-0">
-                  <p className={`text-sm font-semibold ${s.done ? "text-on-surface-variant line-through" : "text-primary-container"}`}>
-                    {s.title}
-                  </p>
-                  <p className="text-xs text-on-surface-variant">{s.body}</p>
-                </div>
-                <Link href={s.href} className="text-xs font-bold text-primary hover:underline inline-flex items-center gap-1 shrink-0">
-                  {s.cta} <Icon name="arrow_forward" className="text-[14px]" />
-                </Link>
-              </li>
-            ))}
-          </ol>
           <p className="text-xs text-on-surface-variant mt-4">
             To test with a real document,{" "}
             <a href="/samples/Sample_Software_Services_Agreement.pdf" download className="font-semibold underline underline-offset-2 hover:text-primary">

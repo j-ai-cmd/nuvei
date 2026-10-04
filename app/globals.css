@@ -231,3 +231,18 @@ body {
     scroll-behavior: auto !important;
   }
 }
+
+/* stats-2 (smoothui) themed for the Nuvei Swiss style: used inside a page, so drop its
+   landing-page padding, left-align its heading, and keep cards flat on hover. */
+.nuvei-stats > section { padding: 0; }
+.nuvei-stats > section > div { max-width: none; padding-left: 0; padding-right: 0; }
+.nuvei-stats > section > div > div:first-child { margin-bottom: 1rem; text-align: left; }
+.nuvei-stats h2 { font-size: 1.25rem; line-height: 1.4; margin-bottom: 0.25rem; color: var(--color-primary-container); }
+.nuvei-stats > section > div > div:first-child p { margin: 0; font-size: 0.95rem; max-width: none; }
+.nuvei-stats section .group { border-radius: var(--radius-lg); background: var(--color-surface-container-lowest); border-color: color-mix(in oklab, var(--color-outline-variant) 50%, transparent); padding: 1.25rem; }
+.nuvei-stats section .group:hover { scale: none; box-shadow: none; border-color: var(--color-primary-container); }
+.nuvei-stats section .group > div:first-of-type { font-size: 1.875rem; }
+.nuvei-stats section .grid { gap: 0.75rem; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (min-width: 1024px) { .nuvei-stats section .grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; } }
+/* no gradient wash on hover (design system: flat surfaces) */
+.nuvei-stats section .group > .absolute { display: none; }

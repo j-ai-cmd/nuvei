@@ -5,7 +5,7 @@ import Link from "next/link";
 import { buildPortfolio, Portfolio } from "@/lib/portfolio";
 import { markTour } from "@/lib/tour";
 import { formatDate } from "@/lib/format";
-import StatCard from "@/components/dashboard/StatCard";
+import { StatsCards } from "@/components/smoothui/stats-2";
 import { RiskScoreBars } from "@/components/dashboard/Charts";
 import ContractsTable from "@/components/contracts/ContractsTable";
 import { ArrowLink, Card, EmptyState, Icon, PageHeader, RiskBadge, Skeleton } from "@/components/ui";
@@ -44,41 +44,31 @@ export default function DashboardPage() {
         subtitle="Which contracts need legal attention, and what to do next."
       />
 
-      {/* The headline: one sentence that tells the story */}
-      <div className="mb-6 rounded-lg border border-outline-variant/50 bg-surface-container-lowest px-5 py-4 flex flex-col md:flex-row md:items-center gap-3 md:gap-6">
-        <Icon name={p.queue.length ? "assignment_late" : "task_alt"} className={`text-[28px] ${p.queue.length ? "text-secondary" : "text-green-700"}`} />
-        <p className="text-base text-primary-container flex-1">
-          {p.queue.length ? (
-            <>
-              <strong>{plural(p.queue.length, "contract")}</strong> need legal review
-              {p.highRisk > 0 && (
-                <>
-                  , including <strong className="text-secondary">{p.highRisk} high risk</strong>
-                </>
-              )}
-              .{next && <> Next deadline: <strong>{next.label.toLowerCase()}</strong> in {plural(next.daysAway, "day")}.</>}
-            </>
-          ) : (
-            <>All analyzed contracts are reviewed or low risk. Nothing needs attention right now.</>
-          )}
-        </p>
+      {/* stats-2 (smoothui): its heading carries the story sentence, its cards the four numbers behind it */}
+      <div className="nuvei-stats mb-6">
+        <StatsCards
+          title={
+            p.queue.length
+              ? `${plural(p.queue.length, "contract")} need legal review${p.highRisk ? `, ${p.highRisk} of them high risk` : ""}.`
+              : "Nothing needs legal attention right now."
+          }
+          description={
+            next
+              ? `Next deadline: ${next.label.toLowerCase()} for ${shortName(next.filename)} in ${plural(next.daysAway, "day")}.`
+              : "No upcoming contract dates."
+          }
+          stats={[
+            { value: String(p.queue.length), label: "Needs review", description: "Medium or higher risk, no matter yet" },
+            { value: String(p.highRisk), label: "High or critical", description: `Out of ${plural(p.entries.length, "contract")} analyzed` },
+            { value: next ? `${next.daysAway}d` : "None", label: "Next deadline", description: next ? `${next.label}, ${shortName(next.filename)}` : "No upcoming dates" },
+            { value: String(p.openMatters), label: "Open matters", description: "Routed to legal teams" },
+          ]}
+        />
         {p.queue[0] && (
-          <ArrowLink href={`/analysis/${p.queue[0].entry.id}`} className="shrink-0">
+          <ArrowLink href={`/analysis/${p.queue[0].entry.id}`} className="mt-4">
             Start with {shortName(p.queue[0].entry.filename)}
           </ArrowLink>
         )}
-      </div>
-
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-6">
-        <StatCard label="Needs Review" value={String(p.queue.length)} trend="Medium+ risk, no matter yet" icon="pending_actions" highlight={p.queue.length > 0} />
-        <StatCard label="High / Critical" value={String(p.highRisk)} trend={`of ${plural(p.entries.length, "contract")} analyzed`} icon="warning" />
-        <StatCard
-          label="Next Deadline"
-          value={next ? `${next.daysAway}d` : "—"}
-          trend={next ? `${next.label} · ${shortName(next.filename)}` : "No upcoming dates"}
-          icon="event"
-        />
-        <StatCard label="Open Matters" value={String(p.openMatters)} trend="Routed to legal teams" icon="work" />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 mb-6">
