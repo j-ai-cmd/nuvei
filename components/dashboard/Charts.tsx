@@ -10,10 +10,11 @@ import {
   Tooltip,
   Legend,
   Filler,
+  BarElement,
 } from "chart.js";
-import { Line, Doughnut } from "react-chartjs-2";
+import { Line, Doughnut, Bar } from "react-chartjs-2";
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, ArcElement, Tooltip, Legend, Filler);
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, ArcElement, BarElement, Tooltip, Legend, Filler);
 
 interface VolumeChartProps {
   labels: string[];
@@ -106,6 +107,68 @@ export function RiskDonut({ high, medium, low, total }: RiskDonutProps) {
           <span className="w-2 h-2 rounded-full bg-outline-variant inline-block" /> Low
         </div>
       </div>
+    </div>
+  );
+}
+
+const EMPHASIS = "#ba0037"; // brand red: at or above the review threshold
+const CONTEXT = "#8a9199"; // de-emphasis gray: below threshold
+
+// Emphasis bar chart: one row per contract, sorted by score, threshold-crossing bars in red
+export function RiskScoreBars({ items, threshold = 70 }: { items: { label: string; score: number; level: string }[]; threshold?: number }) {
+  const sorted = [...items].sort((a, b) => b.score - a.score);
+  return (
+    <div className="w-full relative" style={{ height: Math.max(160, sorted.length * 40 + 40) }}>
+      <Bar
+        data={{
+          labels: sorted.map((i) => i.label),
+          datasets: [
+            {
+              data: sorted.map((i) => i.score),
+              backgroundColor: sorted.map((i) => (i.score >= threshold ? EMPHASIS : CONTEXT)),
+              borderRadius: 4,
+              borderSkipped: "start",
+              barThickness: 14,
+            },
+          ],
+        }}
+        options={{
+          indexAxis: "y",
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                title: (items) => sorted[items[0].dataIndex].label,
+                label: (ctx) => ` ${ctx.parsed.x}/100 · ${sorted[ctx.dataIndex].level} risk`,
+              },
+            },
+          },
+          scales: {
+            x: {
+              min: 0,
+              max: 100,
+              ticks: { stepSize: 10, maxRotation: 0, autoSkip: false, color: "#43474b", callback: (v) => (Number(v) % 50 === 0 || Number(v) === threshold ? v : "") },
+              grid: { color: (c) => (c.tick?.value === threshold ? "#ba0037" : "rgba(195,199,204,0.35)") },
+              border: { display: false },
+            },
+            y: {
+              ticks: {
+                color: "#181c1e",
+                font: { size: 12 },
+                // Full names live in the tooltip; keep axis labels short so narrow screens don't clip them
+                callback: (_v, i) => {
+                  const l = sorted[i]?.label ?? "";
+                  return l.length > 18 ? l.slice(0, 17) + "…" : l;
+                },
+              },
+              grid: { display: false },
+              border: { display: false },
+            },
+          },
+        }}
+      />
     </div>
   );
 }
