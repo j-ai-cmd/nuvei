@@ -124,10 +124,17 @@ export default function UploadZone() {
             </div>
           )}
 
-          <div className="mt-8">
+          <div className="mt-8 flex flex-col items-center gap-3">
             <Button variant="danger" icon="science" onClick={handleDemo}>
               Try Demo Contract
             </Button>
+            <a
+              href="/samples/Sample_Software_Services_Agreement.pdf"
+              download
+              className="text-xs font-semibold text-on-surface-variant hover:text-primary underline underline-offset-2"
+            >
+              Need a file? Download a sample contract (PDF)
+            </a>
           </div>
         </div>
       </div>
