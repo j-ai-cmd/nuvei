@@ -258,3 +258,13 @@ body {
   main a[class*="h-11"] { min-height: 44px; }
   main [role="tab"] { min-width: 44px; }
 }
+
+/* Keep keyboard-focused controls clear of the fixed top bar and (desktop) footer
+   when the browser scrolls them into view (WCAG 2.2 focus-not-obscured). */
+html { scroll-padding-top: 80px; scroll-padding-bottom: 16px; }
+@media (min-width: 768px) { html { scroll-padding-bottom: 72px; } }
+/* ai-loader's elapsed timer is 60% opacity upstream, below 4.5:1 contrast */
+.nuvei-loader .tabular-nums { opacity: 1; }
+
+/* main is focused programmatically on page change; no ring around the whole page */
+#main:focus { outline: none; }

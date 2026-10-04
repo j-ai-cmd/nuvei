@@ -11,5 +11,5 @@ export { default as Panel } from "./Panel";
 export { default as Accordion } from "./Accordion";
 export { ToastProvider, useToast } from "./Toast";
 export { default as Skeleton } from "@/components/smoothui/skeleton-loader";
-export { default as Modal } from "@/components/smoothui/basic-modal";
+export { default as Modal } from "./Modal";
 export { default as ProgressBar } from "@/components/smoothui/animated-progress-bar";

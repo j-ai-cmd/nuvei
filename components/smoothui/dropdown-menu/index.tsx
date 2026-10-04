@@ -131,7 +131,8 @@ export default function DropdownMenu({
   };
 
   return (
-    <DropdownMenuRoot onOpenChange={handleOpenChange} open={controlledOpen}>
+    // a11y: non-modal, so opening a small menu does not aria-hide the whole page
+    <DropdownMenuRoot modal={false} onOpenChange={handleOpenChange} open={controlledOpen}>
       <DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>
       <DropdownMenuContent
         align={align}
