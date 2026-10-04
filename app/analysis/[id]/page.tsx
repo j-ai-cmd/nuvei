@@ -344,7 +344,7 @@ export default function AnalysisPage() {
                   <ul className="space-y-2">
                     {analysis.missingInformation.map((m, i) => (
                       <li key={i} className="flex items-start gap-2 text-sm text-on-surface-variant">
-                        <Icon name="error_outline" className="text-secondary text-[16px] mt-0.5" />
+                        <Icon name="error" className="text-secondary text-[16px] mt-0.5" />
                         {m}
                       </li>
                     ))}

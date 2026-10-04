@@ -154,7 +154,7 @@ export default function TopBar({ onMenu }: { onMenu?: () => void }) {
             { key: "sep", label: "", separator: true },
             { key: "matters", label: "Matters", icon: <Icon name="work" className="text-[18px]" />, onSelect: () => router.push("/matters") },
             { key: "security", label: "Security Policy", icon: <Icon name="security" className="text-[18px]" />, onSelect: () => router.push("/security") },
-            { key: "help", label: "Help", icon: <Icon name="help_outline" className="text-[18px]" />, onSelect: () => router.push("/help") },
+            { key: "help", label: "Help", icon: <Icon name="help" className="text-[18px]" />, onSelect: () => router.push("/help") },
           ]}
         >
           <button

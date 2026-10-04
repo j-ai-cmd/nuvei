@@ -63,6 +63,12 @@ If `KIMI_API_KEY` is not set, the app uses pre-computed demo analysis data. A **
 
 ---
 
+## Icons
+
+Icons are Material Symbols Outlined, self-hosted as a ~5KB subset containing only the icons the app uses
+(`public/fonts/material-symbols-subset.woff2`, list in `material-symbols-subset.json`).
+After adding a new `<Icon name="...">`, run `npm run icons` to regenerate the subset.
+
 ## Vercel Deployment
 
 1. Push to GitHub

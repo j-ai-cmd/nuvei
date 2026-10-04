@@ -13,7 +13,7 @@ const navItems = [
 ];
 
 const bottomItems = [
-  { href: "/help", icon: "help_outline", label: "Help" },
+  { href: "/help", icon: "help", label: "Help" },
 ];
 
 function NuveiLogo() {
