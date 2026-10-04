@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import DropdownMenu from "@/components/smoothui/dropdown-menu";
+import NotificationBadge from "@/components/smoothui/notification-badge";
 import { useRouter } from "next/navigation";
 import { HistoryEntry, MatterRecord } from "@/types/contract";
 import { getMatters, getStoredHistory } from "@/lib/storage";
@@ -102,10 +103,11 @@ export default function TopBar({ onMenu }: { onMenu?: () => void }) {
           <button
               onClick={() => setShowNotifs((v) => !v)}
               className="p-2 rounded-full text-on-surface-variant hover:bg-surface-container-high transition-all relative"
-              aria-label="Notifications"
+              aria-label={notifications.length ? `Notifications (${notifications.length})` : "Notifications"}
             >
-              <Icon name="notifications" />
-              {notifications.length > 0 && <span className="absolute top-1 right-1 w-2 h-2 bg-secondary rounded-full animate-pulse" />}
+              <NotificationBadge variant="count" count={notifications.length} max={9} position="top-right">
+                <Icon name="notifications" />
+              </NotificationBadge>
           </button>
 
           {showNotifs && (
