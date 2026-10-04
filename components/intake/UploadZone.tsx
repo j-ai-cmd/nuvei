@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import AnimatedFileUpload from "@/components/smoothui/animated-file-upload";
 import { useRouter } from "next/navigation";
 import { AnalysisResult } from "@/types/contract";
@@ -14,7 +14,8 @@ function makeId() {
   return "demo-" + Math.random().toString(36).slice(2, 10);
 }
 
-export default function UploadZone() {
+// autoDemo: start the demo flow on mount (used by the Overview "Run the demo" CTA)
+export default function UploadZone({ autoDemo = false }: { autoDemo?: boolean }) {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [processing, setProcessing] = useState(false);
@@ -83,6 +84,16 @@ export default function UploadZone() {
     setProcessing(false);
     router.push(`/analysis/${id}`);
   }
+
+  const demoStarted = useRef(false);
+  useEffect(() => {
+    if (autoDemo && !demoStarted.current) {
+      demoStarted.current = true;
+      handleDemo();
+    }
+    // handleDemo is recreated each render; run once on mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoDemo]);
 
   // wiring: AnimatedFileUpload only checks size, so enforce type here
   function handleFiles(files: File[]) {

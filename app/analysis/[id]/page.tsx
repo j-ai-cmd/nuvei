@@ -10,6 +10,7 @@ import KeyTermsGrid from "@/components/analysis/KeyTermsGrid";
 import AISummaryPanel from "@/components/analysis/AISummaryPanel";
 import MatterModal from "@/components/analysis/MatterModal";
 import { getMatters, getResult, saveMatter } from "@/lib/storage";
+import { markTour } from "@/lib/tour";
 import { isHighRisk } from "@/lib/format";
 import { Accordion, Button, EmptyState, LinkButton, Icon, Panel, Spinner, Tabs, useToast } from "@/components/ui";
 
@@ -42,7 +43,10 @@ export default function AnalysisPage() {
 
   useEffect(() => {
     const found = getResult(id);
-    if (found) setResult(found);
+    if (found) {
+      setResult(found);
+      markTour("viewedAnalysis");
+    }
     else setNotFound(true);
     setExistingMatter(getMatters().find((m) => m.analysisId === id) ?? null);
   }, [id]);
@@ -158,7 +162,7 @@ export default function AnalysisPage() {
         icon="search_off"
         title="Analysis not found"
         message="This session has expired or the analysis was not stored. Please upload a new contract."
-        cta={{ href: "/", label: "New Intake" }}
+        cta={{ href: "/intake", label: "New Intake" }}
       />
     );
   }
@@ -200,15 +204,6 @@ export default function AnalysisPage() {
           <Button variant="secondary" icon="download" onClick={handleExportReport} className="flex-1 md:flex-none">
             Export Report
           </Button>
-          {existingMatter ? (
-            <LinkButton href="/matters" variant="secondary" icon="work" className="flex-1 md:flex-none">
-              Matter {existingMatter.matterId}
-            </LinkButton>
-          ) : (
-            <Button variant="danger" icon="add_circle" onClick={handleCreateMatter} disabled={creatingMatter} className="flex-1 md:flex-none">
-              {creatingMatter ? "Creating..." : "Create Matter"}
-            </Button>
-          )}
         </div>
       </div>
 
@@ -248,6 +243,31 @@ export default function AnalysisPage() {
           <span className="text-xs text-on-surface-variant uppercase tracking-wider font-semibold">Processing Time</span>
           <p className="text-base font-bold text-primary mt-1">{(result.processingTimeMs / 1000).toFixed(1)}s</p>
         </div>
+      </div>
+
+      {/* Next step in the story: route it, then see the portfolio */}
+      <div className="mb-6 flex flex-col sm:flex-row sm:items-center gap-3 rounded-lg border border-outline-variant/50 bg-surface-container-lowest px-4 py-3">
+        <Icon name={existingMatter ? "task_alt" : "arrow_circle_right"} className={`text-[22px] ${existingMatter ? "text-green-700" : "text-secondary"}`} />
+        <p className="text-sm text-primary-container flex-1">
+          {existingMatter ? (
+            <>
+              Routed as <strong>{existingMatter.matterId}</strong> to {existingMatter.assignedTeam}. See how it changes the portfolio view.
+            </>
+          ) : (
+            <>
+              <strong>Next step:</strong> {analysis.recommendedLegalRouting ? <>route to {analysis.recommendedLegalRouting.split(/→|->/)[0].trim()}.</> : "create a matter to route this contract to legal."}
+            </>
+          )}
+        </p>
+        {existingMatter ? (
+          <LinkButton href="/dashboard" variant="secondary" icon="dashboard" className="h-9">
+            Open Dashboard
+          </LinkButton>
+        ) : (
+          <Button variant="danger" icon="add_circle" onClick={handleCreateMatter} disabled={creatingMatter} className="h-9">
+            {creatingMatter ? "Creating..." : "Create Matter"}
+          </Button>
+        )}
       </div>
 
       {/* Tab Navigation */}

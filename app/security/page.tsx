@@ -5,7 +5,7 @@ export default function SecurityPage() {
   return (
     <div className="max-w-3xl">
       <div className="mb-8">
-        <Link href="/" className="inline-flex items-center text-on-surface-variant hover:text-primary transition-colors mb-4 text-sm">
+        <Link href="/intake" className="inline-flex items-center text-on-surface-variant hover:text-primary transition-colors mb-4 text-sm">
           <Icon name="arrow_back" className="text-[18px] mr-1" />
           Back to Intake
         </Link>

@@ -10,7 +10,7 @@ interface PageHeaderProps {
 export default function PageHeader({ title, subtitle, action }: PageHeaderProps) {
   const right =
     action === undefined ? (
-      <LinkButton href="/" icon="add">
+      <LinkButton href="/intake" icon="add">
         New Intake
       </LinkButton>
     ) : (

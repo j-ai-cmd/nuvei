@@ -57,8 +57,8 @@ export default function MatterModal({ matter, onClose }: MatterModalProps) {
           </div>
 
           <div className="flex gap-4">
-            <Button variant="danger" icon="work" onClick={() => router.push("/matters")} className="flex-1">
-              View Matters
+            <Button variant="danger" icon="dashboard" onClick={() => router.push("/dashboard")} className="flex-1">
+              See Dashboard
             </Button>
             <Button variant="secondary" onClick={onClose} className="flex-1">
               Back to Analysis
