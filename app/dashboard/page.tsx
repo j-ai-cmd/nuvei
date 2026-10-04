@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { buildPortfolio, Portfolio } from "@/lib/portfolio";
+import { markTour } from "@/lib/tour";
 import { formatDate } from "@/lib/format";
 import StatCard from "@/components/dashboard/StatCard";
 import { RiskScoreBars } from "@/components/dashboard/Charts";
@@ -20,6 +21,7 @@ export default function DashboardPage() {
 
   useEffect(() => {
     setP(buildPortfolio());
+    markTour("viewedDashboard");
   }, []);
 
   if (!p) {

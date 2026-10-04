@@ -70,7 +70,7 @@ function ContractsInner() {
           icon="description"
           title={q || risk !== "all" ? "No contracts match" : "No contracts yet"}
           message={q || risk !== "all" ? "Try a different search or filter." : "Upload a contract to get started."}
-          cta={q ? undefined : { href: "/", label: "Upload Contract" }}
+          cta={q ? undefined : { href: "/intake", label: "Upload Contract" }}
         />
       ) : (
         <div className="bg-surface-container-lowest rounded-lg border border-outline-variant/50 overflow-hidden">

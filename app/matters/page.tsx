@@ -30,7 +30,7 @@ export default function MattersPage() {
           icon="work"
           title="No matters yet"
           message="Analyze a contract and click “Create Matter” to generate a simulated CLM record."
-          cta={{ href: "/", label: "Upload Contract" }}
+          cta={{ href: "/intake", label: "Upload Contract" }}
         />
       ) : (
         <div className="space-y-4">

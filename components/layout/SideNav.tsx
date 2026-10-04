@@ -5,8 +5,9 @@ import { usePathname } from "next/navigation";
 import { Icon } from "@/components/ui";
 
 const navItems = [
+  { href: "/", icon: "home", label: "Overview" },
+  { href: "/intake", icon: "upload_file", label: "Contract Intake" },
   { href: "/dashboard", icon: "dashboard", label: "Dashboard" },
-  { href: "/", icon: "description", label: "Contract Intake" },
   { href: "/contracts", icon: "assignment", label: "Contracts" },
   { href: "/matters", icon: "work", label: "Matters" },
 ];
