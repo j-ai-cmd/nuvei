@@ -85,7 +85,7 @@ export default function TopBar({ onMenu }: { onMenu?: () => void }) {
       </button>
       <form onSubmit={handleSearch} className="flex-1 max-w-72 min-w-0">
         <div className="relative">
-          <Icon name="search" className="absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant/60 text-[18px]" />
+          <Icon name="search" className="absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]" />
           <input
             type="search"
             aria-label="Search contracts, matters"
@@ -138,7 +138,7 @@ export default function TopBar({ onMenu }: { onMenu?: () => void }) {
                         <p className="text-xs font-semibold text-primary-container truncate">{n.title}</p>
                         <p className="text-xs text-on-surface-variant">{n.body}</p>
                       </div>
-                      <span className="text-[10px] text-on-surface-variant/60 shrink-0">{n.time}</span>
+                      <span className="text-[11px] text-on-surface-variant shrink-0">{n.time}</span>
                     </button>
                   ))}
                 </div>

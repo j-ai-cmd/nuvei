@@ -74,6 +74,9 @@ export default function BasicToast({
             shouldReduceMotion ? { opacity: 1 } : { opacity: 1, scale: 1, x: 0 }
           }
           className={`fixed top-4 right-4 z-50 flex w-80 items-center gap-3 rounded-lg border p-4 shadow-lg ${toastClasses[type]} ${className}`}
+          /* a11y: announce the message to screen readers */
+          role={type === "error" ? "alert" : "status"}
+          aria-live={type === "error" ? "assertive" : "polite"}
           exit={
             shouldReduceMotion
               ? { opacity: 0, transition: { duration: 0 } }
@@ -98,6 +101,8 @@ export default function BasicToast({
           <div className="flex-shrink-0">{toastIcons[type]}</div>
           <p className="flex-1 text-sm">{message}</p>
           <button
+            /* a11y: icon-only button needs a name */
+            aria-label="Dismiss notification"
             className="flex-shrink-0 cursor-pointer rounded-full p-1 transition-colors hover:bg-black/5 dark:hover:bg-white/10"
             onClick={() => {
               setVisible(false);

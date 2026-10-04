@@ -20,13 +20,13 @@ export default function RiskScoreCard({ score, riskLevel }: RiskScoreCardProps) 
   return (
     <div>
       <div className="bg-surface-container-lowest border border-outline-variant/50 rounded-lg p-8 flex flex-col justify-center min-h-[300px]">
-        <h3 className="font-bold text-xl text-primary mb-6">Risk score</h3>
+        <h2 className="font-bold text-xl text-primary mb-6">Risk score</h2>
         <div className="flex items-baseline gap-2 mb-6">
           <span className="text-6xl font-bold tabular-nums" style={{ color }}>{score}</span>
           <span className="text-sm text-on-surface-variant">/ 100</span>
         </div>
         <ProgressBar value={score} color={color} label={`${riskLevel} RISK`} labelClassName="text-sm font-bold" />
-        <div className="mt-4 flex justify-between text-[10px] font-bold uppercase tracking-wider text-on-surface-variant">
+        <div className="mt-4 flex justify-between text-[11px] font-bold uppercase tracking-wider text-on-surface-variant">
           <span>Low</span>
           <span>Medium</span>
           <span>High</span>

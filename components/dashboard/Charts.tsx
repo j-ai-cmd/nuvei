@@ -25,6 +25,8 @@ export function VolumeChart({ labels, data }: VolumeChartProps) {
   return (
     <div className="h-64 w-full relative">
       <Line
+        role="img"
+        aria-label="Contract volume over the last 7 days"
         data={{
           labels,
           datasets: [
@@ -69,6 +71,8 @@ export function RiskDonut({ high, medium, low, total }: RiskDonutProps) {
     <div className="flex-1 relative flex flex-col items-center justify-center">
       <div className="h-48 w-48 relative">
         <Doughnut
+          role="img"
+          aria-label="Risk distribution by level"
           data={{
             labels: ["High / Critical", "Medium", "Low"],
             datasets: [
@@ -93,7 +97,7 @@ export function RiskDonut({ high, medium, low, total }: RiskDonutProps) {
         />
         <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
           <span className="text-2xl font-bold text-primary-container">{total}</span>
-          <span className="text-[10px] text-on-surface-variant">Total</span>
+          <span className="text-[11px] text-on-surface-variant">Total</span>
         </div>
       </div>
       <div className="mt-4 flex justify-center gap-4">
@@ -120,6 +124,8 @@ export function RiskScoreBars({ items, threshold = 70 }: { items: { label: strin
   return (
     <div className="w-full relative" style={{ height: Math.max(160, sorted.length * 40 + 40) }}>
       <Bar
+        role="img"
+        aria-label={`Risk score by contract, highest first: ${sorted.map((i) => `${i.label} ${i.score} out of 100`).join(", ")}. Scores of ${threshold} or more are high risk.`}
         data={{
           labels: sorted.map((i) => i.label),
           datasets: [

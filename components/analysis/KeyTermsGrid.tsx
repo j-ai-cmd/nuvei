@@ -29,7 +29,7 @@ export default function KeyTermsGrid({ metadata }: { metadata: ContractMetadata 
     <div className="space-y-6">
       {metadata.parties && metadata.parties.length > 0 && (
         <div className="bg-surface-container-lowest rounded-lg border border-outline-variant/50 p-5">
-          <h4 className="text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-4">Parties</h4>
+          <h2 className="text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-4">Parties</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {metadata.parties.map((p, i) => (
               <div key={i} className="bg-surface-container-low p-3 rounded-sm">
@@ -42,14 +42,14 @@ export default function KeyTermsGrid({ metadata }: { metadata: ContractMetadata 
       )}
 
       <div className="bg-surface-container-lowest rounded-lg border border-outline-variant/50 p-5">
-        <h4 className="text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-4">Key Terms</h4>
+        <h2 className="text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-4">Key Terms</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {FIELD_LABELS.map(({ key, label }) => {
             const value = metadata[key] as string | null | undefined;
             if (value === null || value === undefined) return (
               <div key={key} className="border-b border-outline-variant/50 pb-3">
-                <p className="text-xs text-on-surface-variant/60 uppercase tracking-wider">{label}</p>
-                <p className="text-sm text-on-surface-variant/40 mt-1 italic">Not specified</p>
+                <p className="text-xs text-on-surface-variant uppercase tracking-wider">{label}</p>
+                <p className="text-sm text-on-surface-variant mt-1 italic">Not specified</p>
               </div>
             );
             return (

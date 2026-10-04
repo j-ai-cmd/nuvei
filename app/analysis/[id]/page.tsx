@@ -192,7 +192,7 @@ export default function AnalysisPage() {
       {/* Context Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
         <div className="min-w-0 w-full md:w-auto">
-          <Link href="/contracts" className="inline-flex items-center text-on-surface-variant hover:text-primary transition-colors mb-2 text-sm">
+          <Link href="/contracts" className="tap inline-flex items-center text-on-surface-variant hover:text-primary transition-colors mb-2 text-sm">
             <Icon name="arrow_back" className="text-[18px] mr-1" />
             Back to Contracts
           </Link>
@@ -318,7 +318,7 @@ export default function AnalysisPage() {
           {activeTab === "risk" && (
             <div className="space-y-6">
               <RiskScoreCard score={riskAnalysis.overallRiskScore} riskLevel={riskAnalysis.riskLevel} />
-              <h3 className="text-xl font-bold text-primary">All findings ({riskAnalysis.risks.length})</h3>
+              <h2 className="text-xl font-bold text-primary">All findings ({riskAnalysis.risks.length})</h2>
               <Accordion
                 defaultExpandedIds={[0]}
                 items={riskAnalysis.risks.map((r, i) => ({
@@ -356,7 +356,7 @@ export default function AnalysisPage() {
 
           {activeTab === "matter" && (
             <Panel>
-              <h3 className="text-xl font-bold text-primary mb-2">Create a matter record</h3>
+              <h2 className="text-xl font-bold text-primary mb-2">Create a matter record</h2>
               <p className="text-sm text-on-surface-variant mb-6">
                 Creates a simulated matter from this analysis. In production it would go to your contract
                 lifecycle management system, such as Clio, Ironclad or DocuSign CLM.
@@ -383,7 +383,7 @@ export default function AnalysisPage() {
                   {creatingMatter ? "Creating matter..." : "Create simulated matter"}
                 </Button>
               )}
-              <p className="text-xs text-center text-on-surface-variant/60 mt-3">
+              <p className="text-xs text-center text-on-surface-variant mt-3">
                 Saved to Matters for this browser session
               </p>
             </Panel>
