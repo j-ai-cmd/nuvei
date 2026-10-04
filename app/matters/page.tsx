@@ -23,13 +23,13 @@ export default function MattersPage() {
 
   return (
     <div>
-      <PageHeader title="Matters" subtitle="Simulated CLM matter records created from AI-analyzed contracts." />
+      <PageHeader title="Matters" subtitle="Contracts routed to legal. These are simulated CLM records." />
 
       {loaded && matters.length === 0 ? (
         <EmptyState
           icon="work"
           title="No matters yet"
-          message="Analyze a contract and click “Create Matter” to generate a simulated CLM record."
+          message="Open any analysis and click Create Matter to route it to legal."
           cta={{ href: "/intake", label: "Upload Contract" }}
         />
       ) : (
@@ -65,7 +65,7 @@ export default function MattersPage() {
             </Card>
           ))}
           <p className="text-xs text-center text-on-surface-variant/50 pt-4">
-            DEMONSTRATION · MOCK CLM INTEGRATION · Matter records are session-only
+            Simulated CLM records, kept for this browser session only
           </p>
         </div>
       )}

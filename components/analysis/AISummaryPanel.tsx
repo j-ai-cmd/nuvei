@@ -13,7 +13,7 @@ export default function AISummaryPanel({ analysis }: { analysis: ContractAnalysi
             <div className="w-8 h-8 rounded-sm bg-surface-container-lowest/10 flex items-center justify-center">
               <Icon name="psychology" className="text-white text-[20px]" />
             </div>
-            <h3 className="text-xl font-bold text-white">AI Review Summary</h3>
+            <h3 className="text-xl font-bold text-white">AI review summary</h3>
           </div>
 
           <div className="space-y-6">
@@ -21,7 +21,7 @@ export default function AISummaryPanel({ analysis }: { analysis: ContractAnalysi
               <div>
                 <h4 className="text-xs font-bold text-on-primary-container uppercase tracking-widest mb-2 flex items-center gap-2">
                   <Icon name="error" className="text-[16px]" />
-                  Missing Information
+                  Missing information
                 </h4>
                 <ul className="space-y-2">
                   {missingInformation.map((item, i) => (
@@ -55,7 +55,7 @@ export default function AISummaryPanel({ analysis }: { analysis: ContractAnalysi
         <div className="bg-surface-container-lowest rounded-lg border border-outline-variant/50 p-5">
           <h3 className="text-base font-bold text-primary mb-4 flex items-center gap-2">
             <Icon name="gavel" className="text-secondary text-[20px]" />
-            Unusual Clauses
+            Unusual clauses
           </h3>
           <ul className="space-y-3">
             {unusualClauses.map((c, i) => (
@@ -71,7 +71,7 @@ export default function AISummaryPanel({ analysis }: { analysis: ContractAnalysi
       {/* Document structure */}
       {top3Risks.length > 0 && (
         <div className="bg-surface-container-lowest rounded-lg border border-outline-variant/50 p-5">
-          <h3 className="text-base font-bold text-primary mb-4">Top 3 Risks</h3>
+          <h3 className="text-base font-bold text-primary mb-4">Top 3 risks</h3>
           <div className="space-y-2">
             {top3Risks.map((risk, i) => (
               <div

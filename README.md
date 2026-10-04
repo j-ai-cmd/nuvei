@@ -1,119 +1,74 @@
-# Legal AI — Contract Intake Assistant
+# Nuvei Legal: contract intake assistant
 
-A production-ready Next.js 14 application demonstrating how a Legal Operations Technology & AI specialist could automate contract intake, analysis, risk identification, and matter creation.
+A concept prototype showing how Nuvei Legal could use AI for the first pass on incoming contracts. You upload a PDF or DOCX, the app extracts the key terms, scores the risky clauses, and lets you route the contract to a legal team as a matter. A dashboard shows which contracts need attention and which deadlines are coming up.
 
-## Features
+## What it does
 
-- **PDF / DOCX upload** — drag-and-drop or browse; 25MB limit
-- **Text extraction** — server-side, no filesystem; Node.js runtime
-- **AI contract analysis** — structured JSON with 23+ metadata fields, risk scoring, executive summary
-- **Zod validation** — all AI output validated; malformed JSON recovered with retry
-- **Risk analysis** — severity scoring (LOW / MEDIUM / HIGH / CRITICAL), recommended actions
-- **Demo mode** — full workflow without uploading a document; works without an API key
-- **Matter creation** — simulated CLM integration with generated matter ID
-- **Live dashboard** — metrics computed from session history: risk distribution, volume, cycle time
-- **Provider-agnostic UI** — no AI provider names visible to end users
+The Overview page (`/`) explains the problem and walks a viewer through a guided demo that tracks their progress. Contract Intake (`/intake`) takes a PDF or DOCX up to 25 MB, or runs a demo contract. Each analysis has an executive summary, risk findings with clause references and recommended actions, 23 extracted terms, and a next step for routing. Create Matter makes a simulated CLM record. The dashboard (`/dashboard`) lists contracts that need review, upcoming notice and renewal dates, and risk scores across all contracts.
+
+Five sample contracts with written analyses are built in, so the app is usable without an API key. A sample PDF with deliberately risky clauses is at `public/samples/Sample_Software_Services_Agreement.pdf` and is linked from the intake page.
 
 ## Stack
 
-- Next.js 14 (App Router)
-- TypeScript + Zod
-- Tailwind CSS (custom design system)
-- `pdf-parse` + `mammoth` for document extraction
-- Chart.js + react-chartjs-2
-
----
+Next.js 14 (App Router), TypeScript, Zod, Tailwind CSS 4, `pdf-parse` and `mammoth` for text extraction, Chart.js, and smoothui components installed through the shadcn registry.
 
 ## Setup
 
 ```bash
-git clone <repo>
-cd nuvei
 npm install
-cp .env.example .env.local
-```
-
-Edit `.env.local`:
-
-```
-KIMI_API_KEY=your_key_here
-```
-
-```bash
+echo "KIMI_API_KEY=your_key_here" > .env.local
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Then open http://localhost:3000.
 
----
+## Configuration
 
-## AI Provider Configuration
+| Variable | Required | Default |
+|---|---|---|
+| `KIMI_API_KEY` | Yes, for live analysis | none |
+| `KIMI_MODEL` | No | `kimi-k3` |
+| `KIMI_TEMPERATURE` | No | `1` (the only value Kimi K3 accepts) |
+| `KIMI_BASE_URL` | No | `https://api.moonshot.ai/v1` |
 
-### Required environment variable
+Without `KIMI_API_KEY`, the sample contracts and the demo still work. A real upload returns an error that says AI analysis is not configured; it never falls back to sample data silently.
 
-| Variable | Description |
-|---|---|
-| `KIMI_API_KEY` | Your API key (server-side only) |
+## Deploying to Vercel
 
-The model is hardcoded server-side. No other configuration is required.
+Import the repository in Vercel, set `KIMI_API_KEY` under Project Settings, Environment Variables, and deploy. No special build settings are needed. API routes run on the Node.js runtime.
 
-### Demo mode (no API key)
+## Project layout
 
-If `KIMI_API_KEY` is not set, the app uses pre-computed demo analysis data. A **DEMO DATA** banner is shown prominently in the UI. Real PDF uploads will return an error rather than silently showing demo data.
-
----
+```
+app/
+  page.tsx                Overview and guided demo
+  intake/                 Upload and demo entry point
+  analysis/[id]/          Analysis with five tabs and the next step
+  dashboard/              Review queue, deadlines, risk by contract
+  contracts/  matters/    Lists, with search and a risk filter
+  api/analyze/            POST: file, extract, AI, Zod, JSON
+  api/matter/             POST: simulated CLM matter
+components/
+  ui/                     Wrappers around the smoothui components
+  smoothui/               Vendored smoothui components (edits are commented)
+  layout/ intake/ analysis/ dashboard/ contracts/
+lib/
+  kimi.ts                 AI client (server only)
+  storage.ts              Session storage for results, history and matters
+  portfolio.ts            Review queue and deadlines for the dashboard
+  seed.ts                 The five sample contracts
+  tour.ts                 Guided demo progress
+design-system/nuvei-legal/MASTER.md   Colours, type, spacing and component rules
+```
 
 ## Icons
 
-Icons are Material Symbols Outlined, self-hosted as a ~5KB subset containing only the icons the app uses
-(`public/fonts/material-symbols-subset.woff2`, list in `material-symbols-subset.json`).
-After adding a new `<Icon name="...">`, run `npm run icons` to regenerate the subset.
+Icons come from Material Symbols Outlined, self-hosted as a 5 KB subset that contains only the icons the app uses (`public/fonts/material-symbols-subset.woff2`, with the list in `material-symbols-subset.json`). After adding a new `<Icon name="...">`, run `npm run icons` to rebuild the subset.
 
-## Vercel Deployment
+## Claude Code skills
 
-1. Push to GitHub
-2. Import the repository in [Vercel](https://vercel.com)
-3. Set one environment variable in **Project Settings → Environment Variables**:
-   - `KIMI_API_KEY`
-4. Deploy
-
-No special build settings required. The app uses the Node.js runtime for API routes (`export const runtime = "nodejs"`).
-
----
-
-## Architecture
-
-```
-/app
-  layout.tsx              Root layout (sidebar, topbar, footer)
-  page.tsx                Contract Intake upload page
-  /analysis/[id]          Analysis results with 5 tabs
-  /dashboard              Executive dashboard with live metrics
-  /api/analyze            POST: file → extract → AI → Zod → JSON
-  /api/matter             POST: simulated CLM matter creation
-
-/components
-  /layout                 SideNav, TopBar, Footer
-  /intake                 UploadZone, ProcessingModal, WorkflowStepper
-  /analysis               RiskScoreCard, RiskCard, KeyTermsGrid, AISummaryPanel, MatterModal
-  /dashboard              StatCard, Charts (VolumeChart, RiskDonut)
-
-/lib
-  kimi.ts                 AI API client (server-only)
-  extract-pdf.ts          PDF text extraction (Node.js runtime)
-  extract-docx.ts         DOCX text extraction
-  demo-contract.ts        Fictional sample contract text
-  demo-analysis.ts        Pre-computed demo analysis
-
-/types
-  contract.ts             TypeScript interfaces + Zod schemas
-```
-
----
+`.claude/skills` holds three project skills: `components` (where to source UI components), `ui-ux-pro-max` (design system and UX rules), and `humanizer` (removing AI writing patterns from copy).
 
 ## Security
 
-- `KIMI_API_KEY` exists only in server-side process environment; it is never imported by any client component, included in API responses, or logged
-- All document processing is in-memory — no temp files written to disk
-- API errors are sanitized before reaching the frontend; raw provider error bodies are only logged server-side
-- The AI provider name and model are never visible in the user-facing UI
+The API key lives only in the server environment. No client component imports it, and it never appears in API responses or logs. Documents are processed in memory and never written to disk. Provider errors are logged on the server and replaced with a plain message before they reach the browser. The interface does not name the AI provider or model.

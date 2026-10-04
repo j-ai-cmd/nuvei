@@ -59,7 +59,7 @@ const SPECS: SeedSpec[] = [
     counterparty: "TechCorp Global",
     analysis: {
       metadata: meta({
-        contractTitle: "Master Services Agreement — TechCorp Global Inc. & Nuvei",
+        contractTitle: "Master Services Agreement between TechCorp Global Inc. and Nuvei",
         agreementType: "Master Services Agreement",
         parties: [
           { name: "TechCorp Global Inc.", role: "Vendor / Service Provider" },
@@ -76,7 +76,7 @@ const SPECS: SeedSpec[] = [
         paymentTerms: "Net 30; 1.5% monthly late fee",
         fees: "$100,000 monthly retainer; change requests at $275/hour",
         terminationTerms: "For cause on 30 days' uncured breach; for convenience by Vendor only on 90 days' notice",
-        liabilityCap: "12 months' fees — carve-out: Client indemnity obligations are UNLIMITED",
+        liabilityCap: "12 months' fees, except Client indemnity obligations, which are unlimited",
         indemnification: "Client indemnifies Vendor for all third-party claims arising from Client data, without cap",
         confidentiality: "3 years post-termination",
         ipOwnership: "Vendor retains ownership of all Deliverables; Client receives a non-exclusive licence",
@@ -112,12 +112,12 @@ const SPECS: SeedSpec[] = [
         { label: "Renewal Notice Deadline", date: "September 1, 2028" },
         { label: "Initial Term End", date: "February 28, 2029" },
       ],
-      missingInformation: ["Data Processing Agreement — referenced but not attached", "Service levels and service credits", "Named security standard (e.g. SOC 2, ISO 27001)"],
+      missingInformation: ["Data Processing Agreement: referenced but not attached", "Service levels and service credits", "Named security standard (e.g. SOC 2, ISO 27001)"],
       unusualClauses: [
         "Clause 12.2: uncapped indemnity running only from Client to Vendor",
         "Clause 9.1: Vendor ownership of custom deliverables paid for by Client",
       ],
-      recommendedLegalRouting: "Legal — Commercial (indemnity, IP) → Information Security (audit rights, DPA) → General Counsel sign-off",
+      recommendedLegalRouting: "Commercial Legal (indemnity, IP) → Information Security (audit rights, DPA) → General Counsel sign-off",
     },
   },
   {
@@ -128,7 +128,7 @@ const SPECS: SeedSpec[] = [
     counterparty: "SupplyCo Ltd",
     analysis: {
       metadata: meta({
-        contractTitle: "Vendor Supply Agreement — SupplyCo Ltd",
+        contractTitle: "Vendor Supply Agreement with SupplyCo Ltd",
         agreementType: "Vendor Agreement",
         parties: [
           { name: "SupplyCo Ltd", role: "Vendor" },
@@ -180,7 +180,7 @@ const SPECS: SeedSpec[] = [
       ],
       missingInformation: ["Schedule 2 pricing table is unsigned"],
       unusualClauses: ["Clause 5.3: unilateral uncapped price increases"],
-      recommendedLegalRouting: "Procurement (pricing, SLAs) → Legal — Commercial review",
+      recommendedLegalRouting: "Procurement (pricing, SLAs) → Commercial Legal review",
     },
   },
   {
@@ -191,7 +191,7 @@ const SPECS: SeedSpec[] = [
     counterparty: "Innovate LLC",
     analysis: {
       metadata: meta({
-        contractTitle: "Mutual Non-Disclosure Agreement — Project Phoenix",
+        contractTitle: "Mutual Non-Disclosure Agreement for Project Phoenix",
         agreementType: "Non-Disclosure Agreement",
         parties: [
           { name: "Innovate LLC", role: "Counterparty" },
@@ -230,7 +230,7 @@ const SPECS: SeedSpec[] = [
       ],
       missingInformation: [],
       unusualClauses: [],
-      recommendedLegalRouting: "Legal — self-serve approval (standard NDA)",
+      recommendedLegalRouting: "Legal self-serve approval (standard NDA)",
     },
   },
   {
@@ -241,7 +241,7 @@ const SPECS: SeedSpec[] = [
     counterparty: "CloudSoft Inc.",
     analysis: {
       metadata: meta({
-        contractTitle: "SaaS Subscription Agreement — CloudSoft Inc.",
+        contractTitle: "SaaS Subscription Agreement with CloudSoft Inc.",
         agreementType: "SaaS License Agreement",
         parties: [
           { name: "CloudSoft Inc.", role: "Provider" },
@@ -292,7 +292,7 @@ const SPECS: SeedSpec[] = [
       ],
       missingInformation: ["Sub-processor list"],
       unusualClauses: ["Schedule B: SLA credits capped at one month with no exit right"],
-      recommendedLegalRouting: "IT Procurement (SLA, pricing) → Legal — Commercial → Privacy (sub-processors)",
+      recommendedLegalRouting: "IT Procurement (SLA, pricing) → Commercial Legal → Privacy (sub-processors)",
     },
   },
   {
@@ -303,7 +303,7 @@ const SPECS: SeedSpec[] = [
     counterparty: "Internal HR",
     analysis: {
       metadata: meta({
-        contractTitle: "Employment Agreement — Senior Engineer",
+        contractTitle: "Employment Agreement: Senior Engineer",
         agreementType: "Employment Agreement",
         parties: [
           { name: "Nuvei", role: "Employer" },

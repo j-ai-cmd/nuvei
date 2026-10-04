@@ -31,8 +31,8 @@ export default function IntakePage() {
             Analyze a contract in minutes.
           </h2>
           <p className="text-lg text-on-surface-variant max-w-3xl leading-relaxed">
-            Upload a PDF or DOCX and automatically extract key terms, identify potential risks,
-            and prepare structured data for legal review.
+            Upload a PDF or DOCX. The AI pulls out the key terms and flags risky clauses so a lawyer can
+            review them quickly.
           </p>
         </header>
 
@@ -45,7 +45,7 @@ export default function IntakePage() {
         {/* Recent Intakes — live from sessionStorage */}
         <div className="bg-surface-container-lowest border border-outline-variant/50 rounded-lg p-6">
           <div className="flex justify-between items-center mb-4">
-            <h3 className="text-xl font-bold text-primary">Recent Intakes</h3>
+            <h3 className="text-xl font-bold text-primary">Recent intakes</h3>
             {recent.length > 0 && (
               <Link href="/contracts" className="text-xs font-bold text-primary hover:underline flex items-center gap-1">
                 All <Icon name="arrow_forward" className="text-[14px]" />
@@ -82,14 +82,14 @@ export default function IntakePage() {
         <div className="bg-surface-container-low border border-outline-variant/50 rounded-lg p-6">
           <h3 className="text-xl font-bold text-primary mb-2 flex items-center gap-2">
             <Icon name="info" className="text-secondary text-[20px]" />
-            Secure Processing
+            Secure processing
           </h3>
           <p className="text-sm text-on-surface-variant mb-4">
-            All documents are processed in memory and never written to disk. Data is not retained
-            beyond the analysis session unless saved to a Matter.
+            Files are read in memory and never written to disk. Results stay in your browser session and
+            are cleared when you close the tab.
           </p>
           <Link href="/security" className="text-xs font-bold text-primary hover:underline flex items-center gap-1">
-            View Security Policy
+            View security policy
             <Icon name="arrow_forward" className="text-[16px]" />
           </Link>
         </div>

@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 
 const TEAMS: Record<string, string> = {
-  HIGH: "Legal — Senior Review",
+  HIGH: "Senior Legal Review",
   CRITICAL: "General Counsel",
-  MEDIUM: "Legal — Commercial",
-  LOW: "Legal — Standard",
+  MEDIUM: "Commercial Legal",
+  LOW: "Legal (standard queue)",
 };
 
 function generateMatterId(): string {
@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
   const { contractType, counterparty, riskLevel } = body;
 
   const matterId = generateMatterId();
-  const assignedTeam = TEAMS[riskLevel?.toUpperCase() ?? "MEDIUM"] ?? "Legal — Commercial";
+  const assignedTeam = TEAMS[riskLevel?.toUpperCase() ?? "MEDIUM"] ?? "Commercial Legal";
 
   return NextResponse.json({
     matterId,
@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
     counterparty: counterparty ?? "Unknown",
     riskLevel: riskLevel ?? "MEDIUM",
     assignedTeam,
-    status: "Open — Pending Attorney Review",
+    status: "Open, awaiting attorney review",
     createdAt: new Date().toISOString(),
   });
 }
